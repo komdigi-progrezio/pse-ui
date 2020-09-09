@@ -8,11 +8,15 @@ import { extend } from 'vee-validate'
 import * as rules from 'vee-validate/dist/rules'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VueSweetalert2 from 'vue-sweetalert2';
+import datePicker from 'vue-bootstrap-datetimepicker';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
 import store from './store'
 
 Vue.config.performance = true
 Vue.use(CoreuiVue)
+Vue.use(datePicker)
 Vue.prototype.$log = console.log.bind(console)
 
 Object.keys(rules).forEach(rule => {
