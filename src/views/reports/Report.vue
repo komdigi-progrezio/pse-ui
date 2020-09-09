@@ -37,17 +37,17 @@
                                     label="Status"
                                     :options="['Dummy Data', 'Dummy Data', 'Dummy Data']"
                                 />
-                                <div class="d-flex justify-content-between">
-                                    <p class="font-weight-bold">
-                                        Statistik
-                                    </p>
-                                    <CButton color="primary">
+                                <div class="text-right">
+                                    <CButton
+                                        color="primary"
+                                        size="sm"
+                                        class="w-25 mb-1"
+                                    >
                                         Cari
                                     </CButton>
+                                    <a class="font-weight-bold d-block" href="#">Statistik</a>
+                                    <a class="font-weight-bold d-block" href="#">Download Laporan</a>
                                 </div>
-                                <p class="font-weight-bold">
-                                    Download Laporan
-                                </p>
                             </CCol>
                         </CRow>
                         <div style="overflow-x:auto;">

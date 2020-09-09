@@ -50,7 +50,7 @@
                                 <CButton
                                     color="primary"
                                     size="sm"
-                                    class="w-25"
+                                    class="w-25 mb-1"
                                 >
                                     Cari
                                 </CButton>
