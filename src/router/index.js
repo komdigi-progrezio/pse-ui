@@ -5,10 +5,11 @@ import Router from 'vue-router'
 const TheContainer = () => import('@/containers/TheContainer')
 
 // Views
-const Dashboard = () => import('@/views/Dashboard')
+const Dashboard = () => import('@/views/Dashboard');
 
-const Report = () => import('@/views/reports/Report')
-const Typography = () => import('@/views/theme/Typography')
+const Report = () => import('@/views/reports/Report');
+const Account = () => import('@/views/accounts/Account');
+// const Typography = () => import('@/views/theme/Typography');
 
 // const Charts = () => import('@/views/charts/Charts')
 // const Widgets = () => import('@/views/widgets/Widgets')
@@ -87,7 +88,7 @@ function configRoutes () {
         {
           path: 'account',
           name: 'Account',
-          component: Typography,
+          component: Account,
         },
         // {
         //   path: 'charts',

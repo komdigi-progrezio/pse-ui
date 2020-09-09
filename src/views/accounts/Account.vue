@@ -55,7 +55,7 @@
                                 <thead>
                                     <tr>
                                         <th
-                                            v-for="(field, index) in reportFields"
+                                            v-for="(field, index) in accountFields"
                                             :key="index"
                                             scope="col"
                                         >
@@ -65,18 +65,18 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(report, index) in reportData"
+                                        v-for="(account, index) in accountData"
                                         :key="index"
                                     >
-                                        <th scope="row">{{ report.no }}</th>
-                                        <td>{{ report.agency_name }}</td>
-                                        <td>{{ report.work_unit }}</td>
-                                        <td>{{ report.information }}</td>
-                                        <td>{{ report.registration_progress }}</td>
-                                        <td>{{ report.regis_number }}</td>
+                                        <th scope="row">{{ account.no }}</th>
+                                        <td>{{ account.agency_name }}</td>
+                                        <td>{{ account.work_unit }}</td>
+                                        <td>{{ account.information }}</td>
+                                        <td>{{ account.registration_progress }}</td>
+                                        <td>{{ account.regis_number }}</td>
                                         <td>
                                             <CButton
-                                                v-if="!report.published"
+                                                v-if="!account.published"
                                                 color="primary"
                                                 size="sm"
                                                 class="m-2"
@@ -119,15 +119,15 @@
 </template>
 
 <script>
-import mockDataReport from '@/views/reports/mockDataReport.js'
-import reportFields from '@/views/reports/reportFields.js'
+import mockDataAccount from '@/views/accounts/mockDataAccount.js'
+import accountFields from '@/views/accounts/accountFields.js'
 
 export default {
-    name: 'Report',
+    name: 'Account',
     data() {
         return {
-            reportFields: reportFields,
-            reportData: mockDataReport,
+            accountFields: accountFields,
+            accountData: mockDataAccount,
             currentPage: 1,
         };
     },
