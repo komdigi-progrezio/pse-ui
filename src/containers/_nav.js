@@ -13,10 +13,24 @@ export default [
         _children: ['Menu']
       },
       {
-        _name: 'CSidebarNavItem',
+        _name: 'CSidebarNavDropdown',
         name: 'Laporan',
-        to: '/report',
-        icon: 'cil-pencil'
+        route: '/report',
+        icon: 'cil-pencil',
+        items: [
+          {
+            name: 'Baru',
+            to: '/report/new',
+          },
+          {
+            name: 'Ditolak',
+            to: '/report/reject'
+          },
+          {
+            name: 'Diterima',
+            to: '/report/received'
+          },
+        ]
       },
       {
         _name: 'CSidebarNavItem',

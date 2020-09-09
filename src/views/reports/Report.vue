@@ -109,7 +109,7 @@
                         </div>
                         <CPagination
                             :activePage.sync="currentPage"
-                            :pages="5"
+                            :pages="10"
                         />
                     </CCardBody>
                 </CCard>

@@ -80,9 +80,28 @@ function configRoutes () {
           component: Dashboard
         },
         {
-          path: 'report',
-          name: 'Report',
-          component: Report,
+          path: '/report',
+          name: 'Laporan',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'new',
+              name: 'NewReport',
+              component: Report,
+            },
+            {
+              path: 'reject',
+              name: 'ReportRejected',
+              component: Report,
+            },
+            {
+              path: 'received',
+              name: 'ReceivedReport',
+              component: Report,
+            },
+          ]
         },
         {
           path: 'account',
