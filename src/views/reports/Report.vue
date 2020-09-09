@@ -50,48 +50,67 @@
                                 </p>
                             </CCol>
                         </CRow>
-                        <CDataTable
-                            :items="reportData"
-                            :fields="reportFields"
-                            column-filter
-                            items-per-page-select
-                            :items-per-page="5"
-                            hover
-                            sorter
-                            pagination
-                        >
-                            <template #actions="{ item }">
-                                <td>
-                                    <CButton
-                                        v-if="!item.published"
-                                        color="primary"
-                                        size="sm"
-                                        class="m-2"
+                        <div style="overflow-x:auto;">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            v-for="(field, index) in reportFields"
+                                            :key="index"
+                                            scope="col"
+                                        >
+                                            {{ field }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(report, index) in reportData"
+                                        :key="index"
                                     >
-                                        Publikasi
-                                    </CButton>
-                                    <CBadge
-                                        v-else
-                                        color="success"
-                                        v-c-popover="{
-                                            header: 'Tanggal Publikasi',
-                                            content: '27-06-2020',
-                                            placement: 'left'
-                                        }"
-                                        class="m-2"
-                                    >
-                                        Terpublikasi
-                                    </CBadge>
-                                     <CButton
-                                        color="danger"
-                                        size="sm"
-                                        class="m-2"
-                                    >
-                                        Hapus
-                                    </CButton>
-                                </td>
-                            </template>
-                        </CDataTable>
+                                        <th scope="row">{{ report.no }}</th>
+                                        <td>{{ report.agency_name }}</td>
+                                        <td>{{ report.work_unit }}</td>
+                                        <td>{{ report.information }}</td>
+                                        <td>{{ report.registration_progress }}</td>
+                                        <td>{{ report.regis_number }}</td>
+                                        <td>
+                                            <CButton
+                                                v-if="!report.published"
+                                                color="primary"
+                                                size="sm"
+                                                class="m-2"
+                                            >
+                                                Publikasi
+                                            </CButton>
+                                            <CBadge
+                                                v-else
+                                                color="success"
+                                                v-c-popover="{
+                                                    header: 'Tanggal Publikasi',
+                                                    content: '27-06-2020',
+                                                    placement: 'left'
+                                                }"
+                                                class="m-2"
+                                            >
+                                                Terpublikasi
+                                            </CBadge>
+                                            <CButton
+                                                color="danger"
+                                                size="sm"
+                                                class="m-2"
+                                            >
+                                                Hapus
+                                            </CButton>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <CPagination
+                            :activePage.sync="currentPage"
+                            :pages="5"
+                        />
                     </CCardBody>
                 </CCard>
             </CCol>
@@ -109,11 +128,8 @@ export default {
         return {
             reportFields: reportFields,
             reportData: mockDataReport,
+            currentPage: 1,
         };
     },
 }
 </script>
-
-<style>
-
-</style>
