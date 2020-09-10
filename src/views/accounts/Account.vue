@@ -4,7 +4,7 @@
             <CCol lg="12">
                 <CCard>
                     <CCardHeader>
-                        <CIcon name="cil-pencil"/> Laporan
+                        <CIcon name="cil-people"/> Akun
                     </CCardHeader>
                     <CCardBody>
                         <h5>Filter Berdasarkan</h5>
@@ -55,8 +55,12 @@
                                     Cari
                                 </CButton>
                                 <a class="font-weight-bold d-block" href="#">Daftar User Admin</a>
-                                <a class="font-weight-bold d-block" href="#">Pengajuan Penggantian User</a>
-                                <a class="font-weight-bold d-block" href="#">Daftar Perubahan Dokumen</a>
+                                <router-link to="/account/subtitutions">
+                                    <a class="font-weight-bold d-block">Pengajuan Penggantian User</a>
+                                </router-link>
+                                <router-link to="/account/document-changes">
+                                    <a class="font-weight-bold d-block">Daftar Perubahan Dokumen</a>
+                                </router-link>
                             </CCol>
                         </CRow>
                         <div class="mt-4" style="overflow-x:auto;">
