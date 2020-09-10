@@ -9,6 +9,7 @@ const Dashboard = () => import('@/views/Dashboard');
 
 const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
+const AccountSubtitutions = () => import('@/views/accounts/subtitutions/AccountSubtitutions');
 // const Typography = () => import('@/views/theme/Typography');
 
 // const Charts = () => import('@/views/charts/Charts')
@@ -110,9 +111,31 @@ function configRoutes () {
           ]
         },
         {
-          path: 'account',
-          name: 'Account',
-          component: Account,
+            path: 'account',
+            meta: {
+              label: 'Akun'
+            },
+            component: {
+              render(c) {
+                return c('router-view')
+              }
+            },
+            children: [
+                {
+                    path: '',
+                    component: Account,
+                },
+                {
+                    path:'subtitutions',
+                    name: 'Pengajuan Pergantian User',
+                    component: AccountSubtitutions,
+                },
+                {
+                    path:'document-changes',
+                    name: 'Perubahan Dokumen',
+                    component: Account,
+                },
+            ]
         },
         // {
         //   path: 'charts',
