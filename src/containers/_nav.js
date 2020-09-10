@@ -30,6 +30,10 @@ export default [
             name: 'Diterima',
             to: '/report/received'
           },
+          {
+            name: 'Selesai',
+            to: '/report/finished'
+          },
         ]
       },
       {

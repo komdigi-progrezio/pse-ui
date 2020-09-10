@@ -102,6 +102,11 @@ function configRoutes () {
               name: 'ReceivedReport',
               component: Report,
             },
+            {
+              path: 'finished',
+              name: 'FinishedReport',
+              component: Report,
+            },
           ]
         },
         {
