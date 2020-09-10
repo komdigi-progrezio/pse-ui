@@ -14,6 +14,7 @@ import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
 import store from './store'
 
+Vue.prototype.$apiAdress = 'http://127.0.0.1:8000'
 Vue.config.performance = true
 Vue.use(CoreuiVue)
 Vue.use(datePicker)

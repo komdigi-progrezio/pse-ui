@@ -2,20 +2,22 @@
   <div class="c-app flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
-        <CCol md="8">
+        <CCol md="5">
           <CCardGroup>
             <CCard class="p-4">
               <CCardBody>
-                <CForm>
+                <CForm @submit.prevent="login" method="POST">
                   <h1>Login</h1>
                   <p class="text-muted">Sign In to your account</p>
                   <CInput
+                    v-model="email"
                     placeholder="Username"
                     autocomplete="username email"
                   >
                     <template #prepend-content><CIcon name="cil-user"/></template>
                   </CInput>
                   <CInput
+                    v-model="password"
                     placeholder="Password"
                     type="password"
                     autocomplete="curent-password"
@@ -24,17 +26,17 @@
                   </CInput>
                   <CRow>
                     <CCol col="6" class="text-left">
-                      <CButton color="primary" class="px-4">Login</CButton>
+                      <CButton type="submit" color="primary" class="px-4">Login</CButton>
                     </CCol>
                     <CCol col="6" class="text-right">
                       <CButton color="link" class="px-0">Forgot password?</CButton>
-                      <CButton color="link" class="d-lg-none">Register now!</CButton>
+                      <!-- <CButton color="link" class="d-lg-none">Register now!</CButton> -->
                     </CCol>
                   </CRow>
                 </CForm>
               </CCardBody>
             </CCard>
-            <CCard
+            <!-- <CCard
               color="primary"
               text-color="white"
               class="text-center py-5 d-md-down-none"
@@ -51,7 +53,7 @@
                   Register Now!
                 </CButton>
               </CCardBody>
-            </CCard>
+            </CCard> -->
           </CCardGroup>
         </CCol>
       </CRow>
@@ -60,7 +62,40 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: 'Login'
+  name: 'Login',
+  data() {
+	return {
+	  email: '',
+	  password: '',
+	  showMessage: false,
+	  message: '',
+	}
+  },
+  methods: {
+	// goRegister(){
+	//   this.$router.push({ path: 'register' });
+	// },
+	login() {
+	  let self = this;
+	  axios.post(  this.$apiAdress + '/api/login', {
+		email: self.email,
+		password: self.password,
+	  }).then(function (response) {
+		self.email = '';
+		self.password = '';
+		localStorage.setItem("api_token", response.data.access_token);
+		localStorage.setItem('roles', response.data.roles);
+		self.$router.push({ path: 'dashboard' });
+	  })
+	  .catch(function (error) {
+		self.message = 'Incorrect E-mail or password';
+		self.showMessage = true;
+		console.log(error);
+	  });
+
+	}
+  }
 }
 </script>

@@ -53,7 +53,7 @@ const AccountDocumentChanges = () => import('@/views/accounts/documents/AccountD
 // Views - Pages
 // const Page404 = () => import('@/views/pages/Page404')
 // const Page500 = () => import('@/views/pages/Page500')
-// const Login = () => import('@/views/pages/Login')
+const Login = () => import('@/views/pages/Login')
 // const Register = () => import('@/views/pages/Register')
 
 // Users
@@ -376,6 +376,21 @@ function configRoutes () {
     //     }
     //   ]
     // }
+    {
+      path: '/',
+      redirect: '/login',
+      name: 'Auth',
+      component: {
+        render (c) { return c('router-view') }
+      },
+      children: [
+        {
+          path: 'login',
+          name: 'Login',
+          component: Login
+        },
+      ]
+    },
   ]
 }
 
