@@ -1,0 +1,53 @@
+const mockDataAccountSubtitution = [
+    {
+        no: 1,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 2,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 3,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 4,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 5,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 6,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+    {
+        no: 7,
+        username: `agus@bangkatengahkab.go.id	`,
+        name: `Agustiar, S. AB	`,
+        nip: `197708152006041018`,
+        updated_at: '24/08/2015',
+    },
+]
+
+export default mockDataAccountSubtitution;

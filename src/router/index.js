@@ -10,6 +10,7 @@ const Dashboard = () => import('@/views/Dashboard');
 const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
 const AccountSubtitutions = () => import('@/views/accounts/subtitutions/AccountSubtitutions');
+const AccountDocumentChanges = () => import('@/views/accounts/documents/AccountDocumentChanges');
 // const Typography = () => import('@/views/theme/Typography');
 
 // const Charts = () => import('@/views/charts/Charts')
@@ -133,7 +134,7 @@ function configRoutes () {
                 {
                     path:'document-changes',
                     name: 'Perubahan Dokumen',
-                    component: Account,
+                    component: AccountDocumentChanges,
                 },
             ]
         },
