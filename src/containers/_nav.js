@@ -23,12 +23,12 @@ export default [
             to: '/report/new',
           },
           {
-            name: 'Ditolak',
-            to: '/report/reject'
+            name: 'Draft',
+            to: '/report/draft'
           },
           {
-            name: 'Diterima',
-            to: '/report/received'
+            name: 'Ditolak',
+            to: '/report/reject'
           },
           {
             name: 'Selesai',

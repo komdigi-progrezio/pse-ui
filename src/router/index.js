@@ -89,22 +89,22 @@ function configRoutes () {
           children: [
             {
               path: 'new',
-              name: 'NewReport',
+              name: 'Laporan Baru',
+              component: Report,
+            },
+            {
+              path: 'draft',
+              name: 'Laporan Draft',
               component: Report,
             },
             {
               path: 'reject',
-              name: 'ReportRejected',
-              component: Report,
-            },
-            {
-              path: 'received',
-              name: 'ReceivedReport',
+              name: 'Laporan Ditolak',
               component: Report,
             },
             {
               path: 'finished',
-              name: 'FinishedReport',
+              name: 'Laporan Selesai',
               component: Report,
             },
           ]
