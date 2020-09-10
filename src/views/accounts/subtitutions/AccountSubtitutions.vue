@@ -12,7 +12,7 @@
                                 <thead>
                                     <tr>
                                         <th
-                                            v-for="(field, index) in AccountSubtitutionFields"
+                                            v-for="(field, index) in accountSubtitutionFields"
                                             :key="index"
                                             scope="col"
                                         >
@@ -22,7 +22,7 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(account, index) in AccountSubtitutionData"
+                                        v-for="(account, index) in accountSubtitutionData"
                                         :key="index"
                                     >
                                         <th scope="row">{{ account.no }}</th>
@@ -50,15 +50,15 @@
 </template>
 
 <script>
-import AccountSubtitutionFields from '@/views/accounts/subtitutions/accountSubtitutionFields.js'
-import AccountSubtitutionData from '@/views/accounts/subtitutions/accountSubtitutionData.js'
+import accountSubtitutionFields from '@/views/accounts/subtitutions/AccountSubtitutionFields.js'
+import accountSubtitutionData from '@/views/accounts/subtitutions/AccountSubtitutionData.js'
 
 export default {
     name: 'AccountSubtitutions',
     data() {
         return {
-            AccountSubtitutionFields: AccountSubtitutionFields,
-            AccountSubtitutionData: AccountSubtitutionData,
+            accountSubtitutionFields: accountSubtitutionFields,
+            accountSubtitutionData: accountSubtitutionData,
             currentPage: 1,
         };
     }
