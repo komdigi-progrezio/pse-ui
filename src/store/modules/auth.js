@@ -14,7 +14,6 @@ const getters = {
 
 const actions = {
     destroyToken(context) {
-      if (context.getters.loggedIn) {
         return new Promise((resolve, reject) => {
             $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}auth/logout`)
             .then(response => {
@@ -32,7 +31,6 @@ const actions = {
                 reject(error)
             })
         })
-      }
     },
     retrieveToken(context, credentials) {
         return new Promise((resolve, reject) => {
