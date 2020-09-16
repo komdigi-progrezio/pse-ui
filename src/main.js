@@ -15,7 +15,7 @@ import { getToken } from '@/utils/auth.js'
 import store from '@/store/store.js';
 import api from '@/utils/api';
 
-Vue.prototype.$apiAdress = 'http://127.0.0.1:8000'
+Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
 Vue.prototype.$http = api;
 
 api.interceptors.request.use(function (config) {
