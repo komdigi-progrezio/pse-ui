@@ -60,22 +60,22 @@ function configRoutes () {
                     children: [
                         {
                             path: 'new',
-                            name: 'NewReport',
+                            name: 'New Report',
                             component: Report,
                         },
                         {
                             path: 'draft',
-                            name: 'DraftReport',
+                            name: 'Draft Report',
                             component: Report,
                         },
                         {
                             path: 'reject',
-                            name: 'RejectReport',
+                            name: 'Reject Report',
                             component: Report,
                         },
                         {
                             path: 'finished',
-                            name: 'FinishReport',
+                            name: 'Finish Report',
                             component: Report,
                         },
                     ]
