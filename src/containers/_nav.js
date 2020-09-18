@@ -15,31 +15,31 @@ export default [
       {
         _name: 'CSidebarNavDropdown',
         name: 'Laporan',
-        route: '/report',
+        route: '/admin/report',
         icon: 'cil-pencil',
         items: [
           {
             name: 'Baru',
-            to: '/report/new',
+            to: '/admin/report/new',
           },
           {
             name: 'Draft',
-            to: '/report/draft'
+            to: '/admin/report/draft'
           },
           {
             name: 'Ditolak',
-            to: '/report/reject'
+            to: '/admin/report/reject'
           },
           {
             name: 'Selesai',
-            to: '/report/finished'
+            to: '/admin/report/finished'
           },
         ]
       },
       {
         _name: 'CSidebarNavItem',
         name: 'Akun',
-        to: '/account',
+        to: '/admin/account',
         icon: 'cil-people'
       },
       // {
@@ -63,7 +63,7 @@ export default [
       //     {
       //       name: 'Carousels',
       //       to: '/base/carousels'
-      //     }, 
+      //     },
       //     {
       //       name: 'Collapses',
       //       to: '/base/collapses'
