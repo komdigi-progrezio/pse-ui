@@ -1,8 +1,10 @@
 import { getToken } from '@/utils/auth';
+import { getRefreshToken } from '@/utils/auth';
 import $axiosApi from '@/utils/api';
 
 const state = {
     token: getToken(),
+    refresh_token: getRefreshToken(),
 };
 
 const getters = {
@@ -18,16 +20,14 @@ const actions = {
             $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}auth/logout`)
             .then(response => {
                 localStorage.removeItem('token')
-                context.commit('auth/DESTROY_TOKEN', null, {
-                    root: true,
-                });
+                localStorage.removeItem('refresh_token')
+                context.commit('DESTROY_TOKEN', null);
                 resolve(response)
             })
             .catch(error => {
                 localStorage.removeItem('token')
-                context.commit('auth/DESTROY_TOKEN', null, {
-                    root: true,
-                });
+                localStorage.removeItem('refresh_token')
+                context.commit('DESTROY_TOKEN', null);
                 reject(error)
             })
         })
@@ -41,11 +41,11 @@ const actions = {
             .then(response => {
                 console.log(response);
                 const token = response.data.access_token
+                const refreshToken = response.data.refresh_token
 
                 localStorage.setItem('token', token)
-                context.commit('auth/RETRIEVE_TOKEN', token, {
-                    root: true,
-                });
+                localStorage.setItem('refresh_token', refreshToken)
+                context.commit('RETRIEVE_TOKEN', response.data);
                 resolve(response)
             })
             .catch(error => {
@@ -56,8 +56,14 @@ const actions = {
 };
 
 const mutations = {
-    RETRIEVE_TOKEN:(state, token) =>state.token = token,
-    DESTROY_TOKEN: state => state.token = null,
+    RETRIEVE_TOKEN:(state, data) => {
+        state.token = data.access_token;
+        state.refresh_token = data.refresh_token;
+    },
+    DESTROY_TOKEN: state => {
+        state.token = null;
+        state.refresh_token = null;
+    },
 };
 
 export default {
