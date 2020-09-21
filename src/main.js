@@ -11,10 +11,10 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-import { getToken } from '@/utils/auth.js'
 import store from '@/store/store.js';
 import api from '@/utils/api';
 import axios from 'axios';
+import { getToken } from '@/utils/auth.js';
 
 Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
 Vue.prototype.$http = api;
@@ -22,7 +22,6 @@ Vue.prototype.$http = api;
 api.interceptors.response.use(function (response) {
     return response;
     }, function (error) {
-    console.log(error);
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -43,13 +42,13 @@ api.interceptors.response.use(function (response) {
     }
 
     return Promise.reject(error);
-    });
-// api.interceptors.request.use(function (config) {
-//     const token = store.state.auth.token ? store.state.auth.token : getToken();
-//     config.headers.common['Authorization'] =  token ? `Bearer ${token}` : '';
+});
+api.interceptors.request.use(function (config) {
+    const token = store.state.auth.token ? store.state.auth.token : getToken();
+    config.headers.common['Authorization'] =  token ? `Bearer ${token}` : '';
 
-//     return config;
-// });
+    return config;
+});
 
 // api.interceptors.response.use(
 //     response => {
