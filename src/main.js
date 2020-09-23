@@ -11,13 +11,38 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-import { getToken } from '@/utils/auth.js'
 import store from '@/store/store.js';
 import api from '@/utils/api';
+import axios from 'axios';
+import { getToken } from '@/utils/auth.js';
 
 Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
 Vue.prototype.$http = api;
 
+api.interceptors.response.use(function (response) {
+    return response;
+    }, function (error) {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+
+        originalRequest._retry = true;
+
+        const refreshToken = window.localStorage.getItem('refresh_token');
+        return axios.post(`${process.env.VUE_APP_BASE_API_URL}auth/oauth/refresh`, {
+            refresh_token: refreshToken
+        })
+        .then(({data}) => {
+            window.localStorage.setItem('token', data.access_token);
+            window.localStorage.setItem('refresh_token', data.refresh_token);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token;
+            originalRequest.headers['Authorization'] = 'Bearer ' + data.access_token;
+            return axios(originalRequest);
+        });
+    }
+
+    return Promise.reject(error);
+});
 api.interceptors.request.use(function (config) {
     const token = store.state.auth.token ? store.state.auth.token : getToken();
     config.headers.common['Authorization'] =  token ? `Bearer ${token}` : '';
@@ -25,48 +50,48 @@ api.interceptors.request.use(function (config) {
     return config;
 });
 
-api.interceptors.response.use(
-    response => {
-        if (response.status === 200 || response.status === 201) {
-            return Promise.resolve(response);
-        } else {
-            return Promise.reject(response);
-        }
-    },
-    error => {
-        if (error.response.status) {
-            switch (error.response.status) {
-                case 400:
+// api.interceptors.response.use(
+//     response => {
+//         if (response.status === 200 || response.status === 201) {
+//             return Promise.resolve(response);
+//         } else {
+//             return Promise.reject(response);
+//         }
+//     },
+//     error => {
+//         if (error.response.status) {
+//             switch (error.response.status) {
+//                 case 400:
 
-                //do something
-                break;
+//                 //do something
+//                 break;
 
-                case 401:
-                alert("session expired");
-                break;
-                case 403:
-                router.replace({
-                    path: "/login",
-                    query: { redirect: router.currentRoute.fullPath }
-                });
-                break;
-                case 404:
-                alert('page not exist');
-                break;
-                case 502:
-                setTimeout(() => {
-                    router.replace({
-                    path: "/login",
-                    query: {
-                        redirect: router.currentRoute.fullPath
-                    }
-                    });
-                }, 1000);
-            }
-        return Promise.reject(error.response);
-        }
-    }
-);
+//                 case 401:
+//                 alert("session expired");
+//                 break;
+//                 case 403:
+//                 router.replace({
+//                     path: "/login",
+//                     query: { redirect: router.currentRoute.fullPath }
+//                 });
+//                 break;
+//                 case 404:
+//                 alert('page not exist');
+//                 break;
+//                 case 502:
+//                 setTimeout(() => {
+//                     router.replace({
+//                     path: "/login",
+//                     query: {
+//                         redirect: router.currentRoute.fullPath
+//                     }
+//                     });
+//                 }, 1000);
+//             }
+//         return Promise.reject(error.response);
+//         }
+//     }
+// );
 Vue.config.performance = true
 Vue.use(CoreuiVue)
 Vue.use(datePicker)
