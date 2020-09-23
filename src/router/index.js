@@ -13,6 +13,7 @@ const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
 const AccountSubtitutions = () => import('@/views/accounts/subtitutions/AccountSubtitutions');
 const AccountDocumentChanges = () => import('@/views/accounts/documents/AccountDocumentChanges');
+const AccountListAdmin = () => import('@/views/accounts/lists/AccountListAdmin');
 const Login = () => import('@/views/pages/Login')
 
 Vue.use(Router)
@@ -96,15 +97,20 @@ function configRoutes () {
                             component: Account,
                         },
                         {
-                            path:'subtitutions',
+                            path: 'subtitutions',
                             name: 'AccountSubtitutions',
                             component: AccountSubtitutions,
                         },
                         {
-                            path:'document-changes',
-                            name: 'AccountDocumentChanges',
+                            path: 'document-changes',
+                            name: 'Document Change List',
                             component: AccountDocumentChanges,
                         },
+                        {
+                            path: 'list',
+                            name: 'AccountListAdmin',
+                            component: AccountListAdmin,
+                        }
                     ]
                 },
             ]
