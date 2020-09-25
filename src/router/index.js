@@ -54,29 +54,29 @@ function configRoutes () {
                 },
                 {
                     path: 'report',
-                    name: 'Report',
+                    name: 'Laporan',
                     component: {
                         render (c) { return c('router-view') }
                     },
                     children: [
                         {
                             path: 'new',
-                            name: 'New Report',
+                            name: 'Laporan Baru',
                             component: Report,
                         },
                         {
                             path: 'draft',
-                            name: 'Draft Report',
+                            name: 'Laporan Draft',
                             component: Report,
                         },
                         {
                             path: 'reject',
-                            name: 'Reject Report',
+                            name: 'Laporan Ditolak',
                             component: Report,
                         },
                         {
                             path: 'finished',
-                            name: 'Finish Report',
+                            name: 'Laporan Selesai',
                             component: Report,
                         },
                     ]
@@ -98,17 +98,17 @@ function configRoutes () {
                         },
                         {
                             path: 'subtitutions',
-                            name: 'AccountSubtitutions',
+                            name: 'Pengajuan Penggantian User',
                             component: AccountSubtitutions,
                         },
                         {
                             path: 'document-changes',
-                            name: 'Document Change List',
+                            name: 'Daftar Perubahan Dokumen',
                             component: AccountDocumentChanges,
                         },
                         {
                             path: 'list',
-                            name: 'AccountListAdmin',
+                            name: 'Daftar User Admin',
                             component: AccountListAdmin,
                         }
                     ]
