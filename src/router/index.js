@@ -13,6 +13,7 @@ const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
 const AccountSubtitutions = () => import('@/views/accounts/subtitutions/AccountSubtitutions');
 const AccountDocumentChanges = () => import('@/views/accounts/documents/AccountDocumentChanges');
+const AccountListAdmin = () => import('@/views/accounts/lists/AccountListAdmin');
 const Login = () => import('@/views/pages/Login')
 
 Vue.use(Router)
@@ -53,29 +54,29 @@ function configRoutes () {
                 },
                 {
                     path: 'report',
-                    name: 'Report',
+                    name: 'Laporan',
                     component: {
                         render (c) { return c('router-view') }
                     },
                     children: [
                         {
                             path: 'new',
-                            name: 'New Report',
+                            name: 'Laporan Baru',
                             component: Report,
                         },
                         {
                             path: 'draft',
-                            name: 'Draft Report',
+                            name: 'Laporan Draft',
                             component: Report,
                         },
                         {
                             path: 'reject',
-                            name: 'Reject Report',
+                            name: 'Laporan Ditolak',
                             component: Report,
                         },
                         {
                             path: 'finished',
-                            name: 'Finish Report',
+                            name: 'Laporan Selesai',
                             component: Report,
                         },
                     ]
@@ -96,15 +97,20 @@ function configRoutes () {
                             component: Account,
                         },
                         {
-                            path:'subtitutions',
-                            name: 'AccountSubtitutions',
+                            path: 'subtitutions',
+                            name: 'Pengajuan Penggantian User',
                             component: AccountSubtitutions,
                         },
                         {
-                            path:'document-changes',
-                            name: 'AccountDocumentChanges',
+                            path: 'document-changes',
+                            name: 'Daftar Perubahan Dokumen',
                             component: AccountDocumentChanges,
                         },
+                        {
+                            path: 'list',
+                            name: 'Daftar User Admin',
+                            component: AccountListAdmin,
+                        }
                     ]
                 },
             ]

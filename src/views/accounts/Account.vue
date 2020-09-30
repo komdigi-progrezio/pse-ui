@@ -54,11 +54,15 @@
                                 >
                                     Cari
                                 </CButton>
-                                <a class="font-weight-bold d-block" href="#">Daftar User Admin</a>
-                                <router-link to="/account/subtitutions">
+                                <router-link to="/admin/account/list">
+                                    <a class="font-weight-bold d-block">
+                                        Daftar User Admin
+                                    </a>
+                                </router-link>
+                                <router-link to="/admin/account/subtitutions">
                                     <a class="font-weight-bold d-block">Pengajuan Penggantian User</a>
                                 </router-link>
-                                <router-link to="/account/document-changes">
+                                <router-link to="/admin/account/document-changes">
                                     <a class="font-weight-bold d-block">Daftar Perubahan Dokumen</a>
                                 </router-link>
                             </CCol>
