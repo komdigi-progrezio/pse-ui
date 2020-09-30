@@ -11,9 +11,10 @@ const Dashboard = () => import('@/views/Dashboard');
 
 const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
-const AccountSubtitutions = () => import('@/views/accounts/subtitutions/AccountSubtitutions');
-const AccountDocumentChanges = () => import('@/views/accounts/documents/AccountDocumentChanges');
-const AccountListAdmin = () => import('@/views/accounts/lists/AccountListAdmin');
+const AccountSubtitutions = () => import('@/views/accounts/AccountSubtitutions');
+const AccountDocumentChanges = () => import('@/views/accounts/AccountDocumentChanges');
+const AccountListAdmin = () => import('@/views/accounts/AccountListAdmin');
+const AccountChangePassword = () => import('@/views/accounts/AccountChangePassword');
 const Login = () => import('@/views/pages/Login')
 
 Vue.use(Router)
@@ -110,7 +111,12 @@ function configRoutes () {
                             path: 'list',
                             name: 'Daftar User Admin',
                             component: AccountListAdmin,
-                        }
+                        },
+                        {
+                            path: 'change/password',
+                            name: 'Ganti Password',
+                            component: AccountChangePassword,
+                        },
                     ]
                 },
             ]

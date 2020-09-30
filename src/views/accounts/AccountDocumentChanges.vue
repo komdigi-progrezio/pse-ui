@@ -4,7 +4,7 @@
             <CCol lg="12">
                 <CCard>
                     <CCardHeader>
-                        <CIcon name="cil-people"/> Daftar Pengajuan Penggantian Akun Pengelola
+                        <CIcon name="cil-file" /> Data Perubahan Dokumen
                     </CCardHeader>
                     <CCardBody>
                         <div style="overflow-x:auto;">
@@ -12,7 +12,7 @@
                                 <thead>
                                     <tr>
                                         <th
-                                            v-for="(field, index) in accountSubtitutionFields"
+                                            v-for="(field, index) in accountDocumentFields"
                                             :key="index"
                                             scope="col"
                                         >
@@ -22,17 +22,13 @@
                                 </thead>
                                 <tbody>
                                     <tr
-                                        v-for="(account, index) in accountSubtitutionData"
+                                        v-for="(account, index) in accountDocumentData"
                                         :key="index"
                                     >
                                         <th scope="row">{{ account.no }}</th>
                                         <td>{{ account.username }}</td>
                                         <td>{{ account.name }}</td>
                                         <td>{{ account.nip }}</td>
-                                        <td>{{ account.position }}</td>
-                                        <td>{{ account.instance }}</td>
-                                        <td>{{ account.stats }}</td>
-                                        <td>{{ account.registered_at }}</td>
                                         <td>{{ account.updated_at }}</td>
                                     </tr>
                                 </tbody>
@@ -50,17 +46,17 @@
 </template>
 
 <script>
-import accountSubtitutionFields from '@/views/accounts/subtitutions/AccountSubtitutionFields.js'
-import accountSubtitutionData from '@/views/accounts/subtitutions/AccountSubtitutionData.js'
+import accountDocumentFields from '@/views/accounts/AccountDocumentFields.js'
+import accountDocumentData from '@/views/accounts/AccountDocumentData.js'
 
 export default {
-    name: 'AccountSubtitutions',
+    name: 'AccountDocumentChanges',
     data() {
         return {
-            accountSubtitutionFields: accountSubtitutionFields,
-            accountSubtitutionData: accountSubtitutionData,
+            accountDocumentFields: accountDocumentFields,
+            accountDocumentData: accountDocumentData,
             currentPage: 1,
         };
-    }
+    },
 }
 </script>
