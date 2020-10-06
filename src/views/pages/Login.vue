@@ -29,7 +29,7 @@
                                     </div>
                                     <CInput
                                         v-model="form.username"
-                                        placeholder="Username"
+                                        placeholder="Masukan Email atau Username"
                                         autocomplete="username email"
                                     >
                                         <template #prepend-content
