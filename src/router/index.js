@@ -1,46 +1,53 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import store from '@/store/store';
 import { getToken } from '@/utils/auth.js';
 
 // Containers
-const TheContainer = () => import('@/containers/TheContainer')
+const TheContainer = () => import('@/containers/TheContainer');
 
 // Views
 const Dashboard = () => import('@/views/Dashboard');
 
 const Report = () => import('@/views/reports/Report');
 const Account = () => import('@/views/accounts/Account');
-const AccountSubtitutions = () => import('@/views/accounts/AccountSubtitutions');
-const AccountDocumentChanges = () => import('@/views/accounts/AccountDocumentChanges');
+const AccountSubtitutions = () =>
+    import('@/views/accounts/AccountSubtitutions');
+const AccountRoles = () => import('@/views/accounts/AccountRoles');
+const AccountPermissions = () => import('@/views/accounts/AccountPermissions');
+const AccountDocumentChanges = () =>
+    import('@/views/accounts/AccountDocumentChanges');
 const AccountListAdmin = () => import('@/views/accounts/AccountListAdmin');
-const AccountChangePassword = () => import('@/views/accounts/AccountChangePassword');
-const Login = () => import('@/views/pages/Login')
+const AccountChangePassword = () =>
+    import('@/views/accounts/AccountChangePassword');
+const Login = () => import('@/views/pages/Login');
 
-Vue.use(Router)
+Vue.use(Router);
 
 const createRouter = new Router({
     mode: 'history', // https://router.vuejs.org/api/#mode
     linkActiveClass: 'active',
     scrollBehavior: () => ({ y: 0 }),
     routes: configRoutes()
-})
+});
 
-function configRoutes () {
+function configRoutes() {
     return [
         {
             path: '',
             redirect: '/login',
             name: 'Auth',
             component: {
-                render (c) { return c('router-view') }
+                render(c) {
+                    return c('router-view');
+                }
             },
             children: [
                 {
-                path: 'login',
-                name: 'Login',
-                component: Login
-                },
+                    path: 'login',
+                    name: 'Login',
+                    component: Login
+                }
             ]
         },
         {
@@ -57,29 +64,31 @@ function configRoutes () {
                     path: 'report',
                     name: 'Laporan',
                     component: {
-                        render (c) { return c('router-view') }
+                        render(c) {
+                            return c('router-view');
+                        }
                     },
                     children: [
                         {
                             path: 'new',
                             name: 'Laporan Baru',
-                            component: Report,
+                            component: Report
                         },
                         {
                             path: 'draft',
                             name: 'Laporan Draft',
-                            component: Report,
+                            component: Report
                         },
                         {
                             path: 'reject',
                             name: 'Laporan Ditolak',
-                            component: Report,
+                            component: Report
                         },
                         {
                             path: 'finished',
                             name: 'Laporan Selesai',
-                            component: Report,
-                        },
+                            component: Report
+                        }
                     ]
                 },
                 {
@@ -88,53 +97,62 @@ function configRoutes () {
                         label: 'Akun'
                     },
                     component: {
-                    render(c) {
-                        return c('router-view')
-                    }
+                        render(c) {
+                            return c('router-view');
+                        }
                     },
                     children: [
                         {
                             path: '',
-                            component: Account,
+                            component: Account
                         },
                         {
                             path: 'subtitutions',
                             name: 'Pengajuan Penggantian User',
-                            component: AccountSubtitutions,
+                            component: AccountSubtitutions
+                        },
+                        {
+                            path: 'role',
+                            name: 'Daftar Role',
+                            component: AccountRoles
+                        },
+                        {
+                            path: 'permission',
+                            name: 'Daftar Hak Akses',
+                            component: AccountPermissions
                         },
                         {
                             path: 'document-changes',
                             name: 'Daftar Perubahan Dokumen',
-                            component: AccountDocumentChanges,
+                            component: AccountDocumentChanges
                         },
                         {
                             path: 'list',
                             name: 'Daftar User Admin',
-                            component: AccountListAdmin,
+                            component: AccountListAdmin
                         },
                         {
                             path: 'change/password',
                             name: 'Ganti Password',
-                            component: AccountChangePassword,
-                        },
+                            component: AccountChangePassword
+                        }
                     ]
-                },
+                }
             ]
-        },
-    ]
+        }
+    ];
 }
 
 createRouter.beforeEach((to, from, next) => {
     const token = store.state.auth.token ? store.state.auth.token : getToken();
 
     if (to.name !== 'Login' && !token) {
-        next({ name: 'Login' })
-    } else if(token && to.name === 'Login') {
+        next({ name: 'Login' });
+    } else if (token && to.name === 'Login') {
         next({ name: 'Dashboard' });
     } else {
         next();
     }
-
-})
+});
 
 export default createRouter;
