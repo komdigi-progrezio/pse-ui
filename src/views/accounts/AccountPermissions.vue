@@ -19,7 +19,7 @@
             <CCol lg="12">
                 <CCard>
                     <CCardHeader>
-                        <CIcon name="cil-people" /> Akun
+                        <CIcon name="cil-lock-locked" /> Hak Akses
                         <div class="card-header-actions">
                             <CButton
                                 color="success"
@@ -27,7 +27,7 @@
                                 size="sm"
                                 variant="outline"
                                 v-c-tooltip="{
-                                    content: 'Tambah User',
+                                    content: 'Tambah Hak Akses',
                                     placement: 'bottom',
                                 }"
                                 @click="post"
@@ -57,55 +57,71 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama</th>
-                                            <th>Status</th>
-                                            <th>Last Login</th>
+                                            <th>Nama Hak Akses</th>
+                                            <th>Created By</th>
+                                            <th>Updated By</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            v-for="(item, index) in data"
-                                            :key="index"
-                                        >
-                                            <th scope="row">{{ index + 1 }}</th>
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.status }}</td>
-                                            <td>{{ item.last_login }}</td>
-                                            <td>
-                                                <CButton
-                                                    color="danger"
-                                                    size="sm"
-                                                    class="m-1"
-                                                    v-c-tooltip="{
-                                                        content: 'Hapus User',
-                                                        placement: 'bottom',
-                                                    }"
-                                                    @click="destroy(item)"
+                                        <template v-if="data.length > 0">
+                                            <tr
+                                                v-for="(item, index) in data"
+                                                :key="index"
+                                            >
+                                                <th scope="row">
+                                                    {{ index + 1 }}
+                                                </th>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.created_by }}</td>
+                                                <td>{{ item.updated_by }}</td>
+                                                <td>
+                                                    <CButton
+                                                        color="danger"
+                                                        size="sm"
+                                                        class="m-1"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'Hapus Hak Akses',
+                                                            placement: 'bottom',
+                                                        }"
+                                                        @click="destroy(item)"
+                                                    >
+                                                        <CIcon
+                                                            name="cil-trash"
+                                                        />
+                                                    </CButton>
+                                                    <CButton
+                                                        color="success"
+                                                        size="sm"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'Edit Hak Akses',
+                                                            placement: 'bottom',
+                                                        }"
+                                                        @click="edit(item)"
+                                                    >
+                                                        <CIcon
+                                                            name="cil-pencil"
+                                                        />
+                                                    </CButton>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                        <template v-else>
+                                            <tr>
+                                                <td
+                                                    colspan="5"
+                                                    class="text-center"
                                                 >
-                                                    <CIcon name="cil-trash" />
-                                                </CButton>
-                                                <CButton
-                                                    color="success"
-                                                    size="sm"
-                                                    v-c-tooltip="{
-                                                        content: 'Edit User',
-                                                        placement: 'bottom',
-                                                    }"
-                                                    @click="edit(item)"
-                                                >
-                                                    <CIcon name="cil-pencil" />
-                                                </CButton>
-                                            </td>
-                                        </tr>
+                                                    Data Kosong
+                                                </td>
+                                            </tr>
+                                        </template>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <!-- <CPagination
-                            :activePage.sync="currentPage"
-                            :pages="5"
-                        /> -->
                     </CCardBody>
                 </CCard>
             </CCol>
@@ -152,99 +168,16 @@
                 <div class="modal-body">
                     <CRow>
                         <CCol sm="12">
-                            <label for="name">Nama Lengkap</label>
+                            <label for="name">Nama Hak Akses</label>
                             <input
                                 v-model="forms.name"
                                 type="text"
                                 name="name"
-                                placeholder="Masukan Nama Lengkap"
+                                placeholder="Masukan Nama Hak Akses"
                                 class="form-control"
                                 @blur="errorValidations.name = []"
                             />
                             <message :messages="errorValidations.name" />
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol sm="12">
-                            <label for="username">Username</label>
-                            <input
-                                v-model="forms.username"
-                                type="text"
-                                name="username"
-                                placeholder="Masukan Username"
-                                class="form-control"
-                                @input="validateUsername"
-                                @blur="errorValidations.username = []"
-                            />
-                            <message :messages="errorValidations.username" />
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol sm="12">
-                            <label for="email">Email</label>
-                            <input
-                                v-model="forms.email"
-                                type="text"
-                                name="email"
-                                placeholder="Masukan Email Yang Aktif"
-                                class="form-control"
-                                @input="validateEmail"
-                                @blur="errorValidations.email = []"
-                            />
-                            <message :messages="errorValidations.email" />
-                        </CCol>
-                    </CRow>
-                    <template v-if="modal.post_put.method == 'post'">
-                        <CRow>
-                            <CCol sm="12">
-                                <label for="password">Password</label>
-                                <input
-                                    v-model="forms.password"
-                                    type="password"
-                                    name="password"
-                                    placeholder="Masukan Password"
-                                    class="form-control"
-                                    @blur="errorValidations.password = []"
-                                />
-                                <message
-                                    :messages="errorValidations.password"
-                                />
-                            </CCol>
-                        </CRow>
-                        <CRow>
-                            <CCol sm="12">
-                                <label for="password_confirmation"
-                                    >Konfirmasi Password</label
-                                >
-                                <input
-                                    v-model="forms.password_confirmation"
-                                    type="password"
-                                    name="password_confirmation"
-                                    placeholder="Masukan Konfirmasi Password"
-                                    class="form-control"
-                                />
-                            </CCol>
-                        </CRow>
-                    </template>
-                    <CRow>
-                        <CCol sm="12">
-                            <label class="form-label">Roles</label>
-                            <label
-                                v-for="(value, index) in roles"
-                                :key="index"
-                                class="custom-control custom-checkbox col-lg-6"
-                            >
-                                <input
-                                    :id="value.name"
-                                    v-model="forms.roles"
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    :value="value.name"
-                                />
-                                <span class="custom-control-label">{{
-                                    value.name.toUpperCase()
-                                }}</span>
-                            </label>
                         </CCol>
                     </CRow>
                 </div>
@@ -273,7 +206,7 @@
 
 <script>
 export default {
-    name: 'AccountListAdmin',
+    name: 'AccountPermissions',
     data() {
         return {
             spinner: true,
@@ -301,74 +234,27 @@ export default {
                 },
             },
             data: [],
-            roles: [],
             forms: {
                 id: null,
                 name: null,
-                username: null,
-                email: null,
-                password: null,
-                password_confirmation: null,
-                roles: [],
             },
             errorValidations: {
                 name: [],
-                username: [],
-                email: [],
-                password: [],
             },
         };
     },
     created() {
         this.getData();
-        this.getRole();
     },
     methods: {
-        validateUsername() {
-            const regex = new RegExp(/^\S*$/);
-            const value = this.forms.username
-                .toString()
-                .replace(/ /g, '')
-                .toLowerCase();
-            if (regex.test(this.forms.username)) {
-                this.errorValidations.username = [];
-            } else {
-                this.errorValidations.username = ['Tidak Boleh ada Spasi'];
-                this.forms.username = value;
-            }
-        },
-        validateEmail() {
-            const regex = new RegExp(/^\S*$/);
-            const value = this.forms.email
-                .toString()
-                .replace(/ /g, '')
-                .toLowerCase();
-            if (regex.test(this.forms.email)) {
-                this.errorValidations.email = [];
-            } else {
-                this.errorValidations.email = ['Tidak Boleh ada Spasi'];
-                this.forms.email = value;
-            }
-        },
         getData() {
             this.spinner = true;
+
             this.$http
-                .get('/users/filter')
+                .get('/permissions/filter')
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        getRole() {
-            this.spinner = true;
-            this.$http
-                .get('/roles')
-                .then((response) => {
-                    this.spinner = false;
-                    this.roles = response.data.data;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -386,11 +272,6 @@ export default {
         clearForm() {
             this.forms.id = null;
             this.forms.name = null;
-            this.forms.username = null;
-            this.forms.email = null;
-            this.forms.password = null;
-            this.forms.password_confirmation = null;
-            this.forms.roles = [];
         },
         post() {
             this.clearForm();
@@ -434,7 +315,7 @@ export default {
         },
         submitDelete() {
             this.$http
-                .delete(`users/${this.modal.delete.uniqueId}`)
+                .delete(`permissions/${this.modal.delete.uniqueId}`)
                 .then(() => {
                     this.getData();
                     this.closeModalDelete();
@@ -452,7 +333,7 @@ export default {
                 });
         },
         submitPostPut() {
-            const url = '/users';
+            const url = '/permissions';
             const formData = new FormData();
             let urlAction = null;
             let message = null;
@@ -482,9 +363,6 @@ export default {
                 }
             });
             this.errorValidations.name = [];
-            this.errorValidations.username = [];
-            this.errorValidations.email = [];
-            this.errorValidations.password = [];
 
             this.$http({
                 method: 'post',
@@ -506,21 +384,6 @@ export default {
                             'undefined'
                                 ? []
                                 : error.response.data.errors.name;
-                        this.errorValidations.username =
-                            typeof error.response.data.errors.username ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.username;
-                        this.errorValidations.email =
-                            typeof error.response.data.errors.email ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.email;
-                        this.errorValidations.password =
-                            typeof error.response.data.errors.password ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.password;
                     }
                     this.alert.show = true;
                     this.alert.style = 'danger';
@@ -531,9 +394,6 @@ export default {
         edit(item) {
             this.forms.id = item.id;
             this.forms.name = item.name;
-            this.forms.username = item.username;
-            this.forms.email = item.email;
-            this.forms.roles = item.roles;
             this.put();
         },
     },
