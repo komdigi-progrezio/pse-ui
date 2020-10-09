@@ -60,7 +60,7 @@
                                             <th>Nama</th>
                                             <th>Status</th>
                                             <th>Last Login</th>
-                                            <th>Aksi</th>
+                                            <th colspan="3">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -76,7 +76,7 @@
                                                 <CButton
                                                     color="danger"
                                                     size="sm"
-                                                    class="m-1"
+                                                    class="mr-1"
                                                     v-c-tooltip="{
                                                         content: 'Hapus User',
                                                         placement: 'bottom',
@@ -88,6 +88,7 @@
                                                 <CButton
                                                     color="success"
                                                     size="sm"
+                                                    class="mr-1"
                                                     v-c-tooltip="{
                                                         content: 'Edit User',
                                                         placement: 'bottom',
@@ -96,6 +97,38 @@
                                                 >
                                                     <CIcon name="cil-pencil" />
                                                 </CButton>
+                                                <template v-if="item.is_active">
+                                                    <CButton
+                                                        color="secondary"
+                                                        size="sm"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'Non Aktifkan User',
+                                                            placement: 'bottom',
+                                                        }"
+                                                        @click="active(item)"
+                                                    >
+                                                        <CIcon
+                                                            name="cil-x-circle"
+                                                        />
+                                                    </CButton>
+                                                </template>
+                                                <template v-else>
+                                                    <CButton
+                                                        color="secondary"
+                                                        size="sm"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'Aktifkan User',
+                                                            placement: 'bottom',
+                                                        }"
+                                                        @click="active(item)"
+                                                    >
+                                                        <CIcon
+                                                            name="cil-check-circle"
+                                                        />
+                                                    </CButton>
+                                                </template>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -324,6 +357,21 @@ export default {
         this.getRole();
     },
     methods: {
+        active(item) {
+            this.$http
+                .patch(`/users/active/${item.id}`)
+                .then(() => {
+                    this.spinner = false;
+                    this.alert.show = true;
+                    this.alert.message = `Data Berhasil di Perbaharui`;
+                    this.alert.style = 'success';
+                    this.alert.counter = 3;
+                    this.getData();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
         validateUsername() {
             const regex = new RegExp(/^\S*$/);
             const value = this.forms.username
