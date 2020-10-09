@@ -26,9 +26,13 @@
                                 shape="pill"
                                 size="sm"
                                 variant="outline"
+                                v-c-tooltip="{
+                                    content: 'Tambah Role',
+                                    placement: 'bottom',
+                                }"
                                 @click="post"
                             >
-                                <CIcon name="cil-user-follow" />
+                                <CIcon name="cil-plus" />
                             </CButton>
                         </div>
                     </CCardHeader>
@@ -75,7 +79,7 @@
                                                     <CButton
                                                         color="danger"
                                                         size="sm"
-                                                        class="m-2"
+                                                        class="m-1"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Hapus Role',
@@ -83,12 +87,13 @@
                                                         }"
                                                         @click="destroy(item)"
                                                     >
-                                                        Hapus Role
+                                                        <CIcon
+                                                            name="cil-trash"
+                                                        />
                                                     </CButton>
                                                     <CButton
                                                         color="success"
                                                         size="sm"
-                                                        class="m-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Edit Role',
@@ -96,7 +101,9 @@
                                                         }"
                                                         @click="edit(item)"
                                                     >
-                                                        Edit Role
+                                                        <CIcon
+                                                            name="cil-pencil"
+                                                        />
                                                     </CButton>
                                                 </td>
                                             </tr>

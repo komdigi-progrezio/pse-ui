@@ -26,9 +26,13 @@
                                 shape="pill"
                                 size="sm"
                                 variant="outline"
+                                v-c-tooltip="{
+                                    content: 'Tambah Hak Akses',
+                                    placement: 'bottom',
+                                }"
                                 @click="post"
                             >
-                                <CIcon name="cil-user-follow" />
+                                <CIcon name="cil-plus" />
                             </CButton>
                         </div>
                     </CCardHeader>
@@ -75,7 +79,7 @@
                                                     <CButton
                                                         color="danger"
                                                         size="sm"
-                                                        class="m-2"
+                                                        class="m-1"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Hapus Hak Akses',
@@ -83,12 +87,13 @@
                                                         }"
                                                         @click="destroy(item)"
                                                     >
-                                                        Hapus Hak Akses
+                                                        <CIcon
+                                                            name="cil-trash"
+                                                        />
                                                     </CButton>
                                                     <CButton
                                                         color="success"
                                                         size="sm"
-                                                        class="m-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Edit Hak Akses',
@@ -96,7 +101,9 @@
                                                         }"
                                                         @click="edit(item)"
                                                     >
-                                                        Edit Hak Akses
+                                                        <CIcon
+                                                            name="cil-pencil"
+                                                        />
                                                     </CButton>
                                                 </td>
                                             </tr>

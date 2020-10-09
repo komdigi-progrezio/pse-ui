@@ -26,9 +26,13 @@
                                 shape="pill"
                                 size="sm"
                                 variant="outline"
+                                v-c-tooltip="{
+                                    content: 'Tambah User',
+                                    placement: 'bottom',
+                                }"
                                 @click="post"
                             >
-                                <CIcon name="cil-user-follow" />
+                                <CIcon name="cil-plus" />
                             </CButton>
                         </div>
                     </CCardHeader>
@@ -72,26 +76,25 @@
                                                 <CButton
                                                     color="danger"
                                                     size="sm"
-                                                    class="m-2"
+                                                    class="m-1"
                                                     v-c-tooltip="{
                                                         content: 'Hapus User',
                                                         placement: 'bottom',
                                                     }"
                                                     @click="destroy(item)"
                                                 >
-                                                    Hapus User
+                                                    <CIcon name="cil-trash" />
                                                 </CButton>
                                                 <CButton
                                                     color="success"
                                                     size="sm"
-                                                    class="m-2"
                                                     v-c-tooltip="{
                                                         content: 'Edit User',
                                                         placement: 'bottom',
                                                     }"
                                                     @click="edit(item)"
                                                 >
-                                                    Edit User
+                                                    <CIcon name="cil-pencil" />
                                                 </CButton>
                                             </td>
                                         </tr>
@@ -181,10 +184,11 @@
                             <label for="email">Email</label>
                             <input
                                 v-model="forms.email"
-                                type="email"
+                                type="text"
                                 name="email"
                                 placeholder="Masukan Email Yang Aktif"
                                 class="form-control"
+                                @input="validateEmail"
                                 @blur="errorValidations.email = []"
                             />
                             <message :messages="errorValidations.email" />
@@ -331,6 +335,19 @@ export default {
             } else {
                 this.errorValidations.username = ['Tidak Boleh ada Spasi'];
                 this.forms.username = value;
+            }
+        },
+        validateEmail() {
+            const regex = new RegExp(/^\S*$/);
+            const value = this.forms.email
+                .toString()
+                .replace(/ /g, '')
+                .toLowerCase();
+            if (regex.test(this.forms.email)) {
+                this.errorValidations.email = [];
+            } else {
+                this.errorValidations.email = ['Tidak Boleh ada Spasi'];
+                this.forms.email = value;
             }
         },
         getData() {
