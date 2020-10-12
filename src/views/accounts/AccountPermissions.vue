@@ -60,7 +60,7 @@
                                             <th>Nama Hak Akses</th>
                                             <th>Created By</th>
                                             <th>Updated By</th>
-                                            <th>Aksi</th>
+                                            <th colspan="2">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
