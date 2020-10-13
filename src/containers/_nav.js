@@ -69,6 +69,17 @@ export default [
                         to: '/admin/account/change/password'
                     }
                 ]
+            },
+            {
+                _name: 'CSidebarNavDropdown',
+                name: 'Data Master',
+                icon: 'cil-storage',
+                items: [
+                    {
+                        name: 'Area',
+                        to: '/admin/master/area/provinsi'
+                    },
+                ]
             }
             // {
             //   _name: 'CSidebarNavTitle',

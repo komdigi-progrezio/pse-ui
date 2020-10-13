@@ -21,7 +21,7 @@
                 variant="outline"
                 size="sm"
                 class="mr-2"
-                :class="{ 'mr-auto': search.name === null }"
+                :class="{ 'mr-auto': search.nama === null }"
                 v-c-tooltip="{
                     content: 'Filter',
                     placement: 'bottom',
@@ -32,13 +32,13 @@
                 <CIcon name="cil-filter" />
             </CButton>
             <CButton
-                v-show="search.name !== null"
+                v-show="search.nama !== null"
                 color="info"
                 variant="outline"
                 size="sm"
                 class="mr-auto"
                 v-c-tooltip="{
-                    content: 'Bersihkan',
+                    content: 'Bershikan',
                     placement: 'bottom',
                 }"
                 @click="clearFilter"
@@ -77,12 +77,12 @@
         <div v-if="this.listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
-                    <label for="name">Nama Role</label>
+                    <label for="name">Nama Provinsi</label>
                     <input
-                        v-model="search.name"
+                        v-model="search.nama"
                         type="text"
-                        name="name"
-                        placeholder="Masukan Nama Role"
+                        nama="nama"
+                        placeholder="Masukan Nama Provinsi"
                         class="form-control"
                     />
                 </CCol>
@@ -92,15 +92,16 @@
             <CCol lg="12">
                 <CCard>
                     <CCardHeader>
-                        <CIcon name="cil-lock-locked" /> Role
+                        <CIcon name="cil-terrain" /> Provinsi
                         <div class="card-header-actions">
                             <CButton
                                 color="success"
                                 shape="pill"
+                                class="m-1"
                                 size="sm"
                                 variant="outline"
                                 v-c-tooltip="{
-                                    content: 'Tambah Role',
+                                    content: 'Tambah Provinsi',
                                     placement: 'bottom',
                                 }"
                                 @click="post"
@@ -110,7 +111,7 @@
                         </div>
                     </CCardHeader>
                     <CCardBody>
-                        <div class="mt-4">
+                        <div>
                             <div
                                 v-if="spinner"
                                 class="d-flex justify-content-center"
@@ -130,11 +131,8 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Role</th>
-                                            <th>Hak Akses</th>
-                                            <th>Created By</th>
-                                            <th>Updated By</th>
-                                            <th colspan="2">Aksi</th>
+                                            <th>Nama Provinsi</th>
+                                            <th colspan="3">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -146,30 +144,7 @@
                                                 <th scope="row">
                                                     {{ index + 1 }}
                                                 </th>
-                                                <td>{{ item.name }}</td>
-                                                <td>
-                                                    <span
-                                                        v-for="(value,
-                                                        index) in item.permissions"
-                                                        :key="index"
-                                                    >
-                                                        <template
-                                                            v-if="
-                                                                item.permissions
-                                                                    .length -
-                                                                    1 ===
-                                                                index
-                                                            "
-                                                        >
-                                                            {{ value }}
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ value }} |
-                                                        </template>
-                                                    </span>
-                                                </td>
-                                                <td>{{ item.created_by }}</td>
-                                                <td>{{ item.updated_by }}</td>
+                                                <td>{{ item.nama }}</td>
                                                 <td>
                                                     <CButton
                                                         color="danger"
@@ -177,7 +152,7 @@
                                                         class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Hapus Role',
+                                                                'Hapus Provinsi',
                                                             placement: 'bottom',
                                                         }"
                                                         @click="destroy(item)"
@@ -189,9 +164,10 @@
                                                     <CButton
                                                         color="success"
                                                         size="sm"
+                                                        class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Edit Role',
+                                                                'Edit Provinsi',
                                                             placement: 'bottom',
                                                         }"
                                                         @click="edit(item)"
@@ -200,13 +176,31 @@
                                                             name="cil-pencil"
                                                         />
                                                     </CButton>
+                                                    <CButton
+                                                        color="secondary"
+                                                        size="sm"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'List Kabupaten / Kota',
+                                                            placement: 'bottom',
+                                                        }"
+                                                        @click="
+                                                            listKabupatenKota(
+                                                                item
+                                                            )
+                                                        "
+                                                    >
+                                                        <CIcon
+                                                            name="cil-list"
+                                                        />
+                                                    </CButton>
                                                 </td>
                                             </tr>
                                         </template>
                                         <template v-else>
                                             <tr>
                                                 <td
-                                                    colspan="6"
+                                                    colspan="3"
                                                     class="text-center"
                                                 >
                                                     Data Kosong
@@ -263,37 +257,16 @@
                 <div class="modal-body">
                     <CRow>
                         <CCol sm="12">
-                            <label for="name">Nama Role</label>
+                            <label for="name">Nama Provinsi</label>
                             <input
-                                v-model="forms.name"
+                                v-model="forms.nama"
                                 type="text"
-                                name="name"
-                                placeholder="Masukan Nama Role"
+                                nama="nama"
+                                placeholder="Masukan Nama Provinsi"
                                 class="form-control"
-                                @blur="errorValidations.name = []"
+                                @blur="errorValidations.nama = []"
                             />
-                            <message :messages="errorValidations.name" />
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol sm="12">
-                            <label class="form-label">Hak Akses</label>
-                            <label
-                                v-for="(value, index) in permissions"
-                                :key="index"
-                                class="custom-control custom-checkbox col-lg-6"
-                            >
-                                <input
-                                    :id="value.name"
-                                    v-model="forms.permissions"
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    :value="value.name"
-                                />
-                                <span class="custom-control-label">{{
-                                    value.name.toUpperCase()
-                                }}</span>
-                            </label>
+                            <message :messages="errorValidations.nama" />
                         </CCol>
                     </CRow>
                 </div>
@@ -322,7 +295,7 @@
 
 <script>
 export default {
-    name: 'AccountRoles',
+    name: 'Provinsi',
     data() {
         return {
             spinner: true,
@@ -351,31 +324,34 @@ export default {
                 },
             },
             data: [],
-            permissions: [],
             forms: {
-                permissions: [],
                 id: null,
-                name: null,
+                nama: null,
             },
             search: {
-                name: null,
+                nama: null,
             },
             errorValidations: {
-                name: [],
+                nama: [],
             },
         };
     },
     created() {
         this.getData();
-        this.getPermissions();
     },
     methods: {
+        listKabupatenKota(item) {
+            this.$router.push({
+                path: '/admin/master/area/kota',
+                query: { id_provinsi: item.id },
+            });
+        },
         resetFilter() {
             this.spinner = true;
-            this.search.name = null;
+            this.search.nama = null;
 
             this.$http
-                .get('/roles/filter', {
+                .get('/provinsi/filter', {
                     params: {
                         page: 1,
                     },
@@ -390,20 +366,20 @@ export default {
         },
         filter() {
             this.listFilter = !this.listFilter;
-            this.search.name = null;
+            this.search.nama = null;
         },
         clearFilter() {
-            this.search.name = null;
+            this.search.nama = null;
         },
         filterData() {
             this.spinner = true;
 
             this.$http
-                .get('/roles/filter', {
+                .get('/provinsi/filter', {
                     params: {
                         page: 1,
-                        filter: 'name',
-                        q: this.search.name,
+                        filter: 'nama',
+                        q: this.search.nama,
                     },
                 })
                 .then((response) => {
@@ -418,21 +394,10 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/roles/filter')
+                .get('/provinsi/filter')
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        getPermissions() {
-            this.$http
-                .get('/permissions')
-                .then((response) => {
-                    this.spinner = false;
-                    this.permissions = response.data.data;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -442,15 +407,14 @@ export default {
             this.modal.delete.showModal = true;
             this.modal.delete.title = 'Hapus Data';
             this.modal.delete.color = 'danger';
-            this.modal.delete.data = item.name;
+            this.modal.delete.data = item.nama;
             this.modal.delete.uniqueId = item.id;
             this.modal.delete.message = 'Ingin Menghapus Data';
             this.modal.delete.labelButton = 'Hapus';
         },
         clearForm() {
             this.forms.id = null;
-            this.forms.name = null;
-            this.forms.permissions = [];
+            this.forms.nama = null;
         },
         post() {
             this.clearForm();
@@ -494,7 +458,7 @@ export default {
         },
         submitDelete() {
             this.$http
-                .delete(`roles/${this.modal.delete.uniqueId}`)
+                .delete(`provinsi/${this.modal.delete.uniqueId}`)
                 .then(() => {
                     this.getData();
                     this.closeModalDelete();
@@ -512,7 +476,7 @@ export default {
                 });
         },
         submitPostPut() {
-            const url = '/roles';
+            const url = '/provinsi';
             const formData = new FormData();
             let urlAction = null;
             let message = null;
@@ -541,7 +505,7 @@ export default {
                     );
                 }
             });
-            this.errorValidations.name = [];
+            this.errorValidations.nama = [];
 
             this.$http({
                 method: 'post',
@@ -558,11 +522,11 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response.status === 422) {
-                        this.errorValidations.name =
-                            typeof error.response.data.errors.name ===
+                        this.errorValidations.nama =
+                            typeof error.response.data.errors.nama ===
                             'undefined'
                                 ? []
-                                : error.response.data.errors.name;
+                                : error.response.data.errors.nama;
                     }
                     this.alert.show = true;
                     this.alert.style = 'danger';
@@ -572,8 +536,7 @@ export default {
         },
         edit(item) {
             this.forms.id = item.id;
-            this.forms.name = item.name;
-            this.forms.permissions = item.permissions;
+            this.forms.nama = item.nama;
 
             this.put();
         },

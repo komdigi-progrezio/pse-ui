@@ -15,6 +15,79 @@
                 animate
             />
         </CAlert>
+        <div class="d-flex mb-3">
+            <CButton
+                color="secondary"
+                variant="outline"
+                size="sm"
+                class="mr-2"
+                :class="{ 'mr-auto': search.name === null }"
+                v-c-tooltip="{
+                    content: 'Filter',
+                    placement: 'bottom',
+                }"
+                @click="filter"
+            >
+                Filter
+                <CIcon name="cil-filter" />
+            </CButton>
+            <CButton
+                v-show="search.name !== null"
+                color="info"
+                variant="outline"
+                size="sm"
+                class="mr-auto"
+                v-c-tooltip="{
+                    content: 'Bersihkan',
+                    placement: 'bottom',
+                }"
+                @click="clearFilter"
+            >
+                Clear All
+                <CIcon name="cil-clear-all" />
+            </CButton>
+            <CButton
+                color="primary"
+                variant="outline"
+                size="sm"
+                class="mr-2"
+                v-c-tooltip="{
+                    content: 'Cari',
+                    placement: 'bottom',
+                }"
+                @click="filterData"
+            >
+                Search
+                <CIcon name="cil-search" />
+            </CButton>
+            <CButton
+                color="danger"
+                variant="outline"
+                size="sm"
+                v-c-tooltip="{
+                    content: 'Reset',
+                    placement: 'bottom',
+                }"
+                @click="resetFilter"
+            >
+                Reset
+                <CIcon name="cil-reload" />
+            </CButton>
+        </div>
+        <div v-if="this.listFilter">
+            <CRow class="my-3">
+                <CCol sm="12">
+                    <label for="name">Nama Hak Akses</label>
+                    <input
+                        v-model="search.name"
+                        type="text"
+                        name="name"
+                        placeholder="Masukan Nama Hak Akses"
+                        class="form-control"
+                    />
+                </CCol>
+            </CRow>
+        </div>
         <CRow>
             <CCol lg="12">
                 <CCard>
@@ -58,6 +131,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Hak Akses</th>
+                                            <th>Role</th>
                                             <th>Created By</th>
                                             <th>Updated By</th>
                                             <th colspan="2">Aksi</th>
@@ -73,13 +147,34 @@
                                                     {{ index + 1 }}
                                                 </th>
                                                 <td>{{ item.name }}</td>
+                                                <td>
+                                                    <span
+                                                        v-for="(value,
+                                                        index) in item.roles"
+                                                        :key="index"
+                                                    >
+                                                        <template
+                                                            v-if="
+                                                                item.roles
+                                                                    .length -
+                                                                    1 ===
+                                                                index
+                                                            "
+                                                        >
+                                                            {{ value }}
+                                                        </template>
+                                                        <template v-else>
+                                                            {{ value }} |
+                                                        </template>
+                                                    </span>
+                                                </td>
                                                 <td>{{ item.created_by }}</td>
                                                 <td>{{ item.updated_by }}</td>
                                                 <td>
                                                     <CButton
                                                         color="danger"
                                                         size="sm"
-                                                        class="m-1"
+                                                        class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Hapus Hak Akses',
@@ -111,7 +206,7 @@
                                         <template v-else>
                                             <tr>
                                                 <td
-                                                    colspan="5"
+                                                    colspan="6"
                                                     class="text-center"
                                                 >
                                                     Data Kosong
@@ -210,6 +305,7 @@ export default {
     data() {
         return {
             spinner: true,
+            listFilter: false,
             alert: {
                 message: null,
                 show: false,
@@ -238,6 +334,9 @@ export default {
                 id: null,
                 name: null,
             },
+            search: {
+                name: null,
+            },
             errorValidations: {
                 name: [],
             },
@@ -247,6 +346,50 @@ export default {
         this.getData();
     },
     methods: {
+        resetFilter() {
+            this.spinner = true;
+            this.search.name = null;
+
+            this.$http
+                .get('/permissions/filter', {
+                    params: {
+                        page: 1,
+                    },
+                })
+                .then((response) => {
+                    this.spinner = false;
+                    this.data = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        filter() {
+            this.listFilter = !this.listFilter;
+            this.search.name = null;
+        },
+        clearFilter() {
+            this.search.name = null;
+        },
+        filterData() {
+            this.spinner = true;
+
+            this.$http
+                .get('/permissions/filter', {
+                    params: {
+                        page: 1,
+                        filter: 'name',
+                        q: this.search.name,
+                    },
+                })
+                .then((response) => {
+                    this.spinner = false;
+                    this.data = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
         getData() {
             this.spinner = true;
 
