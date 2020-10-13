@@ -23,7 +23,7 @@
                 class="mr-2"
                 :class="{ 'mr-auto': search.name === null }"
                 v-c-tooltip="{
-                    content: 'Cari',
+                    content: 'Filter',
                     placement: 'bottom',
                 }"
                 @click="filter"
@@ -38,7 +38,7 @@
                 size="sm"
                 class="mr-auto"
                 v-c-tooltip="{
-                    content: 'Cari',
+                    content: 'Bersihkan',
                     placement: 'bottom',
                 }"
                 @click="clearFilter"
@@ -65,7 +65,7 @@
                 variant="outline"
                 size="sm"
                 v-c-tooltip="{
-                    content: 'Cari',
+                    content: 'Reset',
                     placement: 'bottom',
                 }"
                 @click="resetFilter"
