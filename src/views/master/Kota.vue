@@ -150,7 +150,7 @@
                                                     <CButton
                                                         color="danger"
                                                         size="sm"
-                                                        class="m-1"
+                                                        class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Hapus Kabupaten / Kota',
@@ -165,7 +165,7 @@
                                                     <CButton
                                                         color="success"
                                                         size="sm"
-                                                        class="m-1"
+                                                        class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Edit Kabupaten / Kota',

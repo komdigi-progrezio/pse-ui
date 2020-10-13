@@ -174,7 +174,7 @@
                                                     <CButton
                                                         color="danger"
                                                         size="sm"
-                                                        class="m-1"
+                                                        class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
                                                                 'Hapus Hak Akses',
