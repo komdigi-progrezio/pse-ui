@@ -27,6 +27,7 @@ const actions = {
             .catch(error => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh_token')
+                localStorage.removeItem('users')
                 context.commit('DESTROY_TOKEN', null);
                 reject(error)
             })
@@ -47,6 +48,16 @@ const actions = {
                 localStorage.setItem('refresh_token', refreshToken)
                 context.commit('RETRIEVE_TOKEN', response.data);
                 resolve(response)
+
+                $axiosApi.get(`${process.env.VUE_APP_BASE_API_URL}auth/authenticated`)
+                    .then(response => {
+                        const user = response.data.data;
+
+                        localStorage.setItem('user', JSON.stringify(user))
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             })
             .catch(error => {
                 reject(error);
