@@ -46,35 +46,37 @@
                 Clear All
                 <CIcon name="cil-clear-all" />
             </CButton>
-            <CButton
-                color="primary"
-                variant="outline"
-                size="sm"
-                class="mr-2"
-                v-c-tooltip="{
-                    content: 'Cari',
-                    placement: 'bottom',
-                }"
-                @click="filterData"
-            >
-                Search
-                <CIcon name="cil-search" />
-            </CButton>
-            <CButton
-                color="danger"
-                variant="outline"
-                size="sm"
-                v-c-tooltip="{
-                    content: 'Reset',
-                    placement: 'bottom',
-                }"
-                @click="resetFilter"
-            >
-                Reset
-                <CIcon name="cil-reload" />
-            </CButton>
+            <template v-if="this.listFilter">
+                <CButton
+                    color="primary"
+                    variant="outline"
+                    size="sm"
+                    class="mr-2"
+                    v-c-tooltip="{
+                        content: 'Cari',
+                        placement: 'bottom',
+                    }"
+                    @click="filterData"
+                >
+                    Search
+                    <CIcon name="cil-search" />
+                </CButton>
+                <CButton
+                    color="danger"
+                    variant="outline"
+                    size="sm"
+                    v-c-tooltip="{
+                        content: 'Reset',
+                        placement: 'bottom',
+                    }"
+                    @click="resetFilter"
+                >
+                    Reset
+                    <CIcon name="cil-reload" />
+                </CButton>
+            </template>
         </div>
-        <div v-if="this.listFilter">
+        <template v-if="this.listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
                     <label for="name">Nama Role</label>
@@ -87,7 +89,7 @@
                     />
                 </CCol>
             </CRow>
-        </div>
+        </template>
         <CRow>
             <CCol lg="12">
                 <CCard>
