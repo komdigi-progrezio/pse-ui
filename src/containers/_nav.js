@@ -79,6 +79,10 @@ export default [
                         name: 'Area',
                         to: '/admin/master/area/provinsi'
                     },
+                    {
+                        name: 'Instansi',
+                        to: '/admin/master/agency'
+                    },
                 ]
             }
             // {
