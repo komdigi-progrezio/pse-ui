@@ -1,5 +1,6 @@
 const Provinsi = () => import('@/views/master/Provinsi');
 const Kota = () => import('@/views/master/Kota');
+const Agency = () => import('@/views/master/Agency');
 
 const master = {
     path: 'master',
@@ -29,9 +30,14 @@ const master = {
                 {
                     path: 'kota',
                     name: 'Kota',
-                    component: Kota
+                    component: Kota,
                 },
             ],
+        },
+        {
+            path: 'agency',
+            name: 'Instansi',
+            component: Agency,
         },
     ]
 }
