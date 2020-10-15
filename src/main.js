@@ -34,7 +34,7 @@ api.interceptors.response.use(
 
             const refreshToken = window.localStorage.getItem('refresh_token');
             return axios
-                .post(`${process.env.VUE_APP_BASE_API_URL}auth/oauth/refresh`, {
+                .post(`${process.env.VUE_APP_BASE_API_URL}users/oauth/refresh`, {
                     refresh_token: refreshToken
                 })
                 .then(({ data }) => {
