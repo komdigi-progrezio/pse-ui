@@ -17,7 +17,7 @@ const getters = {
 const actions = {
     destroyToken(context) {
         return new Promise((resolve, reject) => {
-            $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}auth/logout`)
+            $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}users/logout`)
             .then(response => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh_token')
@@ -35,7 +35,7 @@ const actions = {
     },
     retrieveToken(context, credentials) {
         return new Promise((resolve, reject) => {
-            $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}auth/login`, {
+            $axiosApi.post(`${process.env.VUE_APP_BASE_API_URL}users/login`, {
             username: credentials.username,
             password: credentials.password,
         })
