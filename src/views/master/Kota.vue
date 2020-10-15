@@ -467,14 +467,11 @@ export default {
             const url = '/kota';
             const formData = new FormData();
             let urlAction = null;
-            let message = null;
             if (this.modal.post_put.method === 'patch') {
                 urlAction = `${url}/${this.forms.id}`;
-                message = 'Perbaharui';
                 formData.append('_method', 'patch');
             } else {
                 urlAction = url;
-                message = 'Tambah';
                 formData.append('_method', 'POST');
             }
             const forMapData = Object.entries(this.forms);
@@ -500,11 +497,11 @@ export default {
                 url: urlAction,
                 data: formData,
             })
-                .then(() => {
+                .then((response) => {
                     this.getData();
                     this.closeModalPostPut();
                     this.alert.show = true;
-                    this.alert.message = `Data Berhasil di ${message}`;
+                    this.alert.message = response.data.messages;
                     this.alert.style = 'success';
                     this.alert.counter = 3;
                 })
@@ -518,7 +515,7 @@ export default {
                     }
                     this.alert.show = true;
                     this.alert.style = 'danger';
-                    this.alert.message = `Data Gagal di ${message}`;
+                    this.alert.message = error.response.data.messages;
                     this.alert.counter = 3;
                 });
         },
