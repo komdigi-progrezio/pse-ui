@@ -12,6 +12,7 @@ export default {
         messages: {
             type: Array || Object,
             required: true,
+            default: () => [],
         },
     },
 };

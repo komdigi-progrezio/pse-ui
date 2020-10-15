@@ -49,7 +49,7 @@ const actions = {
                 context.commit('RETRIEVE_TOKEN', response.data);
                 resolve(response)
 
-                $axiosApi.get(`${process.env.VUE_APP_BASE_API_URL}auth/authenticated`)
+                $axiosApi.get(`${process.env.VUE_APP_BASE_API_URL}users/authenticated`)
                     .then(response => {
                         const user = response.data.data;
 
