@@ -15,6 +15,16 @@
                 animate
             />
         </CAlert>
+        <a @click.prevent="modalNotApproved" href="">
+            <div
+                class="alert alert-warning"
+                role="alert"
+                v-if="not_approved.data.length > 0"
+            >
+                Ada <strong>{{ not_approved.total_data }}</strong> Permintaan
+                Penambahan Instansi.
+            </div>
+        </a>
         <div class="d-flex mb-3">
             <CButton
                 color="secondary"
@@ -193,24 +203,6 @@
                                                             name="cil-pencil"
                                                         />
                                                     </CButton>
-                                                    <CButton
-                                                        color="secondary"
-                                                        size="sm"
-                                                        v-c-tooltip="{
-                                                            content:
-                                                                'List Kabupaten / Kota',
-                                                            placement: 'bottom',
-                                                        }"
-                                                        @click="
-                                                            listKabupatenKota(
-                                                                item
-                                                            )
-                                                        "
-                                                    >
-                                                        <CIcon
-                                                            name="cil-list"
-                                                        />
-                                                    </CButton>
                                                 </td>
                                             </tr>
                                         </template>
@@ -232,6 +224,94 @@
                 </CCard>
             </CCol>
         </CRow>
+        <CModal
+            :title="modal.not_approved.title"
+            :color="modal.not_approved.color"
+            :size="'xl'"
+            :show.sync="modal.not_approved.showModal"
+        >
+            <template v-slot:body-wrapper>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table
+                            v-if="!spinner"
+                            class="table table-hover table-striped"
+                        >
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kategori</th>
+                                    <th>Kelompok</th>
+                                    <th>Nama Instansi</th>
+                                    <th>Alamat</th>
+                                    <th>Provinsi</th>
+                                    <th>Kabupaten / Kota</th>
+                                    <th>Kode Pos</th>
+                                    <th>Website</th>
+                                    <th colspan="2">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template v-if="not_approved.data.length > 0">
+                                    <tr
+                                        v-for="(item,
+                                        index) in not_approved.data"
+                                        :key="index"
+                                    >
+                                        <th scope="row">
+                                            {{ index + 1 }}
+                                        </th>
+                                        <td>{{ item.kategori }}</td>
+                                        <td>{{ item.kelompok }}</td>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.alamat }}</td>
+                                        <td>
+                                            {{ item.nama_propinsi }}
+                                        </td>
+                                        <td>{{ item.nama_kota }}</td>
+                                        <td>{{ item.kode_pos }}</td>
+                                        <td>{{ item.website }}</td>
+                                        <td>
+                                            <CButton
+                                                color="danger"
+                                                size="sm"
+                                                class="mr-2"
+                                                v-c-tooltip="{
+                                                    content: 'Hapus Instansi',
+                                                    placement: 'bottom',
+                                                }"
+                                                @click="destroy(item)"
+                                            >
+                                                <CIcon name="cil-trash" />
+                                            </CButton>
+                                            <CButton
+                                                color="secondary"
+                                                size="sm"
+                                                v-c-tooltip="{
+                                                    content: 'Setujui Instansi',
+                                                    placement: 'bottom',
+                                                }"
+                                                @click="active(item)"
+                                            >
+                                                <CIcon name="cil-check" />
+                                            </CButton>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr>
+                                        <td colspan="10" class="text-center">
+                                            Data Kosong
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+            <template v-slot:footer> </template>
+        </CModal>
         <CModal
             :title="modal.delete.title"
             :color="modal.delete.color"
@@ -438,6 +518,11 @@ export default {
                 counter: 3,
             },
             modal: {
+                not_approved: {
+                    showModal: false,
+                    title: null,
+                    color: null,
+                },
                 delete: {
                     showModal: false,
                     title: null,
@@ -507,6 +592,27 @@ export default {
         this.getAgencyGroup();
     },
     methods: {
+        modalNotApproved() {
+            this.modal.not_approved.showModal = true;
+            this.modal.not_approved.title =
+                'Daftar Permintaan Penambahan Instansi';
+            this.modal.not_approved.color = 'primary';
+        },
+        active(item) {
+            this.$http
+                .patch(`/parinstansi/approved/${item.id}`)
+                .then(() => {
+                    this.spinner = false;
+                    this.alert.show = true;
+                    this.alert.message = `Data Berhasil di Perbaharui`;
+                    this.alert.style = 'success';
+                    this.alert.counter = 3;
+                    this.getAgencyNotApproved();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
         getAgencyGroup() {
             this.$http
                 .get('/parconfig/agency/group')
@@ -742,6 +848,7 @@ export default {
             })
                 .then((response) => {
                     this.getData();
+                    this.getAgencyNotApproved();
                     this.closeModalPostPut();
                     this.alert.show = true;
                     this.alert.message = response.data.messages;
