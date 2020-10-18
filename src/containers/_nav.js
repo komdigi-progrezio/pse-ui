@@ -77,11 +77,15 @@ export default [
                 items: [
                     {
                         name: 'Area',
-                        to: '/admin/master/area/provinsi'
+                        to: '/admin/master/area/province'
                     },
                     {
                         name: 'Instansi',
                         to: '/admin/master/agency'
+                    },
+                    {
+                        name: 'Satuan Kerja',
+                        to: '/admin/master/work/unit'
                     },
                 ]
             }
