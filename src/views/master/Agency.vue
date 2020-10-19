@@ -335,7 +335,7 @@
                             <message :messages="errorValidations.alamat" />
                         </CCol>
                         <CCol sm="12">
-                            <label for="alamat">Provinsi</label>
+                            <label for="provinsi">Provinsi</label>
                             <select
                                 v-model="forms.propinsi"
                                 class="form-control"
@@ -356,7 +356,7 @@
                             <message :messages="errorValidations.propinsi" />
                         </CCol>
                         <CCol sm="12">
-                            <label for="alamat">Kota</label>
+                            <label for="kota">Kota</label>
                             <select
                                 v-model="forms.kota"
                                 class="form-control"
@@ -468,8 +468,8 @@ export default {
                 kelompok: '',
             },
             dataSelect: {
-                provinsi: null,
-                kota: null,
+                provinsi: [],
+                kota: [],
                 kelompok: [],
                 kategori: [
                     {
@@ -526,7 +526,7 @@ export default {
             if (regex.test(this.forms.kode_pos)) {
                 this.errorValidations.kode_pos = [];
             } else {
-                this.errorValidations.kode_pos = ['Tidak Boleh Angka'];
+                this.errorValidations.kode_pos = ['Hanya Boleh Angka'];
                 this.forms.kode_pos = value;
             }
         },
@@ -535,7 +535,7 @@ export default {
                 .get('/parinstansi/not/approved')
                 .then((response) => {
                     this.not_approved.data = response.data.data;
-                    this.not_approved.total_data = response.data.total_data;
+                    this.not_approved.total_data = response.data.data.length;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -556,6 +556,7 @@ export default {
                 .get(`/provinsi/${this.forms.propinsi}/kota`)
                 .then((response) => {
                     this.dataSelect.kota = response.data.data;
+                    this.forms.kota = '';
                 })
                 .catch((error) => {
                     console.log(error);
