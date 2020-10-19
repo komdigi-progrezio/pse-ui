@@ -45,6 +45,7 @@ function configRoutes() {
         {
             path: '/admin',
             name: 'Home',
+            redirect: 'admin/dashboard',
             component: TheContainer,
             children: [
                 {
