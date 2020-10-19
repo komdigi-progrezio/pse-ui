@@ -363,7 +363,7 @@
                                 v-model="forms.no_telp"
                                 type="text"
                                 placeholder="Masukan Nomor Telepon"
-                                maxlength="10"
+                                maxlength="13"
                                 class="form-control"
                                 @input="validateNoTelp"
                                 @blur="errorValidations.no_telp = []"
