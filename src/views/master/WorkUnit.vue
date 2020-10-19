@@ -15,16 +15,6 @@
                 animate
             />
         </CAlert>
-        <a @click.prevent="modalNotApproved" href="">
-            <div
-                class="alert alert-warning"
-                role="alert"
-                v-if="not_approved.data.length > 0"
-            >
-                Ada <strong>{{ not_approved.total_data }}</strong> Permintaan
-                Penambahan Instansi.
-            </div>
-        </a>
         <div class="d-flex mb-3">
             <CButton
                 color="secondary"
@@ -89,11 +79,12 @@
         <template v-if="this.listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
-                    <label for="name">Nama Instansi</label>
+                    <label for="name">Nama Satuan Kerja</label>
                     <input
                         v-model="search.name"
                         type="text"
-                        placeholder="Masukan Nama Instansi"
+                        name="name"
+                        placeholder="Masukan Nama Satuan Kerja"
                         class="form-control"
                     />
                 </CCol>
@@ -103,7 +94,7 @@
             <CCol lg="12">
                 <CCard>
                     <CCardHeader>
-                        <CIcon name="cil-building" /> Instansi
+                        <CIcon name="cil-industry" /> Satuan Kerja
                         <div class="card-header-actions">
                             <CButton
                                 color="success"
@@ -112,7 +103,7 @@
                                 size="sm"
                                 variant="outline"
                                 v-c-tooltip="{
-                                    content: 'Tambah Instansi',
+                                    content: 'Tambah Satuan Kerja',
                                     placement: 'bottom',
                                 }"
                                 @click="post"
@@ -142,14 +133,8 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Kategori</th>
-                                            <th>Kelompok</th>
                                             <th>Nama Instansi</th>
-                                            <th>Alamat</th>
-                                            <th>Provinsi</th>
-                                            <th>Kabupaten / Kota</th>
-                                            <th>Kode Pos</th>
-                                            <th>Website</th>
+                                            <th>Nama Satuan Kerja</th>
                                             <th colspan="3">Aksi</th>
                                         </tr>
                                     </thead>
@@ -162,16 +147,8 @@
                                                 <th scope="row">
                                                     {{ index + 1 }}
                                                 </th>
-                                                <td>{{ item.kategori }}</td>
-                                                <td>{{ item.kelompok }}</td>
                                                 <td>{{ item.name }}</td>
-                                                <td>{{ item.alamat }}</td>
-                                                <td>
-                                                    {{ item.nama_propinsi }}
-                                                </td>
-                                                <td>{{ item.nama_kota }}</td>
-                                                <td>{{ item.kode_pos }}</td>
-                                                <td>{{ item.website }}</td>
+                                                <td>{{ item.name }}</td>
                                                 <td>
                                                     <CButton
                                                         color="danger"
@@ -179,7 +156,7 @@
                                                         class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Hapus Instansi',
+                                                                'Hapus Satuan Kerja',
                                                             placement: 'bottom',
                                                         }"
                                                         @click="destroy(item)"
@@ -194,7 +171,7 @@
                                                         class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Edit Instansi',
+                                                                'Edit Satuan Kerja',
                                                             placement: 'bottom',
                                                         }"
                                                         @click="edit(item)"
@@ -209,7 +186,7 @@
                                         <template v-else>
                                             <tr>
                                                 <td
-                                                    colspan="10"
+                                                    colspan="4"
                                                     class="text-center"
                                                 >
                                                     Data Kosong
@@ -224,94 +201,6 @@
                 </CCard>
             </CCol>
         </CRow>
-        <CModal
-            :title="modal.not_approved.title"
-            :color="modal.not_approved.color"
-            :size="'xl'"
-            :show.sync="modal.not_approved.showModal"
-        >
-            <template v-slot:body-wrapper>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table
-                            v-if="!spinner"
-                            class="table table-hover table-striped"
-                        >
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kategori</th>
-                                    <th>Kelompok</th>
-                                    <th>Nama Instansi</th>
-                                    <th>Alamat</th>
-                                    <th>Provinsi</th>
-                                    <th>Kabupaten / Kota</th>
-                                    <th>Kode Pos</th>
-                                    <th>Website</th>
-                                    <th colspan="2">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-if="not_approved.data.length > 0">
-                                    <tr
-                                        v-for="(item,
-                                        index) in not_approved.data"
-                                        :key="index"
-                                    >
-                                        <th scope="row">
-                                            {{ index + 1 }}
-                                        </th>
-                                        <td>{{ item.kategori }}</td>
-                                        <td>{{ item.kelompok }}</td>
-                                        <td>{{ item.name }}</td>
-                                        <td>{{ item.alamat }}</td>
-                                        <td>
-                                            {{ item.nama_propinsi }}
-                                        </td>
-                                        <td>{{ item.nama_kota }}</td>
-                                        <td>{{ item.kode_pos }}</td>
-                                        <td>{{ item.website }}</td>
-                                        <td>
-                                            <CButton
-                                                color="danger"
-                                                size="sm"
-                                                class="mr-2"
-                                                v-c-tooltip="{
-                                                    content: 'Hapus Instansi',
-                                                    placement: 'bottom',
-                                                }"
-                                                @click="destroy(item)"
-                                            >
-                                                <CIcon name="cil-trash" />
-                                            </CButton>
-                                            <CButton
-                                                color="secondary"
-                                                size="sm"
-                                                v-c-tooltip="{
-                                                    content: 'Setujui Instansi',
-                                                    placement: 'bottom',
-                                                }"
-                                                @click="active(item)"
-                                            >
-                                                <CIcon name="cil-check" />
-                                            </CButton>
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template v-else>
-                                    <tr>
-                                        <td colspan="10" class="text-center">
-                                            Data Kosong
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </template>
-            <template v-slot:footer> </template>
-        </CModal>
         <CModal
             :title="modal.delete.title"
             :color="modal.delete.color"
@@ -354,52 +243,56 @@
                 <div class="modal-body">
                     <CRow>
                         <CCol sm="12">
-                            <label for="kelompok">Kelompok</label>
+                            <label for="instansi_id">Instansi</label>
                             <select
-                                v-model="forms.kelompok"
+                                v-model="forms.instansi_id"
                                 class="form-control"
+                                @change="getPerAgency"
+                                :disabled="disabled.instansi_id"
                             >
                                 <option value="" selected="selected">
-                                    Pilih Kategori
+                                    Pilih Instansi
                                 </option>
                                 <option
                                     :value="value.id"
                                     v-for="(value,
-                                    index) in dataSelect.kelompok"
-                                    :key="index"
-                                >
-                                    {{ value.param_value }}
-                                </option>
-                            </select>
-                            <message :messages="errorValidations.kelompok" />
-                        </CCol>
-                        <CCol sm="12">
-                            <label for="kategori">Kategori</label>
-                            <select
-                                v-model="forms.kategori"
-                                class="form-control"
-                            >
-                                <option value="" selected="selected">
-                                    Pilih Kategori
-                                </option>
-                                <option
-                                    :value="value.id"
-                                    v-for="(value,
-                                    index) in dataSelect.kategori"
-                                    :key="index"
+                                    index) in dataSelect.instansi"
+                                    :key="`instansi-${index}`"
                                 >
                                     {{ value.name }}
                                 </option>
                             </select>
-                            <message :messages="errorValidations.kategori" />
+                            <message :messages="errorValidations.instansi_id" />
                         </CCol>
                         <CCol sm="12">
-                            <label for="name">Nama Instansi</label>
+                            <label for="parent_id">Satuan Kerja Utama</label>
+                            <select
+                                v-model="forms.parent_id"
+                                class="form-control"
+                                :disabled="disabled.parent_id"
+                            >
+                                <option value="" selected="selected">
+                                    Pilih Satuan Kerja
+                                </option>
+                                <option
+                                    :value="value.id"
+                                    v-for="(value,
+                                    index) in dataSelect.satuan_kerja"
+                                    :key="`instansi-${index}`"
+                                >
+                                    {{ value.name }}
+                                </option>
+                            </select>
+                            <message :messages="errorValidations.parent_id" />
+                        </CCol>
+                        <CCol sm="12">
+                            <label for="name">Nama Satuan Kerja</label>
                             <input
                                 v-model="forms.name"
                                 type="text"
-                                placeholder="Masukan Nama Instansi"
+                                placeholder="Masukan Nama Satuan Kerja"
                                 class="form-control"
+                                :disabled="disabled.name"
                                 @blur="errorValidations.name = []"
                             />
                             <message :messages="errorValidations.name" />
@@ -415,7 +308,7 @@
                             <message :messages="errorValidations.alamat" />
                         </CCol>
                         <CCol sm="12">
-                            <label for="alamat">Provinsi</label>
+                            <label for="propinsi">Provinsi</label>
                             <select
                                 v-model="forms.propinsi"
                                 class="form-control"
@@ -436,12 +329,8 @@
                             <message :messages="errorValidations.propinsi" />
                         </CCol>
                         <CCol sm="12">
-                            <label for="alamat">Kota</label>
-                            <select
-                                v-model="forms.kota"
-                                class="form-control"
-                                @change="getDistrict"
-                            >
+                            <label for="kota">Kota</label>
+                            <select v-model="forms.kota" class="form-control">
                                 <option value="" selected="selected">
                                     Pilih Kota
                                 </option>
@@ -467,6 +356,19 @@
                                 @blur="errorValidations.kode_pos = []"
                             />
                             <message :messages="errorValidations.kode_pos" />
+                        </CCol>
+                        <CCol sm="12">
+                            <label for="no_telp">No Telp</label>
+                            <input
+                                v-model="forms.no_telp"
+                                type="text"
+                                placeholder="Masukan Nomor Telepon"
+                                maxlength="13"
+                                class="form-control"
+                                @input="validateNoTelp"
+                                @blur="errorValidations.no_telp = []"
+                            />
+                            <message :messages="errorValidations.no_telp" />
                         </CCol>
                         <CCol sm="12">
                             <label for="website">Website</label>
@@ -504,9 +406,10 @@
     </div>
 </template>
 
+
 <script>
 export default {
-    name: 'Agency',
+    name: 'WorkUnit',
     data() {
         return {
             spinner: true,
@@ -518,11 +421,6 @@ export default {
                 counter: 3,
             },
             modal: {
-                not_approved: {
-                    showModal: false,
-                    title: null,
-                    color: null,
-                },
                 delete: {
                     showModal: false,
                     title: null,
@@ -542,106 +440,66 @@ export default {
             data: [],
             forms: {
                 id: null,
+                parent_id: '',
+                instansi_id: '',
                 name: null,
                 alamat: null,
                 propinsi: '',
                 kota: '',
                 kode_pos: null,
-                approved: null,
+                no_telp: null,
                 website: null,
-                kategori: '',
-                kelompok: '',
             },
             dataSelect: {
-                provinsi: null,
-                kota: null,
-                kelompok: [],
-                kategori: [
-                    {
-                        id: 'Pemerintah Pusat',
-                        name: 'Pemerintah Pusat',
-                    },
-                    {
-                        id: 'Pemerintah Daerah',
-                        name: 'Pemerintah Daerah',
-                    },
-                ],
+                provinsi: [],
+                kota: [],
+                instansi: [],
+                satuan_kerja: [],
             },
-            not_approved: {
-                data: [],
-                total_data: null,
+            disabled: {
+                name: false,
+                instansi_id: false,
+                parent_id: false,
             },
             search: {
                 name: null,
             },
             errorValidations: {
-                kelompok: [],
-                kategori: [],
                 name: [],
+                instansi_id: [],
                 alamat: [],
                 propinsi: [],
                 kota: [],
                 kode_pos: [],
+                no_telp: [],
+                website: [],
             },
         };
     },
     created() {
         this.getData();
         this.getProvince();
-        this.getAgencyNotApproved();
-        this.getAgencyGroup();
+        this.getAgency();
     },
     methods: {
-        modalNotApproved() {
-            this.modal.not_approved.showModal = true;
-            this.modal.not_approved.title =
-                'Daftar Permintaan Penambahan Instansi';
-            this.modal.not_approved.color = 'primary';
-        },
-        active(item) {
-            this.$http
-                .patch(`/parinstansi/approved/${item.id}`)
-                .then(() => {
-                    this.spinner = false;
-                    this.alert.show = true;
-                    this.alert.message = `Data Berhasil di Perbaharui`;
-                    this.alert.style = 'success';
-                    this.alert.counter = 3;
-                    this.getAgencyNotApproved();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        getAgencyGroup() {
-            this.$http
-                .get('/parconfig/agency/group')
-                .then((response) => {
-                    this.dataSelect.kelompok = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        validateKodePos() {
+        validateNoTelp() {
             const regex = new RegExp(/^[0-9]*$/);
-            const value = this.forms.kode_pos
+            const value = this.forms.no_telp
                 .toString()
                 .replace(/[^\d]/g, '')
                 .toLowerCase();
-            if (regex.test(this.forms.kode_pos)) {
-                this.errorValidations.kode_pos = [];
+            if (regex.test(this.forms.no_telp)) {
+                this.errorValidations.no_telp = [];
             } else {
-                this.errorValidations.kode_pos = ['Tidak Boleh Angka'];
-                this.forms.kode_pos = value;
+                this.errorValidations.no_telp = ['Hanya Boleh Angka'];
+                this.forms.no_telp = value;
             }
         },
-        getAgencyNotApproved() {
+        getAgency() {
             this.$http
-                .get('/parinstansi/not/approved')
+                .get('/parinstansi')
                 .then((response) => {
-                    this.not_approved.data = response.data.data;
-                    this.not_approved.total_data = response.data.total_data;
+                    this.dataSelect.instansi = response.data.data;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -667,12 +525,38 @@ export default {
                     console.log(error);
                 });
         },
+        getPerAgency() {
+            this.forms.parent_id = '';
+            this.dataSelect.satuan_kerja = [];
+            this.$http
+                .get(`/parsatuankerja/${this.forms.instansi_id}/parinstansi`)
+                .then((response) => {
+                    this.dataSelect.satuan_kerja = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        validateKodePos() {
+            const regex = new RegExp(/^[0-9]*$/);
+            const value = this.forms.kode_pos
+                .toString()
+                .replace(/[^\d]/g, '')
+                .toLowerCase();
+            if (regex.test(this.forms.kode_pos)) {
+                this.errorValidations.kode_pos = [];
+            } else {
+                this.errorValidations.kode_pos = ['Hanya Boleh Angka'];
+                this.forms.kode_pos = value;
+            }
+        },
         resetFilter() {
+            console.log(1);
             this.spinner = true;
             this.search.name = null;
 
             this.$http
-                .get('/parinstansi/filter', {
+                .get('/parsatuankerja/filter', {
                     params: {
                         page: 1,
                     },
@@ -696,7 +580,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/parinstansi/filter', {
+                .get('/parsatuankerja/filter', {
                     params: {
                         page: 1,
                         filter: 'name',
@@ -715,7 +599,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/parinstansi/filter')
+                .get('/parsatuankerja/filter')
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
@@ -735,19 +619,21 @@ export default {
         },
         clearForm() {
             this.forms.id = null;
+            this.forms.parent_id = '';
+            this.forms.instansi_id = '';
             this.forms.name = null;
             this.forms.alamat = null;
             this.forms.propinsi = '';
             this.forms.kota = '';
             this.forms.kode_pos = null;
-            this.forms.approved = null;
+            this.forms.no_telp = null;
             this.forms.website = null;
-            this.forms.kategori = '';
-            this.forms.kelompok = '';
-            this.dataSelect.kota = [];
         },
         post() {
             this.clearForm();
+            this.disabled.name = false;
+            this.disabled.instansi_id = false;
+            this.disabled.parent_id = false;
             this.modal.post_put.showModal = true;
             this.modal.post_put.title = 'Tambah Data';
             this.modal.post_put.color = 'success';
@@ -755,6 +641,9 @@ export default {
             this.modal.post_put.method = 'post';
         },
         put() {
+            this.disabled.name = true;
+            this.disabled.instansi_id = true;
+            this.disabled.parent_id = true;
             this.modal.post_put.showModal = true;
             this.modal.post_put.title = 'Update Data';
             this.modal.post_put.color = 'success';
@@ -788,7 +677,7 @@ export default {
         },
         submitDelete() {
             this.$http
-                .delete(`/parinstansi/${this.modal.delete.uniqueId}`)
+                .delete(`parsatuankerja/${this.modal.delete.uniqueId}`)
                 .then(() => {
                     this.getData();
                     this.closeModalDelete();
@@ -806,7 +695,7 @@ export default {
                 });
         },
         submitPostPut() {
-            const url = '/parinstansi';
+            const url = '/parsatuankerja';
             const formData = new FormData();
             let urlAction = null;
             if (this.modal.post_put.method === 'patch') {
@@ -832,13 +721,13 @@ export default {
                     );
                 }
             });
-            this.errorValidations.kelompok = [];
-            this.errorValidations.kategori = [];
             this.errorValidations.name = [];
+            this.errorValidations.instansi_id = [];
             this.errorValidations.alamat = [];
             this.errorValidations.propinsi = [];
             this.errorValidations.kota = [];
             this.errorValidations.kode_pos = [];
+            this.errorValidations.no_telp = [];
             this.errorValidations.website = [];
 
             this.$http({
@@ -848,7 +737,6 @@ export default {
             })
                 .then((response) => {
                     this.getData();
-                    this.getAgencyNotApproved();
                     this.closeModalPostPut();
                     this.alert.show = true;
                     this.alert.message = response.data.messages;
@@ -857,46 +745,53 @@ export default {
                 })
                 .catch((error) => {
                     if (error.response.status === 422) {
-                        this.errorValidations.kelompok =
-                            typeof error.response.data.errors.kelompok ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.kelompok;
-                        this.errorValidations.kategori =
-                            typeof error.response.data.errors.kategori ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.kategori;
                         this.errorValidations.name =
                             typeof error.response.data.errors.name ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.name;
+                        this.errorValidations.instansi_id =
+                            typeof error.response.data.errors.instansi_id ===
+                            'undefined'
+                                ? []
+                                : error.response.data.errors.instansi_id;
+                        this.errorValidations;
                         this.errorValidations.alamat =
                             typeof error.response.data.errors.alamat ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.alamat;
+                        this.errorValidations;
                         this.errorValidations.propinsi =
                             typeof error.response.data.errors.propinsi ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.propinsi;
+                        this.errorValidations;
                         this.errorValidations.kota =
                             typeof error.response.data.errors.kota ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.kota;
+                        this.errorValidations;
                         this.errorValidations.kode_pos =
                             typeof error.response.data.errors.kode_pos ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.kode_pos;
+                        this.errorValidations;
+                        this.errorValidations.no_telp =
+                            typeof error.response.data.errors.no_telp ===
+                            'undefined'
+                                ? []
+                                : error.response.data.errors.no_telp;
+                        this.errorValidations;
                         this.errorValidations.website =
                             typeof error.response.data.errors.website ===
                             'undefined'
                                 ? []
                                 : error.response.data.errors.website;
+                        this.errorValidations;
                     }
                     this.alert.show = true;
                     this.alert.style = 'danger';
@@ -906,19 +801,22 @@ export default {
         },
         edit(item) {
             this.forms.id = item.id;
+            this.forms.instansi_id = item.instansi_id;
             this.forms.name = item.name;
             this.forms.alamat = item.alamat;
-            this.forms.propinsi = item.id_propinsi;
+            this.forms.propinsi = item.propinsi;
             this.forms.kode_pos = item.kode_pos;
-            this.forms.approved = item.approved;
+            this.forms.no_telp = item.no_telp;
             this.forms.website = item.website;
-            this.forms.kategori = item.kategori;
-            this.forms.kelompok = item.id_kelompok;
 
             this.put();
             this.$nextTick(() => {
                 this.getDistrict();
-                this.forms.kota = item.id_kota;
+                this.forms.kota = item.kota;
+            });
+            this.$nextTick(() => {
+                this.getPerAgency();
+                this.forms.parent_id = item.parent_id;
             });
         },
     },
