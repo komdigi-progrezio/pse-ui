@@ -83,6 +83,10 @@ export default [
                         name: 'Instansi',
                         to: '/admin/master/agency'
                     },
+                    {
+                        name: 'Satuan Kerja',
+                        to: '/admin/master/work/unit'
+                    },
                 ]
             }
             // {
