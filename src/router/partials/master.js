@@ -2,6 +2,7 @@ const Provinsi = () => import('@/views/master/Provinsi');
 const Kota = () => import('@/views/master/Kota');
 const Agency = () => import('@/views/master/Agency');
 const WorkUnit = () => import('@/views/master/WorkUnit');
+const Config = () => import('@/views/master/Config');
 
 const master = {
     path: 'master',
@@ -53,6 +54,11 @@ const master = {
             path: 'work/unit',
             name: 'Satuan Kerja',
             component: WorkUnit,
+        },
+        {
+            path: 'config',
+            name: 'Setting Paramter',
+            component: Config,
         },
     ]
 }
