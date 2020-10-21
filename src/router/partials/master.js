@@ -15,6 +15,7 @@ const master = {
     children: [
         {
             path: 'area',
+            redirect: 'area/province',
             name: 'Area',
             component: {
                 render(c) {
