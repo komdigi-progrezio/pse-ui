@@ -76,6 +76,10 @@ export default [
                 icon: 'cil-storage',
                 items: [
                     {
+                        name: 'Setting Parameter',
+                        to: '/admin/master/config'
+                    },
+                    {
                         name: 'Area',
                         to: '/admin/master/area/province'
                     },

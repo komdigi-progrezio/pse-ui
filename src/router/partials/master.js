@@ -1,12 +1,11 @@
 const Provinsi = () => import('@/views/master/Provinsi');
 const Kota = () => import('@/views/master/Kota');
 const Agency = () => import('@/views/master/Agency');
+const WorkUnit = () => import('@/views/master/WorkUnit');
+const Config = () => import('@/views/master/Config');
 
 const master = {
     path: 'master',
-    meta: {
-        label: 'Data Master'
-    },
     component: {
         render(c) {
             return c('router-view');
@@ -37,8 +36,29 @@ const master = {
         },
         {
             path: 'agency',
-            name: 'Instansi',
-            component: Agency,
+            redirect: '',
+            component: {
+                render(c) {
+                    return c('router-view');
+                }
+            },
+            children: [
+                {
+                    path: '',
+                    name: 'Instansi',
+                    component: Agency,
+                }
+            ]
+        },
+        {
+            path: 'work/unit',
+            name: 'Satuan Kerja',
+            component: WorkUnit,
+        },
+        {
+            path: 'config',
+            name: 'Setting Paramter',
+            component: Config,
         },
     ]
 }
