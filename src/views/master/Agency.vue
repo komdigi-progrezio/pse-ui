@@ -543,7 +543,6 @@ export default {
                 propinsi: '',
                 kota: '',
                 kode_pos: null,
-                approved: null,
                 website: null,
                 kategori: '',
                 kelompok: '',
@@ -737,7 +736,6 @@ export default {
             this.forms.propinsi = '';
             this.forms.kota = '';
             this.forms.kode_pos = null;
-            this.forms.approved = null;
             this.forms.website = null;
             this.forms.kategori = '';
             this.forms.kelompok = '';
@@ -907,7 +905,6 @@ export default {
             this.forms.alamat = item.alamat;
             this.forms.propinsi = item.id_propinsi;
             this.forms.kode_pos = item.kode_pos;
-            this.forms.approved = item.approved;
             this.forms.website = item.website;
             this.forms.kategori = item.kategori;
             this.forms.kelompok = item.id_kelompok;
