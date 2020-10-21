@@ -437,11 +437,7 @@
                         </CCol>
                         <CCol sm="12">
                             <label for="kota">Kota</label>
-                            <select
-                                v-model="forms.kota"
-                                class="form-control"
-                                @change="getDistrict"
-                            >
+                            <select v-model="forms.kota" class="form-control">
                                 <option value="" selected="selected">
                                     Pilih Kota
                                 </option>
