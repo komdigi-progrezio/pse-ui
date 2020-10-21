@@ -344,7 +344,7 @@ export default {
     methods: {
         listKabupatenKota(item) {
             this.$router.push({
-                path: '/admin/master/area/kota',
+                path: '/admin/master/area/district',
                 query: { id_provinsi: item.id },
             });
         },

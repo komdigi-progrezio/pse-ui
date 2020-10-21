@@ -22,12 +22,12 @@ const master = {
             },
             children: [
                 {
-                    path: 'provinsi',
+                    path: 'province',
                     name: 'Provinsi',
                     component: Provinsi
                 },
                 {
-                    path: 'kota',
+                    path: 'district',
                     name: 'Kota',
                     component: Kota,
                 },

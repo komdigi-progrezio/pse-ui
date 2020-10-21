@@ -77,7 +77,7 @@ export default [
                 items: [
                     {
                         name: 'Area',
-                        to: '/admin/master/area/provinsi'
+                        to: '/admin/master/area/province'
                     },
                     {
                         name: 'Instansi',
