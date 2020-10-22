@@ -420,6 +420,7 @@
                                 v-model="forms.propinsi"
                                 class="form-control"
                                 @change="getDistrict"
+                                @blur="errorValidations.propinsi = []"
                             >
                                 <option value="" selected="selected">
                                     Pilih Provinsi
@@ -440,7 +441,7 @@
                             <select
                                 v-model="forms.kota"
                                 class="form-control"
-                                @change="getDistrict"
+                                @blur="errorValidations.kota = []"
                             >
                                 <option value="" selected="selected">
                                     Pilih Kota

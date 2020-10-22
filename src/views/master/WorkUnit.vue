@@ -313,6 +313,7 @@
                                 v-model="forms.propinsi"
                                 class="form-control"
                                 @change="getDistrict"
+                                @blur="errorValidations.propinsi = []"
                             >
                                 <option value="" selected="selected">
                                     Pilih Provinsi
@@ -330,7 +331,11 @@
                         </CCol>
                         <CCol sm="12">
                             <label for="kota">Kota</label>
-                            <select v-model="forms.kota" class="form-control">
+                            <select
+                                v-model="forms.kota"
+                                class="form-control"
+                                @blur="errorValidations.kota = []"
+                            >
                                 <option value="" selected="selected">
                                     Pilih Kota
                                 </option>
