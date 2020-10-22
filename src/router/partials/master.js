@@ -3,6 +3,7 @@ const Kota = () => import('@/views/master/Kota');
 const Agency = () => import('@/views/master/Agency');
 const WorkUnit = () => import('@/views/master/WorkUnit');
 const Config = () => import('@/views/master/Config');
+const Help = () => import('@/views/master/Help');
 
 const master = {
     path: 'master',
@@ -59,6 +60,11 @@ const master = {
             path: 'config',
             name: 'Setting Paramter',
             component: Config,
+        },
+        {
+            path: 'help',
+            name: 'Bantuan',
+            component: Help,
         },
     ]
 }

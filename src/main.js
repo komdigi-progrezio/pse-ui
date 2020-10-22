@@ -15,6 +15,9 @@ import store from '@/store/store.js';
 import api from '@/utils/api';
 import axios from 'axios';
 import { getToken } from '@/utils/auth.js';
+import '@morioh/v-quill-editor/dist/editor.css';
+import Editor from '@morioh/v-quill-editor';
+
 
 //  Partials Component
 import Message from '@/views/notifications/Message.vue';
@@ -60,52 +63,11 @@ api.interceptors.request.use(function(config) {
 
     return config;
 });
-
-// api.interceptors.response.use(
-//     response => {
-//         if (response.status === 200 || response.status === 201) {
-//             return Promise.resolve(response);
-//         } else {
-//             return Promise.reject(response);
-//         }
-//     },
-//     error => {
-//         if (error.response.status) {
-//             switch (error.response.status) {
-//                 case 400:
-
-//                 //do something
-//                 break;
-
-//                 case 401:
-//                 alert("session expired");
-//                 break;
-//                 case 403:
-//                 router.replace({
-//                     path: "/login",
-//                     query: { redirect: router.currentRoute.fullPath }
-//                 });
-//                 break;
-//                 case 404:
-//                 alert('page not exist');
-//                 break;
-//                 case 502:
-//                 setTimeout(() => {
-//                     router.replace({
-//                     path: "/login",
-//                     query: {
-//                         redirect: router.currentRoute.fullPath
-//                     }
-//                     });
-//                 }, 1000);
-//             }
-//         return Promise.reject(error.response);
-//         }
-//     }
-// );
+// global register
 Vue.config.performance = true;
 Vue.use(CoreuiVue);
 Vue.use(datePicker);
+Vue.use(Editor);
 Vue.prototype.$log = console.log.bind(console);
 
 Object.keys(rules).forEach(rule => {

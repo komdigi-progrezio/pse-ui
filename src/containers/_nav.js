@@ -91,6 +91,10 @@ export default [
                         name: 'Satuan Kerja',
                         to: '/admin/master/work/unit'
                     },
+                    {
+                        name: 'Bantuan',
+                        to: '/admin/master/help'
+                    },
                 ]
             }
             // {
