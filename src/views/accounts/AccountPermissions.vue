@@ -221,6 +221,14 @@
                         </div>
                     </CCardBody>
                 </CCard>
+                <CPagination
+                    :activePage.sync="pagination.current_page"
+                    :pages="pagination.last_page"
+                    size="sm"
+                    align="center"
+                    @update:activePage="getData"
+                    v-if="data.length > 0"
+                />
             </CCol>
         </CRow>
         <CModal
@@ -342,6 +350,10 @@ export default {
             errorValidations: {
                 name: [],
             },
+            pagination: {
+                current_page: 1,
+                last_page: 10,
+            },
         };
     },
     created() {
@@ -361,6 +373,9 @@ export default {
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -387,6 +402,9 @@ export default {
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -396,10 +414,19 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/permissions/filter')
+                .get('/permissions/filter', {
+                    params: {
+                        page: this.pagination.current_page,
+                        filter: 'name',
+                        q: this.search.name,
+                    },
+                })
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -462,7 +489,7 @@ export default {
             this.$http
                 .delete(`permissions/${this.modal.delete.uniqueId}`)
                 .then(() => {
-                    this.getData();
+                    this.filterData();
                     this.closeModalDelete();
                     this.alert.show = true;
                     this.alert.message = 'Data Berhasil di Hapus';
@@ -512,7 +539,7 @@ export default {
                 data: formData,
             })
                 .then((response) => {
-                    this.getData();
+                    this.filterData();
                     this.closeModalPostPut();
                     this.alert.show = true;
                     this.alert.message = response.data.messages;
