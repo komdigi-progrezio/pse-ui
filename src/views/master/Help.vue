@@ -166,6 +166,14 @@
                         </div>
                     </CCardBody>
                 </CCard>
+                <CPagination
+                    :activePage.sync="pagination.current_page"
+                    :pages="pagination.last_page"
+                    size="sm"
+                    align="center"
+                    @update:activePage="getData"
+                    v-if="data.length > 0"
+                />
             </CCol>
         </CRow>
         <CModal
@@ -223,7 +231,11 @@
                         </CCol>
                         <CCol sm="12">
                             <label for="name">Teks</label>
-                            <editor v-model="forms.help" theme="snow" :options="options" />
+                            <editor
+                                v-model="forms.help"
+                                theme="snow"
+                                :options="options"
+                            />
                         </CCol>
                     </CRow>
                 </div>
@@ -318,15 +330,16 @@ export default {
             errorValidations: {
                 name: [],
             },
+            pagination: {
+                current_page: 1,
+                last_page: 10,
+            },
         };
     },
     created() {
         this.getData();
     },
     methods: {
-        // onChange(html, text) {
-        //     console.log(html.length, text.length);
-        // },
         resetFilter() {
             this.spinner = true;
             this.search.name = null;
@@ -340,6 +353,9 @@ export default {
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -366,6 +382,9 @@ export default {
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -375,10 +394,19 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/parhelp/filter')
+                .get('/parhelp/filter', {
+                    params: {
+                        page: this.pagination.current_page,
+                        filter: 'name',
+                        q: this.search.name,
+                    },
+                })
                 .then((response) => {
                     this.spinner = false;
                     this.data = response.data.data;
+                    this.pagination.current_page =
+                        response.data.meta.current_page;
+                    this.pagination.last_page = response.data.meta.last_page;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -442,7 +470,7 @@ export default {
             this.$http
                 .delete(`provinsi/${this.modal.delete.uniqueId}`)
                 .then(() => {
-                    this.getData();
+                    this.filterData();
                     this.closeModalDelete();
                     this.alert.show = true;
                     this.alert.message = 'Data Berhasil di Hapus';
@@ -492,7 +520,7 @@ export default {
                 data: formData,
             })
                 .then((response) => {
-                    this.getData();
+                    this.filterData();
                     this.closeModalPostPut();
                     this.alert.show = true;
                     this.alert.message = response.data.messages;
