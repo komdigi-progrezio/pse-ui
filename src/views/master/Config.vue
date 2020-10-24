@@ -418,7 +418,7 @@ export default {
             this.modal.delete.showModal = true;
             this.modal.delete.title = 'Hapus Data';
             this.modal.delete.color = 'danger';
-            this.modal.delete.data = item.name;
+            this.modal.delete.data = item.param_value;
             this.modal.delete.uniqueId = item.id;
             this.modal.delete.message = 'Ingin Menghapus Data';
             this.modal.delete.labelButton = 'Hapus';

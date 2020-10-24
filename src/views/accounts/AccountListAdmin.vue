@@ -64,73 +64,101 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr
-                                            v-for="(item, index) in data"
-                                            :key="index"
-                                        >
-                                            <th scope="row">{{ index + 1 }}</th>
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.status }}</td>
-                                            <td>{{ item.last_login }}</td>
-                                            <td>
-                                                <CButton
-                                                    color="danger"
-                                                    size="sm"
-                                                    class="mr-1"
-                                                    v-c-tooltip="{
-                                                        content: 'Hapus User',
-                                                        placement: 'bottom',
-                                                    }"
-                                                    @click="destroy(item)"
-                                                >
-                                                    <CIcon name="cil-trash" />
-                                                </CButton>
-                                                <CButton
-                                                    color="success"
-                                                    size="sm"
-                                                    class="mr-1"
-                                                    v-c-tooltip="{
-                                                        content: 'Edit User',
-                                                        placement: 'bottom',
-                                                    }"
-                                                    @click="edit(item)"
-                                                >
-                                                    <CIcon name="cil-pencil" />
-                                                </CButton>
-                                                <template v-if="item.is_active">
+                                        <template v-if="data.length > 0">
+                                            <tr
+                                                v-for="(item, index) in data"
+                                                :key="index"
+                                            >
+                                                <th scope="row">
+                                                    {{ index + 1 }}
+                                                </th>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.status }}</td>
+                                                <td>{{ item.last_login }}</td>
+                                                <td>
                                                     <CButton
-                                                        color="secondary"
+                                                        color="danger"
                                                         size="sm"
+                                                        class="mr-1"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Non Aktifkan User',
+                                                                'Hapus User',
                                                             placement: 'bottom',
                                                         }"
-                                                        @click="active(item)"
+                                                        @click="destroy(item)"
                                                     >
                                                         <CIcon
-                                                            name="cil-x-circle"
+                                                            name="cil-trash"
                                                         />
                                                     </CButton>
-                                                </template>
-                                                <template v-else>
                                                     <CButton
-                                                        color="secondary"
+                                                        color="success"
                                                         size="sm"
+                                                        class="mr-1"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Aktifkan User',
+                                                                'Edit User',
                                                             placement: 'bottom',
                                                         }"
-                                                        @click="active(item)"
+                                                        @click="edit(item)"
                                                     >
                                                         <CIcon
-                                                            name="cil-check-circle"
+                                                            name="cil-pencil"
                                                         />
                                                     </CButton>
-                                                </template>
-                                            </td>
-                                        </tr>
+                                                    <template
+                                                        v-if="item.is_active"
+                                                    >
+                                                        <CButton
+                                                            color="secondary"
+                                                            size="sm"
+                                                            v-c-tooltip="{
+                                                                content:
+                                                                    'Non Aktifkan User',
+                                                                placement:
+                                                                    'bottom',
+                                                            }"
+                                                            @click="
+                                                                active(item)
+                                                            "
+                                                        >
+                                                            <CIcon
+                                                                name="cil-x-circle"
+                                                            />
+                                                        </CButton>
+                                                    </template>
+                                                    <template v-else>
+                                                        <CButton
+                                                            color="secondary"
+                                                            size="sm"
+                                                            v-c-tooltip="{
+                                                                content:
+                                                                    'Aktifkan User',
+                                                                placement:
+                                                                    'bottom',
+                                                            }"
+                                                            @click="
+                                                                active(item)
+                                                            "
+                                                        >
+                                                            <CIcon
+                                                                name="cil-check-circle"
+                                                            />
+                                                        </CButton>
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                        <template v-else>
+                                            <tr>
+                                                <td
+                                                    colspan="5"
+                                                    class="text-center"
+                                                >
+                                                    Data Kosong
+                                                </td>
+                                            </tr>
+                                        </template>
                                     </tbody>
                                 </table>
                             </div>
