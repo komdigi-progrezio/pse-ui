@@ -3,6 +3,7 @@ import { getRefreshToken } from '@/utils/auth';
 import $axiosApi from '@/utils/api';
 
 const state = {
+    isLogin: false,
     token: getToken(),
     refresh_token: getRefreshToken(),
 };
@@ -21,13 +22,14 @@ const actions = {
             .then(response => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh_token')
+                localStorage.removeItem('user')
                 context.commit('DESTROY_TOKEN', null);
                 resolve(response)
             })
             .catch(error => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh_token')
-                localStorage.removeItem('users')
+                localStorage.removeItem('user')
                 context.commit('DESTROY_TOKEN', null);
                 reject(error)
             })
@@ -40,20 +42,19 @@ const actions = {
             password: credentials.password,
         })
             .then(response => {
-                console.log(response);
                 const token = response.data.access_token
                 const refreshToken = response.data.refresh_token
 
                 localStorage.setItem('token', token)
                 localStorage.setItem('refresh_token', refreshToken)
                 context.commit('RETRIEVE_TOKEN', response.data);
-                resolve(response)
 
                 $axiosApi.get(`${process.env.VUE_APP_BASE_API_URL}users/get/authenticated`)
                     .then(response => {
                         const user = response.data.data;
 
                         localStorage.setItem('user', JSON.stringify(user))
+                        resolve(response)
                     })
                     .catch(error => {
                         console.log(error);

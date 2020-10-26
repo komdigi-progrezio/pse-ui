@@ -46,7 +46,7 @@
                 Clear All
                 <CIcon name="cil-clear-all" />
             </CButton>
-            <template v-if="this.listFilter">
+            <template v-if="listFilter">
                 <CButton
                     color="primary"
                     variant="outline"
@@ -76,7 +76,7 @@
                 </CButton>
             </template>
         </div>
-        <template v-if="this.listFilter">
+        <template v-if="listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
                     <label for="name">Kategori</label>

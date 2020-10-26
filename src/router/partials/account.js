@@ -12,7 +12,8 @@ const AccountChangePassword = () =>
 const account = {
     path: 'account',
     meta: {
-        label: 'Akun'
+        label: 'Akun',
+        requiresAuth: true,
     },
     component: {
         render(c) {
@@ -22,37 +23,44 @@ const account = {
     children: [
         {
             path: '',
-            component: Account
+            component: Account,
+            meta: { requiresAuth: true },
         },
         {
             path: 'subtitutions',
             name: 'Pengajuan Penggantian User',
-            component: AccountSubtitutions
+            component: AccountSubtitutions,
+            meta: { requiresAuth: true },
         },
         {
             path: 'role',
             name: 'Daftar Role',
-            component: AccountRoles
+            component: AccountRoles,
+            meta: { requiresAuth: true },
         },
         {
             path: 'permission',
             name: 'Daftar Hak Akses',
-            component: AccountPermissions
+            component: AccountPermissions,
+            meta: { requiresAuth: true },
         },
         {
             path: 'document-changes',
             name: 'Daftar Perubahan Dokumen',
-            component: AccountDocumentChanges
+            component: AccountDocumentChanges,
+            meta: { requiresAuth: true },
         },
         {
             path: 'list',
             name: 'Daftar User Admin',
-            component: AccountListAdmin
+            component: AccountListAdmin,
+            meta: { requiresAuth: true },
         },
         {
             path: 'change/password',
             name: 'Ganti Password',
-            component: AccountChangePassword
+            component: AccountChangePassword,
+            meta: { requiresAuth: true },
         }
     ]
 }

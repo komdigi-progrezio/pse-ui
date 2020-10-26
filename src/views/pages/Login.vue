@@ -1,93 +1,115 @@
 <template>
     <div class="c-app flex-row align-items-center">
-        <CContainer>
-            <CRow class="justify-content-center">
-                <CCol md="5">
-                    <CCardGroup>
-                        <CCard class="p-4">
-                            <CCardBody>
-                                <CForm @submit.prevent="login" method="POST">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card-group">
+                        <div class="card">
+                            <div class="card-body">
+                                <form @submit.prevent="login" method="POST">
                                     <h1>Login</h1>
                                     <p class="text-muted">
                                         Sign In to your account
                                     </p>
-                                    <div
-                                        v-if="showMessage"
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                    >
-                                        {{ message }}
-                                        <button
-                                            class="close"
-                                            type="button"
-                                            data-dismiss="alert"
-                                            aria-label="Close"
-                                            @click="dismissError"
-                                        >
-                                            <span aria-hidden="true"> × </span>
-                                        </button>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <CIcon name="cil-user" />
+                                            </span>
+                                        </div>
+                                        <input
+                                            v-model="form.username"
+                                            class="form-control"
+                                            type="text"
+                                            placeholder="Username"
+                                        />
                                     </div>
-                                    <CInput
-                                        v-model="form.username"
-                                        placeholder="Masukan Email atau Username"
-                                        autocomplete="username email"
-                                    >
-                                        <template #prepend-content
-                                            ><CIcon name="cil-user"
-                                        /></template>
-                                    </CInput>
-                                    <CInput
-                                        v-model="form.password"
-                                        placeholder="Password"
-                                        type="password"
-                                        autocomplete="curent-password"
-                                    >
-                                        <template #prepend-content
-                                            ><CIcon name="cil-lock-locked"
-                                        /></template>
-                                    </CInput>
-                                    <CRow>
-                                        <CCol col="6" class="text-left">
-                                            <CButton
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <CIcon name="cil-lock-locked" />
+                                            </span>
+                                        </div>
+                                        <input
+                                            v-model="form.password"
+                                            class="form-control"
+                                            type="password"
+                                            placeholder="Password"
+                                        />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button
+                                                class="btn btn-primary px-4"
                                                 type="submit"
-                                                color="primary"
-                                                class="px-4"
                                             >
                                                 Login
-                                            </CButton>
-                                        </CCol>
-                                        <CCol col="6" class="text-right">
-                                            <CButton color="link" class="px-0">
+                                            </button>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <button
+                                                class="btn btn-link px-0"
+                                                type="button"
+                                            >
                                                 Forgot password?
-                                            </CButton>
-                                            <!-- <CButton color="link" class="d-lg-none">Register now!</CButton> -->
-                                        </CCol>
-                                    </CRow>
-                                </CForm>
-                            </CCardBody>
-                        </CCard>
-                        <!-- <CCard
-                    color="primary"
-                    text-color="white"
-                    class="text-center py-5 d-md-down-none"
-                    body-wrapper
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card text-white bg-primary py-5">
+                            <div class="card-body text-center">
+                                <div>
+                                    <h2>Sign up</h2>
+                                    <!-- <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna
+                                        aliqua.
+                                    </p> -->
+                                    <button
+                                        class="btn btn-lg btn-outline-light mt-3"
+                                        type="button"
+                                        @click="showRegister"
+                                    >
+                                        Register Now!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <CModal
+            :title="modal.register.title"
+            :color="modal.register.color"
+            :show.sync="modal.register.showModal"
+        >
+            <template v-slot:body-wrapper>
+                <div class="modal-body">
+                    <label for="register"
+                        >Silahkan Pilih Metode Pendaftaran :</label
                     >
-                    <CCardBody>
-                        <h2>Sign up</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        <CButton
-                        color="light"
-                        variant="outline"
-                        size="lg"
-                        >
-                        Register Now!
-                        </CButton>
-                    </CCardBody>
-                    </CCard> -->
-                    </CCardGroup>
-                </CCol>
-            </CRow>
-        </CContainer>
+                    <router-link
+                        to="/register"
+                        class="btn btn-primary d-flex w-100 mb-2"
+                    >
+                        Pendaftaran Pejabat Baru
+                    </router-link>
+                    <router-link
+                        to="/login"
+                        class="btn btn-primary d-flex w-100"
+                    >
+                        Pendaftaran Pejabat Pengganti
+                    </router-link>
+                </div>
+            </template>
+            <template v-slot:footer-wrapper>
+                <div></div>
+            </template>
+        </CModal>
     </div>
 </template>
 
@@ -102,12 +124,21 @@ export default {
             },
             showMessage: false,
             message: '',
+            modal: {
+                register: {
+                    showModal: false,
+                    title: null,
+                    color: null,
+                },
+            },
         };
     },
     methods: {
-        // goRegister(){
-        //   this.$router.push({ path: 'register' });
-        // },
+        showRegister() {
+            this.modal.register.showModal = true;
+            this.modal.register.title = 'Register';
+            this.modal.register.color = 'primary';
+        },
         dismissError() {
             this.showMessage = false;
         },

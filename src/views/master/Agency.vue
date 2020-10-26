@@ -56,7 +56,7 @@
                 Clear All
                 <CIcon name="cil-clear-all" />
             </CButton>
-            <template v-if="this.listFilter">
+            <template v-if="listFilter">
                 <CButton
                     color="primary"
                     variant="outline"
@@ -86,7 +86,7 @@
                 </CButton>
             </template>
         </div>
-        <template v-if="this.listFilter">
+        <template v-if="listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
                     <label for="name">Nama Instansi</label>
@@ -318,7 +318,9 @@
                     </div>
                 </div>
             </template>
-            <template v-slot:footer> </template>
+            <template v-slot:footer-wrapper>
+                <div></div>
+            </template>
         </CModal>
         <CModal
             :title="modal.delete.title"
@@ -484,6 +486,7 @@
                                 type="text"
                                 placeholder="Masukan Domain Website"
                                 class="form-control"
+                                @input="validateWebsite"
                                 @blur="errorValidations.website = []"
                             />
                             <message :messages="errorValidations.website" />
@@ -605,6 +608,19 @@ export default {
         this.getAgencyGroup();
     },
     methods: {
+        validateWebsite() {
+            const regex = new RegExp(/[a-z0-9]+\.go.id$/g);
+            const value = this.forms.website
+                .toString()
+                .replace(/[`~,< >;':"\/\[\]\|{}()=_+-]/, '')
+                .toLowerCase();
+            if (regex.test(this.forms.website)) {
+                this.errorValidations.website = [];
+            } else {
+                this.errorValidations.website = ['Format Webiste Tidak Sesuai'];
+                this.forms.website = value;
+            }
+        },
         modalNotApproved() {
             this.modal.not_approved.showModal = true;
             this.modal.not_approved.title =
@@ -686,7 +702,7 @@ export default {
             this.search.name = null;
 
             this.$http
-                .get('/parinstansi/filter', {
+                .get('/parinstansi/filter/approved', {
                     params: {
                         page: 1,
                     },
@@ -713,7 +729,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/parinstansi/filter', {
+                .get('/parinstansi/filter/approved', {
                     params: {
                         page: 1,
                         filter: 'name',
@@ -735,7 +751,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/parinstansi/filter', {
+                .get('/parinstansi/filter/approved', {
                     params: {
                         page: this.pagination.current_page,
                         filter: 'name',

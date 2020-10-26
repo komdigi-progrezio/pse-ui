@@ -13,6 +13,7 @@ import master from '@/router/partials/master.js';
 const Dashboard = () => import('@/views/Dashboard');
 const Report = () => import('@/views/reports/Report');
 const Login = () => import('@/views/pages/Login');
+const OfficialNew = () => import('@/views/pages/OfficialNew');
 
 Vue.use(Router);
 
@@ -38,20 +39,27 @@ function configRoutes() {
                 {
                     path: 'login',
                     name: 'Login',
-                    component: Login
+                    component: Login,
                 }
             ]
+        },
+        {
+            path: '/register',
+            name: 'Daftar Pejabat',
+            component: OfficialNew,
         },
         {
             path: '/admin',
             name: 'Home',
             redirect: 'admin/dashboard',
             component: TheContainer,
+            meta: { requiresAuth: true },
             children: [
                 {
                     path: 'dashboard',
                     name: 'Dashboard',
-                    component: Dashboard
+                    component: Dashboard,
+                    meta: { requiresAuth: true },
                 },
                 {
                     path: 'report',
@@ -61,26 +69,31 @@ function configRoutes() {
                             return c('router-view');
                         }
                     },
+                    meta: { requiresAuth: true },
                     children: [
                         {
                             path: 'new',
                             name: 'Laporan Baru',
-                            component: Report
+                            component: Report,
+                            meta: { requiresAuth: true },
                         },
                         {
                             path: 'draft',
                             name: 'Laporan Draft',
-                            component: Report
+                            component: Report,
+                            meta: { requiresAuth: true },
                         },
                         {
                             path: 'reject',
                             name: 'Laporan Ditolak',
-                            component: Report
+                            component: Report,
+                            meta: { requiresAuth: true },
                         },
                         {
                             path: 'finished',
                             name: 'Laporan Selesai',
-                            component: Report
+                            component: Report,
+                            meta: { requiresAuth: true },
                         }
                     ]
                 },
@@ -92,14 +105,20 @@ function configRoutes() {
 }
 
 createRouter.beforeEach((to, from, next) => {
-    const token = store.state.auth.token ? store.state.auth.token : getToken();
+    const user = localStorage.getItem('user');
 
-    if (to.name !== 'Login' && !token) {
-        next({ name: 'Login' });
-    } else if (token && to.name === 'Login') {
-        next({ name: 'Dashboard' });
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (user === null) {
+            next({ path: '/login' });
+        } else {
+            next();
+        }
     } else {
-        next();
+         if (user !== null) {
+            next({ path: '/admin/dashboard' });
+        } else {
+            next();
+        }
     }
 });
 
