@@ -99,7 +99,7 @@
                         Pendaftaran Pejabat Baru
                     </router-link>
                     <router-link
-                        to="/login"
+                        to="/register/replace"
                         class="btn btn-primary d-flex w-100"
                     >
                         Pendaftaran Pejabat Pengganti

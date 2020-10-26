@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import store from '@/store/store';
-import { getToken } from '@/utils/auth.js';
 
 // Containers
 const TheContainer = () => import('@/containers/TheContainer');
@@ -14,6 +12,7 @@ const Dashboard = () => import('@/views/Dashboard');
 const Report = () => import('@/views/reports/Report');
 const Login = () => import('@/views/pages/Login');
 const OfficialNew = () => import('@/views/pages/OfficialNew');
+const OfficiaReplace = () => import('@/views/pages/OfficiaReplace');
 
 Vue.use(Router);
 
@@ -47,6 +46,11 @@ function configRoutes() {
             path: '/register',
             name: 'Daftar Pejabat',
             component: OfficialNew,
+        },
+        {
+            path: '/register/replace',
+            name: 'Daftar Pergantian Pejabat',
+            component: OfficiaReplace,
         },
         {
             path: '/admin',
