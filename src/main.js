@@ -11,6 +11,7 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
+import '@coreui/icons/css/all.min.css';
 import store from '@/store/store.js';
 import api from '@/utils/api';
 import axios from 'axios';

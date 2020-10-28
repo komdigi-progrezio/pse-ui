@@ -6,6 +6,11 @@
                     <div class="card-group">
                         <div class="card">
                             <div class="card-body">
+                                <img
+                                    src="@/assets/images/logo.png"
+                                    alt="PSE"
+                                    class="w-100"
+                                />
                                 <form @submit.prevent="login" method="POST">
                                     <h1>Login</h1>
                                     <p class="text-muted">
@@ -58,24 +63,23 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="card text-white bg-primary py-5">
-                            <div class="card-body text-center">
-                                <div>
-                                    <h2>Sign up</h2>
-                                    <!-- <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna
-                                        aliqua.
-                                    </p> -->
-                                    <button
-                                        class="btn btn-lg btn-outline-light mt-3"
-                                        type="button"
-                                        @click="showRegister"
-                                    >
-                                        Register Now!
-                                    </button>
-                                </div>
+                        <div class="card text-white bg-primary">
+                            <div
+                                class="card-body text-center align-items-center d-flex justify-content-center"
+                            >
+                                <!-- <p>
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna
+                                    aliqua.
+                                </p> -->
+                                <button
+                                    class="btn btn-lg btn-outline-light"
+                                    type="button"
+                                    @click="showRegister"
+                                >
+                                    Register Now!
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -151,6 +155,10 @@ export default {
                     password: this.form.password,
                 })
                 .then(() => {
+                    this.$toastr.s(
+                        'Anda Berhasil Masuk Halaman Admin',
+                        'Pemberitahuan'
+                    );
                     this.$router.push('admin/dashboard');
                 })
                 .catch((error) => {
@@ -158,6 +166,7 @@ export default {
                     this.form.password = null;
                     this.showMessage = true;
                     this.message = error.response.data;
+                    this.$toastr.e(this.message, 'Pemberitahuan');
                 });
         },
     },
