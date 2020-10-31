@@ -1,5 +1,85 @@
 <template>
     <div>
+        <CCard>
+            <CCardHeader> Filter </CCardHeader>
+            <CCardBody>
+                <div class="d-flex mb-3">
+                    <CButton
+                        color="dark"
+                        variant="outline"
+                        size="sm"
+                        class="mr-2"
+                        :class="{ 'mr-auto': search.name === null }"
+                        v-c-tooltip="{
+                            content: 'Filter',
+                            placement: 'bottom',
+                        }"
+                        @click="filter"
+                    >
+                        Filter
+                        <CIcon :name="setIconFilter" />
+                    </CButton>
+                    <CButton
+                        v-show="search.name !== null"
+                        color="info"
+                        variant="outline"
+                        size="sm"
+                        class="mr-auto"
+                        v-c-tooltip="{
+                            content: 'Bershikan',
+                            placement: 'bottom',
+                        }"
+                        @click="clearFilter"
+                    >
+                        Clear All
+                        <CIcon name="cil-clear-all" />
+                    </CButton>
+                    <template v-if="listFilter">
+                        <CButton
+                            color="primary"
+                            variant="outline"
+                            size="sm"
+                            class="mr-2"
+                            v-c-tooltip="{
+                                content: 'Cari',
+                                placement: 'bottom',
+                            }"
+                            @click="filterData"
+                        >
+                            Search
+                            <CIcon name="cil-search" />
+                        </CButton>
+                        <CButton
+                            color="danger"
+                            variant="outline"
+                            size="sm"
+                            v-c-tooltip="{
+                                content: 'Reset',
+                                placement: 'bottom',
+                            }"
+                            @click="resetFilter"
+                        >
+                            Reset
+                            <CIcon name="cil-reload" />
+                        </CButton>
+                    </template>
+                </div>
+                <template v-if="listFilter">
+                    <CRow class="my-3">
+                        <CCol sm="12">
+                            <label for="name">Nama Bantuan</label>
+                            <input
+                                v-model="search.name"
+                                type="text"
+                                name="name"
+                                placeholder="Masukan Nama Bantuan"
+                                class="form-control"
+                            />
+                        </CCol>
+                    </CRow>
+                </template>
+            </CCardBody>
+        </CCard>
         <CAlert
             :color="alert.style"
             :show.sync="alert.counter"
@@ -15,81 +95,6 @@
                 animate
             />
         </CAlert>
-        <div class="d-flex mb-3">
-            <CButton
-                color="secondary"
-                variant="outline"
-                size="sm"
-                class="mr-2"
-                :class="{ 'mr-auto': search.name === null }"
-                v-c-tooltip="{
-                    content: 'Filter',
-                    placement: 'bottom',
-                }"
-                @click="filter"
-            >
-                Filter
-                <CIcon name="cil-filter" />
-            </CButton>
-            <CButton
-                v-show="search.name !== null"
-                color="info"
-                variant="outline"
-                size="sm"
-                class="mr-auto"
-                v-c-tooltip="{
-                    content: 'Bershikan',
-                    placement: 'bottom',
-                }"
-                @click="clearFilter"
-            >
-                Clear All
-                <CIcon name="cil-clear-all" />
-            </CButton>
-            <template v-if="this.listFilter">
-                <CButton
-                    color="primary"
-                    variant="outline"
-                    size="sm"
-                    class="mr-2"
-                    v-c-tooltip="{
-                        content: 'Cari',
-                        placement: 'bottom',
-                    }"
-                    @click="filterData"
-                >
-                    Search
-                    <CIcon name="cil-search" />
-                </CButton>
-                <CButton
-                    color="danger"
-                    variant="outline"
-                    size="sm"
-                    v-c-tooltip="{
-                        content: 'Reset',
-                        placement: 'bottom',
-                    }"
-                    @click="resetFilter"
-                >
-                    Reset
-                    <CIcon name="cil-reload" />
-                </CButton>
-            </template>
-        </div>
-        <template v-if="this.listFilter">
-            <CRow class="my-3">
-                <CCol sm="12">
-                    <label for="name">Nama Bantuan</label>
-                    <input
-                        v-model="search.name"
-                        type="text"
-                        name="name"
-                        placeholder="Masukan Nama Bantuan"
-                        class="form-control"
-                    />
-                </CCol>
-            </CRow>
-        </template>
         <CRow>
             <CCol lg="12">
                 <CCard>
@@ -192,7 +197,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalDelete"
@@ -242,7 +247,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalPostPut"
@@ -336,13 +341,22 @@ export default {
             },
         };
     },
+    computed: {
+        setIconFilter() {
+            if (this.listFilter) {
+                return 'cil-filter-x';
+            }
+
+            return 'cil-filter';
+        },
+    },
     created() {
         this.getData();
     },
     methods: {
         resetFilter() {
             this.spinner = true;
-            this.search.name = null;
+            this.clearFilter();
 
             this.$http
                 .get('/parhelp/filter', {
@@ -363,7 +377,7 @@ export default {
         },
         filter() {
             this.listFilter = !this.listFilter;
-            this.search.name = null;
+            this.clearFilter();
         },
         clearFilter() {
             this.search.name = null;

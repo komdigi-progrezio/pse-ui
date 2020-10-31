@@ -110,7 +110,7 @@
                                                         v-if="item.is_active"
                                                     >
                                                         <CButton
-                                                            color="secondary"
+                                                            color="dark"
                                                             size="sm"
                                                             v-c-tooltip="{
                                                                 content:
@@ -129,7 +129,7 @@
                                                     </template>
                                                     <template v-else>
                                                         <CButton
-                                                            color="secondary"
+                                                            color="dark"
                                                             size="sm"
                                                             v-c-tooltip="{
                                                                 content:
@@ -187,7 +187,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalDelete"
@@ -312,7 +312,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalPostPut"

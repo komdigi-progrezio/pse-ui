@@ -9,21 +9,17 @@ import * as rules from 'vee-validate/dist/rules';
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
 import VueSweetalert2 from 'vue-sweetalert2';
 import datePicker from 'vue-bootstrap-datetimepicker';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 import store from '@/store/store.js';
 import api from '@/utils/api';
 import axios from 'axios';
 import { getToken } from '@/utils/auth.js';
 import '@morioh/v-quill-editor/dist/editor.css';
 import Editor from '@morioh/v-quill-editor';
-
+import VueToastr from 'vue-toastr';
+import toastrConfig from '@/utils/toastr';
 
 //  Partials Component
 import Message from '@/views/notifications/Message.vue';
-
-Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
-Vue.prototype.$http = api;
 
 api.interceptors.response.use(
     function(response) {
@@ -63,17 +59,25 @@ api.interceptors.request.use(function(config) {
 
     return config;
 });
+
+Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
+Vue.prototype.$http = api;
+
 // global register
 Vue.config.performance = true;
 Vue.use(CoreuiVue);
 Vue.use(datePicker);
 Vue.use(Editor);
+Vue.use(VueToastr, {
+    toastrConfig
+});
 Vue.prototype.$log = console.log.bind(console);
 
 Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule]);
 });
 
+import './utils/validations';
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('message', Message);

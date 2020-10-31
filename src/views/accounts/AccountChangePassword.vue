@@ -62,7 +62,7 @@
                 >
                     Simpan
                 </button>
-                <button class="btn btn-secondary" type="button">Cancel</button>
+                <button class="btn btn-dark" type="button">Cancel</button>
             </div>
         </div>
     </div>

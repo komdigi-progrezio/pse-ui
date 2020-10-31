@@ -17,7 +17,7 @@
         </CAlert>
         <div class="d-flex mb-3">
             <CButton
-                color="secondary"
+                color="dark"
                 variant="outline"
                 size="sm"
                 class="mr-2"
@@ -46,7 +46,7 @@
                 Clear All
                 <CIcon name="cil-clear-all" />
             </CButton>
-            <template v-if="this.listFilter">
+            <template v-if="listFilter">
                 <CButton
                     color="primary"
                     variant="outline"
@@ -76,7 +76,7 @@
                 </CButton>
             </template>
         </div>
-        <template v-if="this.listFilter">
+        <template v-if="listFilter">
             <CRow class="my-3">
                 <CCol sm="12">
                     <label for="name">Nama Provinsi</label>
@@ -179,7 +179,7 @@
                                                         />
                                                     </CButton>
                                                     <CButton
-                                                        color="secondary"
+                                                        color="dark"
                                                         size="sm"
                                                         v-c-tooltip="{
                                                             content:
@@ -241,7 +241,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalDelete"
@@ -283,7 +283,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalPostPut"
@@ -362,7 +362,7 @@ export default {
         },
         resetFilter() {
             this.spinner = true;
-            this.search.nama = null;
+            this.clearFilter();
 
             this.$http
                 .get('/provinsi/filter', {
@@ -383,7 +383,7 @@ export default {
         },
         filter() {
             this.listFilter = !this.listFilter;
-            this.search.nama = null;
+            this.clearFilter();
         },
         clearFilter() {
             this.search.nama = null;
