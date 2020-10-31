@@ -17,7 +17,7 @@
         </CAlert>
         <div class="d-flex mb-3">
             <CButton
-                color="secondary"
+                color="dark"
                 variant="outline"
                 size="sm"
                 class="mr-2"
@@ -224,7 +224,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalDelete"
@@ -266,7 +266,7 @@
             </template>
             <template v-slot:footer>
                 <CButton
-                    color="secondary"
+                    color="dark"
                     size="sm"
                     class="m-2"
                     @click="closeModalPostPut"
@@ -341,7 +341,7 @@ export default {
     methods: {
         resetFilter() {
             this.spinner = true;
-            this.search.nama = null;
+            this.clearFilter();
 
             this.$http
                 .get('/kota/filter', {
@@ -364,7 +364,7 @@ export default {
         },
         filter() {
             this.listFilter = !this.listFilter;
-            this.search.nama = null;
+            this.clearFilter();
         },
         clearFilter() {
             this.search.nama = null;

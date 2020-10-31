@@ -1,9 +1,9 @@
 // If you want to override variables do it here
 @import 'variables';
-
 // Import styles
 @import '~@coreui/coreui/scss/coreui';
-
+@import '~@coreui/icons/css/all.min.css';
+@import '~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 // If you want to add something do it here
 @import 'custom';
 

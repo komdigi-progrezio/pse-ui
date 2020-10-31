@@ -17,7 +17,7 @@
                         @click="filter"
                     >
                         Filter
-                        <CIcon name="cil-filter" />
+                        <CIcon :name="setIconFilter" />
                     </CButton>
                     <CButton
                         v-show="!checkFilter"
@@ -201,57 +201,57 @@
                                             <th>Tanggal Daftar</th>
                                             <th>Tanggal Update</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
                                             <th colspan="2">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <!-- <tbody>
+                                    <tbody>
                                         <template v-if="data.length > 0">
                                             <tr
-                                                v-for="(item, index) in data"
-                                                :key="index"
+                                                v-for="(value, index) in data"
+                                                :key="`user-${index}`"
                                             >
-                                                <th scope="row">
-                                                    {{ index + 1 }}
-                                                </th>
-                                                <td>{{ item.name }}</td>
+                                                <td>{{ index + 1 }}</td>
+                                                <td>{{ value.nama }}</td>
+                                                <td>{{ value.nip }}</td>
+                                                <td>{{ value.jabatan }}</td>
                                                 <td>
-                                                    <span
-                                                        v-for="(value,
-                                                        index) in item.permissions"
-                                                        :key="index"
-                                                    >
-                                                        <template
-                                                            v-if="
-                                                                item.permissions
-                                                                    .length -
-                                                                    1 ===
-                                                                index
-                                                            "
-                                                        >
-                                                            {{ value }}
-                                                        </template>
-                                                        <template v-else>
-                                                            {{ value }} |
-                                                        </template>
-                                                    </span>
+                                                    {{
+                                                        value.instansi_induk_text
+                                                    }}
                                                 </td>
-                                                <td>{{ item.created_by }}</td>
-                                                <td>{{ item.updated_by }}</td>
+                                                <td>{{ value.created_at }}</td>
+                                                <td>{{ value.modified_at }}</td>
+                                                <td>{{ value.status }}</td>
                                                 <td>
                                                     <CButton
-                                                        color="danger"
+                                                        color="primary"
                                                         size="sm"
                                                         class="mr-2"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Hapus Akun',
+                                                                'Lihat Detail User',
                                                             placement: 'bottom',
                                                         }"
-                                                        @click="destroy(item)"
+                                                        :to="{
+                                                            path: `/admin/account/${value.id}/official`,
+                                                        }"
                                                     >
                                                         <CIcon
-                                                            name="cil-trash"
+                                                            name="cil-description"
+                                                        />
+                                                    </CButton>
+                                                    <CButton
+                                                        color="info"
+                                                        size="sm"
+                                                        class="mr-2"
+                                                        v-c-tooltip="{
+                                                            content:
+                                                                'Lihat Daftar Sistem Elektronik',
+                                                            placement: 'bottom',
+                                                        }"
+                                                    >
+                                                        <CIcon
+                                                            name="cil-storage"
                                                         />
                                                     </CButton>
                                                     <CButton
@@ -259,13 +259,12 @@
                                                         size="sm"
                                                         v-c-tooltip="{
                                                             content:
-                                                                'Edit Akun',
+                                                                'Lihat Daftar Pejabat di Bawahnya',
                                                             placement: 'bottom',
                                                         }"
-                                                        @click="edit(item)"
                                                     >
                                                         <CIcon
-                                                            name="cil-pencil"
+                                                            name="cil-fork"
                                                         />
                                                     </CButton>
                                                 </td>
@@ -281,7 +280,7 @@
                                                 </td>
                                             </tr>
                                         </template>
-                                    </tbody> -->
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -333,10 +332,6 @@ export default {
                     },
                 ],
                 filter: [
-                    {
-                        id: 'username',
-                        name: 'Username',
-                    },
                     {
                         id: 'nama',
                         name: 'Nama Lengkap',
@@ -427,6 +422,16 @@ export default {
                 return true;
             }
         },
+        setIconFilter() {
+            if (this.listFilter) {
+                return 'cil-filter-x';
+            }
+
+            return 'cil-filter';
+        },
+    },
+    created() {
+        this.getData();
     },
     methods: {
         changeMinDate() {
@@ -434,15 +439,10 @@ export default {
         },
         resetFilter() {
             this.spinner = true;
-            this.search.status = 'all';
-            this.search.filter = 'all';
-            this.search.q = null;
-            this.search.tanggal = 'all';
-            this.search.created_at = null;
-            this.search.modified_at = null;
+            this.clearFilter();
 
             this.$http
-                .get('/roles/filter', {
+                .get('/users/filter/official', {
                     params: {
                         page: 1,
                     },
@@ -460,12 +460,7 @@ export default {
         },
         filter() {
             this.listFilter = !this.listFilter;
-            this.search.status = 'all';
-            this.search.filter = 'all';
-            this.search.q = null;
-            this.search.tanggal = 'all';
-            this.search.created_at = null;
-            this.search.modified_at = null;
+            this.clearFilter();
         },
         clearFilter() {
             this.search.status = 'all';
@@ -479,7 +474,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/roles/filter', {
+                .get('/users/filter/official', {
                     params: {
                         page: 1,
                         status: this.search.status,
@@ -505,7 +500,7 @@ export default {
             this.spinner = true;
 
             this.$http
-                .get('/roles/filter', {
+                .get('/users/filter/official', {
                     params: {
                         page: this.pagination.current_page,
                         status: this.search.status,

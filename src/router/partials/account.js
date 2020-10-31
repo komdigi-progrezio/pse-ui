@@ -1,4 +1,5 @@
 const Account = () => import('@/views/accounts/Account');
+const DetailAccount = () => import('@/views/accounts/DetailAccount');
 const AccountSubtitutions = () =>
     import('@/views/accounts/AccountSubtitutions');
 const AccountRoles = () => import('@/views/accounts/AccountRoles');
@@ -24,6 +25,11 @@ const account = {
         {
             path: '',
             component: Account,
+            meta: { requiresAuth: true },
+        },
+        {
+            path: ':id/official',
+            component: DetailAccount,
             meta: { requiresAuth: true },
         },
         {
