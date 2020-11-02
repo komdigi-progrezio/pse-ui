@@ -22,6 +22,7 @@
   "copyright": "Copyright 2020 creativeLabs Łukasz Holeczek",
   "license": "MIT",
   "scripts": {
+    "prettier": "prettier",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
@@ -29,7 +30,8 @@
     "test:e2e": "vue-cli-service test:e2e",
     "clearCache": "jest --clearCache",
     "release": "npm-run-all clearCache lint build test:unit test:e2e",
-    "auto-changelog": "auto-changelog  --hide-credit --commit-limit false --package --backfill-limit 0 --starting-version 3.0.0-beta.0"
+    "auto-changelog": "auto-changelog  --hide-credit --commit-limit false --package --backfill-limit 0 --starting-version 3.0.0-beta.0",
+    "format": "prettier --write \"**/*.{vue,js,css,scss,md,json,yml}\""
   },
   "dependencies": {
     "@coreui/coreui": "^3.2.2",
@@ -49,6 +51,8 @@
   },
   "devDependencies": {
     "@babel/core": "~7.11.6",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@vue/cli-plugin-babel": "~4.5.4",
     "@vue/cli-plugin-e2e-nightwatch": "~4.5.4",
     "@vue/cli-plugin-eslint": "~4.5.4",
@@ -62,8 +66,11 @@
     "core-js": "~3.6.5",
     "eslint": "~7.8.1",
     "eslint-plugin-vue": "~6.2.2",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
     "node-sass": "~4.14.1",
     "npm-run-all": "~4.1.5",
+    "prettier": "^2.1.2",
     "sass-loader": "~10.0.2",
     "vue-template-compiler": "~2.6.12"
   },
