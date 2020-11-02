@@ -1,617 +1,526 @@
 <template>
-    <div>
-        <CAlert
-            :color="alert.style"
-            :show.sync="alert.counter"
-            closeButton
-            v-if="alert.show"
-        >
-            {{ alert.message }}
-            <CProgress
-                :max="3"
-                :value="alert.counter"
-                height="3px"
-                :color="alert.style"
-                animate
-            />
-        </CAlert>
-        <CRow>
-            <CCol lg="12">
-                <CCard>
-                    <CCardHeader>
-                        <CIcon name="cil-people" /> Akun
-                        <div class="card-header-actions">
+  <div>
+    <CRow>
+      <CCol lg="12">
+        <CCard>
+          <CCardHeader>
+            <CIcon name="cil-people" /> Akun
+            <div class="card-header-actions">
+              <CButton
+                color="success"
+                shape="pill"
+                size="sm"
+                variant="outline"
+                v-c-tooltip="{
+                  content: 'Tambah User',
+                  placement: 'bottom',
+                }"
+                @click="post"
+              >
+                <CIcon name="cil-plus" />
+              </CButton>
+            </div>
+          </CCardHeader>
+          <CCardBody>
+            <div class="mt-4">
+              <div v-if="spinner" class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table v-if="!spinner" class="table table-hover table-striped">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Nama</th>
+                      <th>Status</th>
+                      <th>Last Login</th>
+                      <th colspan="3">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template v-if="data.length > 0">
+                      <tr v-for="(item, index) in data" :key="index">
+                        <th scope="row">
+                          {{ index + 1 }}
+                        </th>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.last_login }}</td>
+                        <td>
+                          <CButton
+                            color="danger"
+                            size="sm"
+                            class="mr-1"
+                            v-c-tooltip="{
+                              content: 'Hapus User',
+                              placement: 'bottom',
+                            }"
+                            @click="destroy(item)"
+                          >
+                            <CIcon name="cil-trash" />
+                          </CButton>
+                          <CButton
+                            color="success"
+                            size="sm"
+                            class="mr-1"
+                            v-c-tooltip="{
+                              content: 'Edit User',
+                              placement: 'bottom',
+                            }"
+                            @click="edit(item)"
+                          >
+                            <CIcon name="cil-pencil" />
+                          </CButton>
+                          <template v-if="item.is_active">
                             <CButton
-                                color="success"
-                                shape="pill"
-                                size="sm"
-                                variant="outline"
-                                v-c-tooltip="{
-                                    content: 'Tambah User',
-                                    placement: 'bottom',
-                                }"
-                                @click="post"
+                              color="dark"
+                              size="sm"
+                              v-c-tooltip="{
+                                content: 'Non Aktifkan User',
+                                placement: 'bottom',
+                              }"
+                              @click="active(item)"
                             >
-                                <CIcon name="cil-plus" />
+                              <CIcon name="cil-x-circle" />
                             </CButton>
-                        </div>
-                    </CCardHeader>
-                    <CCardBody>
-                        <div class="mt-4">
-                            <div
-                                v-if="spinner"
-                                class="d-flex justify-content-center"
+                          </template>
+                          <template v-else>
+                            <CButton
+                              color="dark"
+                              size="sm"
+                              v-c-tooltip="{
+                                content: 'Aktifkan User',
+                                placement: 'bottom',
+                              }"
+                              @click="active(item)"
                             >
-                                <div
-                                    class="spinner-border text-primary"
-                                    role="status"
-                                >
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table
-                                    v-if="!spinner"
-                                    class="table table-hover table-striped"
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama</th>
-                                            <th>Status</th>
-                                            <th>Last Login</th>
-                                            <th colspan="3">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <template v-if="data.length > 0">
-                                            <tr
-                                                v-for="(item, index) in data"
-                                                :key="index"
-                                            >
-                                                <th scope="row">
-                                                    {{ index + 1 }}
-                                                </th>
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.status }}</td>
-                                                <td>{{ item.last_login }}</td>
-                                                <td>
-                                                    <CButton
-                                                        color="danger"
-                                                        size="sm"
-                                                        class="mr-1"
-                                                        v-c-tooltip="{
-                                                            content:
-                                                                'Hapus User',
-                                                            placement: 'bottom',
-                                                        }"
-                                                        @click="destroy(item)"
-                                                    >
-                                                        <CIcon
-                                                            name="cil-trash"
-                                                        />
-                                                    </CButton>
-                                                    <CButton
-                                                        color="success"
-                                                        size="sm"
-                                                        class="mr-1"
-                                                        v-c-tooltip="{
-                                                            content:
-                                                                'Edit User',
-                                                            placement: 'bottom',
-                                                        }"
-                                                        @click="edit(item)"
-                                                    >
-                                                        <CIcon
-                                                            name="cil-pencil"
-                                                        />
-                                                    </CButton>
-                                                    <template
-                                                        v-if="item.is_active"
-                                                    >
-                                                        <CButton
-                                                            color="dark"
-                                                            size="sm"
-                                                            v-c-tooltip="{
-                                                                content:
-                                                                    'Non Aktifkan User',
-                                                                placement:
-                                                                    'bottom',
-                                                            }"
-                                                            @click="
-                                                                active(item)
-                                                            "
-                                                        >
-                                                            <CIcon
-                                                                name="cil-x-circle"
-                                                            />
-                                                        </CButton>
-                                                    </template>
-                                                    <template v-else>
-                                                        <CButton
-                                                            color="dark"
-                                                            size="sm"
-                                                            v-c-tooltip="{
-                                                                content:
-                                                                    'Aktifkan User',
-                                                                placement:
-                                                                    'bottom',
-                                                            }"
-                                                            @click="
-                                                                active(item)
-                                                            "
-                                                        >
-                                                            <CIcon
-                                                                name="cil-check-circle"
-                                                            />
-                                                        </CButton>
-                                                    </template>
-                                                </td>
-                                            </tr>
-                                        </template>
-                                        <template v-else>
-                                            <tr>
-                                                <td
-                                                    colspan="5"
-                                                    class="text-center"
-                                                >
-                                                    Data Kosong
-                                                </td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <!-- <CPagination
+                              <CIcon name="cil-check-circle" />
+                            </CButton>
+                          </template>
+                        </td>
+                      </tr>
+                    </template>
+                    <template v-else>
+                      <tr>
+                        <td colspan="5" class="text-center"> Data Kosong </td>
+                      </tr>
+                    </template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- <CPagination
                             :activePage.sync="currentPage"
                             :pages="5"
                         /> -->
-                    </CCardBody>
-                </CCard>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
+    <CModal
+      :title="modal.delete.title"
+      :color="modal.delete.color"
+      :show.sync="modal.delete.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.delete.message }}
+            <strong>{{ modal.delete.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModalDelete">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="submitDelete">
+          {{ modal.delete.labelButton }}
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.post_put.title"
+      :color="modal.post_put.color"
+      :show.sync="modal.post_put.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <label for="name">Nama Lengkap</label>
+              <input
+                v-model="forms.name"
+                type="text"
+                name="name"
+                placeholder="Masukan Nama Lengkap"
+                class="form-control"
+                @blur="errorValidations.name = []"
+              />
+              <message :messages="errorValidations.name" />
             </CCol>
-        </CRow>
-        <CModal
-            :title="modal.delete.title"
-            :color="modal.delete.color"
-            :show.sync="modal.delete.showModal"
-        >
-            <template v-slot:body-wrapper>
-                <div class="modal-body">
-                    <p>
-                        {{ modal.delete.message }}
-                        <strong>{{ modal.delete.data }}</strong
-                        >?
-                    </p>
-                </div>
-            </template>
-            <template v-slot:footer>
-                <CButton
-                    color="dark"
-                    size="sm"
-                    class="m-2"
-                    @click="closeModalDelete"
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="primary"
-                    size="sm"
-                    class="m-2"
-                    @click="submitDelete"
-                >
-                    {{ modal.delete.labelButton }}
-                </CButton>
-            </template>
-        </CModal>
-        <CModal
-            :title="modal.post_put.title"
-            :color="modal.post_put.color"
-            :show.sync="modal.post_put.showModal"
-        >
-            <template v-slot:body-wrapper>
-                <div class="modal-body">
-                    <CRow>
-                        <CCol sm="12">
-                            <label for="name">Nama Lengkap</label>
-                            <input
-                                v-model="forms.name"
-                                type="text"
-                                name="name"
-                                placeholder="Masukan Nama Lengkap"
-                                class="form-control"
-                                @blur="errorValidations.name = []"
-                            />
-                            <message :messages="errorValidations.name" />
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol sm="12">
-                            <label for="username">Username</label>
-                            <input
-                                v-model="forms.username"
-                                type="text"
-                                name="username"
-                                placeholder="Masukan Username"
-                                class="form-control"
-                                @input="validateUsername"
-                                @blur="errorValidations.username = []"
-                            />
-                            <message :messages="errorValidations.username" />
-                        </CCol>
-                    </CRow>
-                    <CRow>
-                        <CCol sm="12">
-                            <label for="email">Email</label>
-                            <input
-                                v-model="forms.email"
-                                type="text"
-                                name="email"
-                                placeholder="Masukan Email Yang Aktif"
-                                class="form-control"
-                                @input="validateEmail"
-                                @blur="errorValidations.email = []"
-                            />
-                            <message :messages="errorValidations.email" />
-                        </CCol>
-                    </CRow>
-                    <template v-if="modal.post_put.method == 'post'">
-                        <CRow>
-                            <CCol sm="12">
-                                <label for="password">Password</label>
-                                <input
-                                    v-model="forms.password"
-                                    type="password"
-                                    name="password"
-                                    placeholder="Masukan Password"
-                                    class="form-control"
-                                    @blur="errorValidations.password = []"
-                                />
-                                <message
-                                    :messages="errorValidations.password"
-                                />
-                            </CCol>
-                        </CRow>
-                        <CRow>
-                            <CCol sm="12">
-                                <label for="password_confirmation"
-                                    >Konfirmasi Password</label
-                                >
-                                <input
-                                    v-model="forms.password_confirmation"
-                                    type="password"
-                                    name="password_confirmation"
-                                    placeholder="Masukan Konfirmasi Password"
-                                    class="form-control"
-                                />
-                            </CCol>
-                        </CRow>
-                    </template>
-                    <CRow>
-                        <CCol sm="12">
-                            <label class="form-label">Roles</label>
-                            <label
-                                v-for="(value, index) in roles"
-                                :key="index"
-                                class="custom-control custom-checkbox col-lg-6"
-                            >
-                                <input
-                                    :id="value.name"
-                                    v-model="forms.roles"
-                                    type="checkbox"
-                                    class="custom-control-input"
-                                    :value="value.name"
-                                />
-                                <span class="custom-control-label">{{
-                                    value.name.toUpperCase()
-                                }}</span>
-                            </label>
-                        </CCol>
-                    </CRow>
-                </div>
-            </template>
-            <template v-slot:footer>
-                <CButton
-                    color="dark"
-                    size="sm"
-                    class="m-2"
-                    @click="closeModalPostPut"
-                >
-                    Cancel
-                </CButton>
-                <CButton
-                    color="primary"
-                    size="sm"
-                    class="m-2"
-                    @click="submitPostPut"
-                >
-                    {{ modal.post_put.labelButton }}
-                </CButton>
-            </template>
-        </CModal>
-    </div>
+          </CRow>
+          <CRow>
+            <CCol sm="12">
+              <label for="username">Username</label>
+              <input
+                v-model="forms.username"
+                type="text"
+                name="username"
+                placeholder="Masukan Username"
+                class="form-control"
+                @input="validateUsername"
+                @blur="errorValidations.username = []"
+              />
+              <message :messages="errorValidations.username" />
+            </CCol>
+          </CRow>
+          <CRow>
+            <CCol sm="12">
+              <label for="email">Email</label>
+              <input
+                v-model="forms.email"
+                type="text"
+                name="email"
+                placeholder="Masukan Email Yang Aktif"
+                class="form-control"
+                @input="validateEmail"
+                @blur="errorValidations.email = []"
+              />
+              <message :messages="errorValidations.email" />
+            </CCol>
+          </CRow>
+          <template v-if="modal.post_put.method == 'post'">
+            <CRow>
+              <CCol sm="12">
+                <label for="password">Password</label>
+                <input
+                  v-model="forms.password"
+                  type="password"
+                  name="password"
+                  placeholder="Masukan Password"
+                  class="form-control"
+                  @blur="errorValidations.password = []"
+                />
+                <message :messages="errorValidations.password" />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol sm="12">
+                <label for="password_confirmation">Konfirmasi Password</label>
+                <input
+                  v-model="forms.password_confirmation"
+                  type="password"
+                  name="password_confirmation"
+                  placeholder="Masukan Konfirmasi Password"
+                  class="form-control"
+                />
+              </CCol>
+            </CRow>
+          </template>
+          <CRow>
+            <CCol sm="12">
+              <label class="form-label">Roles</label>
+              <label
+                v-for="(value, index) in roles"
+                :key="index"
+                class="custom-control custom-checkbox col-lg-6"
+              >
+                <input
+                  :id="value.name"
+                  v-model="forms.roles"
+                  type="checkbox"
+                  class="custom-control-input"
+                  :value="value.name"
+                />
+                <span class="custom-control-label">{{
+                  value.name.toUpperCase()
+                }}</span>
+              </label>
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModalPostPut">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="submitPostPut">
+          {{ modal.post_put.labelButton }}
+        </CButton>
+      </template>
+    </CModal>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'AccountListAdmin',
-    data() {
-        return {
-            spinner: true,
-            alert: {
-                message: null,
-                show: false,
-                style: 'danger',
-                counter: 3,
-            },
-            modal: {
-                delete: {
-                    showModal: false,
-                    title: null,
-                    color: null,
-                    message: null,
-                    labelButton: null,
-                    uniqueId: null,
-                },
-                post_put: {
-                    showModal: false,
-                    title: null,
-                    color: null,
-                    labelButton: null,
-                    method: null,
-                },
-            },
-            data: [],
-            roles: [],
-            forms: {
-                id: null,
-                name: null,
-                username: null,
-                email: null,
-                password: null,
-                password_confirmation: null,
-                roles: [],
-            },
-            errorValidations: {
-                name: [],
-                username: [],
-                email: [],
-                password: [],
-            },
-        };
-    },
-    created() {
-        this.getData();
-        this.getRole();
-    },
-    methods: {
-        active(item) {
-            this.$http
-                .patch(`/users/active/${item.id}`)
-                .then(() => {
-                    this.spinner = false;
-                    this.alert.show = true;
-                    this.alert.message = `Data Berhasil di Perbaharui`;
-                    this.alert.style = 'success';
-                    this.alert.counter = 3;
-                    this.getData();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+  name: 'AccountListAdmin',
+  data() {
+    return {
+      spinner: true,
+      modal: {
+        delete: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
         },
-        validateUsername() {
-            const regex = new RegExp(/^\S*$/);
-            const value = this.forms.username
-                .toString()
-                .replace(/ /g, '')
-                .toLowerCase();
-            if (regex.test(this.forms.username)) {
-                this.errorValidations.username = [];
-            } else {
-                this.errorValidations.username = ['Tidak Boleh ada Spasi'];
-                this.forms.username = value;
-            }
+        post_put: {
+          showModal: false,
+          title: null,
+          color: null,
+          labelButton: null,
+          method: null,
         },
-        validateEmail() {
-            const regex = new RegExp(/^\S*$/);
-            const value = this.forms.email
-                .toString()
-                .replace(/ /g, '')
-                .toLowerCase();
-            if (regex.test(this.forms.email)) {
-                this.errorValidations.email = [];
-            } else {
-                this.errorValidations.email = ['Tidak Boleh ada Spasi'];
-                this.forms.email = value;
-            }
-        },
-        getData() {
-            this.spinner = true;
-            this.$http
-                .get('/users/filter')
-                .then((response) => {
-                    this.spinner = false;
-                    this.data = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        getRole() {
-            this.spinner = true;
-            this.$http
-                .get('/roles')
-                .then((response) => {
-                    this.spinner = false;
-                    this.roles = response.data.data;
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        },
-        destroy(item) {
-            this.modal.delete.showModal = true;
-            this.modal.delete.title = 'Hapus Data';
-            this.modal.delete.color = 'danger';
-            this.modal.delete.data = item.name;
-            this.modal.delete.uniqueId = item.id;
-            this.modal.delete.message = 'Ingin Menghapus Data';
-            this.modal.delete.labelButton = 'Hapus';
-        },
-        clearForm() {
-            this.forms.id = null;
-            this.forms.name = null;
-            this.forms.username = null;
-            this.forms.email = null;
-            this.forms.password = null;
-            this.forms.password_confirmation = null;
-            this.forms.roles = [];
-        },
-        post() {
-            this.clearForm();
-            this.modal.post_put.showModal = true;
-            this.modal.post_put.title = 'Tambah Data';
-            this.modal.post_put.color = 'success';
-            this.modal.post_put.labelButton = 'Simpan';
-            this.modal.post_put.method = 'post';
-        },
-        put() {
-            this.modal.post_put.showModal = true;
-            this.modal.post_put.title = 'Update Data';
-            this.modal.post_put.color = 'success';
-            this.modal.post_put.labelButton = 'Update';
-            this.modal.post_put.method = 'patch';
-        },
-        clearModalDelete() {
-            this.modal.delete.title = null;
-            this.modal.delete.color = null;
-            this.modal.delete.data = null;
-            this.modal.delete.uniqueId = null;
-            this.modal.delete.message = null;
-            this.modal.delete.labelButton = null;
-        },
-        clearModalPostPut() {
-            this.modal.post_put.title = null;
-            this.modal.post_put.color = null;
-            this.modal.post_put.data = null;
-            this.modal.post_put.uniqueId = null;
-            this.modal.post_put.message = null;
-            this.modal.post_put.labelButton = null;
-        },
-        closeModalDelete() {
-            this.modal.delete.showModal = false;
-            this.clearModalDelete();
-        },
-        closeModalPostPut() {
-            this.modal.post_put.showModal = false;
-            this.clearModalPostPut();
-            this.clearForm();
-        },
-        submitDelete() {
-            this.$http
-                .delete(`users/${this.modal.delete.uniqueId}`)
-                .then(() => {
-                    this.getData();
-                    this.closeModalDelete();
-                    this.alert.show = true;
-                    this.alert.message = 'Data Berhasil di Hapus';
-                    this.alert.style = 'success';
-                    this.alert.counter = 3;
-                })
-                .catch(() => {
-                    this.closeModalDelete();
-                    this.alert.show = true;
-                    this.alert.style = 'danger';
-                    this.alert.message = 'Data Gagal di Hapus';
-                    this.alert.counter = 3;
-                });
-        },
-        submitPostPut() {
-            const url = '/users';
-            const formData = new FormData();
-            let urlAction = null;
-            if (this.modal.post_put.method === 'patch') {
-                urlAction = `${url}/${this.forms.id}`;
-                formData.append('_method', 'patch');
-            } else {
-                urlAction = url;
-                formData.append('_method', 'POST');
-            }
-            const forMapData = Object.entries(this.forms);
-            forMapData.forEach((value) => {
-                if (Array.isArray(value[1])) {
-                    for (let index = 0; index < value[1].length; index += 1) {
-                        formData.append(
-                            `${value[0]}[${index}]`,
-                            value[1][index]
-                        );
-                    }
-                } else {
-                    formData.append(
-                        value[0],
-                        value[1] === null ? [] : value[1]
-                    );
-                }
-            });
-            this.errorValidations.name = [];
-            this.errorValidations.username = [];
-            this.errorValidations.email = [];
-            this.errorValidations.password = [];
+      },
+      data: [],
+      roles: [],
+      forms: {
+        id: null,
+        name: null,
+        username: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
+        roles: [],
+      },
+      errorValidations: {
+        name: [],
+        username: [],
+        email: [],
+        password: [],
+      },
+    }
+  },
+  created() {
+    this.getData()
+    this.getRole()
+  },
+  methods: {
+    active(item) {
+      this.$http
+        .patch(`/users/active/${item.id}`)
+        .then((response) => {
+          this.spinner = false
+          this.getData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
 
-            this.$http({
-                method: 'post',
-                url: urlAction,
-                data: formData,
-            })
-                .then((response) => {
-                    this.getData();
-                    this.closeModalPostPut();
-                    this.alert.show = true;
-                    this.alert.message = response.data.messages;
-                    this.alert.style = 'success';
-                    this.alert.counter = 3;
-                })
-                .catch((error) => {
-                    if (error.response.status === 422) {
-                        this.errorValidations.name =
-                            typeof error.response.data.errors.name ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.name;
-                        this.errorValidations.username =
-                            typeof error.response.data.errors.username ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.username;
-                        this.errorValidations.email =
-                            typeof error.response.data.errors.email ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.email;
-                        this.errorValidations.password =
-                            typeof error.response.data.errors.password ===
-                            'undefined'
-                                ? []
-                                : error.response.data.errors.password;
-                    }
-                    this.alert.show = true;
-                    this.alert.style = 'danger';
-                    this.alert.message = error.response.data.messages;
-                    this.alert.counter = 3;
-                });
-        },
-        edit(item) {
-            this.forms.id = item.id;
-            this.forms.name = item.name;
-            this.forms.username = item.username;
-            this.forms.email = item.email;
-            this.forms.roles = item.roles;
-            this.put();
-        },
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
     },
-};
+    validateUsername() {
+      const regex = new RegExp(/^\S*$/)
+      const value = this.forms.username
+        .toString()
+        .replace(/ /g, '')
+        .toLowerCase()
+      if (regex.test(this.forms.username)) {
+        this.errorValidations.username = []
+      } else {
+        this.errorValidations.username = ['Tidak Boleh ada Spasi']
+        this.forms.username = value
+      }
+    },
+    validateEmail() {
+      const regex = new RegExp(/^\S*$/)
+      const value = this.forms.email.toString().replace(/ /g, '').toLowerCase()
+      if (regex.test(this.forms.email)) {
+        this.errorValidations.email = []
+      } else {
+        this.errorValidations.email = ['Tidak Boleh ada Spasi']
+        this.forms.email = value
+      }
+    },
+    getData() {
+      this.spinner = true
+      this.$http
+        .get('/users/filter')
+        .then((response) => {
+          this.spinner = false
+          this.data = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    getRole() {
+      this.spinner = true
+      this.$http
+        .get('/roles')
+        .then((response) => {
+          this.spinner = false
+          this.roles = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    destroy(item) {
+      this.modal.delete.showModal = true
+      this.modal.delete.title = 'Hapus Data'
+      this.modal.delete.color = 'danger'
+      this.modal.delete.data = item.name
+      this.modal.delete.uniqueId = item.id
+      this.modal.delete.message = 'Ingin Menghapus Data'
+      this.modal.delete.labelButton = 'Hapus'
+    },
+    clearForm() {
+      this.forms.id = null
+      this.forms.name = null
+      this.forms.username = null
+      this.forms.email = null
+      this.forms.password = null
+      this.forms.password_confirmation = null
+      this.forms.roles = []
+    },
+    post() {
+      this.clearForm()
+      this.modal.post_put.showModal = true
+      this.modal.post_put.title = 'Tambah Data'
+      this.modal.post_put.color = 'success'
+      this.modal.post_put.labelButton = 'Simpan'
+      this.modal.post_put.method = 'post'
+    },
+    put() {
+      this.modal.post_put.showModal = true
+      this.modal.post_put.title = 'Update Data'
+      this.modal.post_put.color = 'success'
+      this.modal.post_put.labelButton = 'Update'
+      this.modal.post_put.method = 'patch'
+    },
+    clearModalDelete() {
+      this.modal.delete.title = null
+      this.modal.delete.color = null
+      this.modal.delete.data = null
+      this.modal.delete.uniqueId = null
+      this.modal.delete.message = null
+      this.modal.delete.labelButton = null
+    },
+    clearModalPostPut() {
+      this.modal.post_put.title = null
+      this.modal.post_put.color = null
+      this.modal.post_put.data = null
+      this.modal.post_put.uniqueId = null
+      this.modal.post_put.message = null
+      this.modal.post_put.labelButton = null
+    },
+    closeModalDelete() {
+      this.modal.delete.showModal = false
+      this.clearModalDelete()
+    },
+    closeModalPostPut() {
+      this.modal.post_put.showModal = false
+      this.clearModalPostPut()
+      this.clearForm()
+    },
+    submitDelete() {
+      this.$http
+        .delete(`users/${this.modal.delete.uniqueId}`)
+        .then((response) => {
+          this.getData()
+          this.closeModalDelete()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.closeModalDelete()
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    submitPostPut() {
+      const url = '/users'
+      const formData = new FormData()
+      let urlAction = null
+      if (this.modal.post_put.method === 'patch') {
+        urlAction = `${url}/${this.forms.id}`
+        formData.append('_method', 'patch')
+      } else {
+        urlAction = url
+        formData.append('_method', 'POST')
+      }
+      const forMapData = Object.entries(this.forms)
+      forMapData.forEach((value) => {
+        if (Array.isArray(value[1])) {
+          for (let index = 0; index < value[1].length; index += 1) {
+            formData.append(`${value[0]}[${index}]`, value[1][index])
+          }
+        } else {
+          formData.append(value[0], value[1] === null ? [] : value[1])
+        }
+      })
+      this.errorValidations.name = []
+      this.errorValidations.username = []
+      this.errorValidations.email = []
+      this.errorValidations.password = []
+
+      this.$http({
+        method: 'post',
+        url: urlAction,
+        data: formData,
+      })
+        .then((response) => {
+          this.getData()
+          this.closeModalPostPut()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            this.errorValidations.name =
+              typeof error.response.data.errors.name === 'undefined'
+                ? []
+                : error.response.data.errors.name
+            this.errorValidations.username =
+              typeof error.response.data.errors.username === 'undefined'
+                ? []
+                : error.response.data.errors.username
+            this.errorValidations.email =
+              typeof error.response.data.errors.email === 'undefined'
+                ? []
+                : error.response.data.errors.email
+            this.errorValidations.password =
+              typeof error.response.data.errors.password === 'undefined'
+                ? []
+                : error.response.data.errors.password
+          }
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    edit(item) {
+      this.forms.id = item.id
+      this.forms.name = item.name
+      this.forms.username = item.username
+      this.forms.email = item.email
+      this.forms.roles = item.roles
+      this.put()
+    },
+  },
+}
 </script>
 
-<style>
-</style>
+<style></style>
