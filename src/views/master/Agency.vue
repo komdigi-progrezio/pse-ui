@@ -222,8 +222,19 @@
     >
       <template v-slot:body-wrapper>
         <div class="modal-body">
+          <div
+            v-if="spinner_not_approved"
+            class="d-flex justify-content-center"
+          >
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
           <div class="table-responsive">
-            <table v-if="!spinner" class="table table-hover table-striped">
+            <table
+              v-if="!spinner_not_approved"
+              class="table table-hover table-striped"
+            >
               <thead>
                 <tr>
                   <th>No</th>
@@ -274,7 +285,7 @@
                           content: 'Setujui Instansi',
                           placement: 'bottom',
                         }"
-                        @click="active(item)"
+                        @click="confirmActive(item)"
                       >
                         <CIcon name="cil-check" />
                       </CButton>
@@ -289,6 +300,14 @@
               </tbody>
             </table>
           </div>
+          <CPagination
+            :activePage.sync="pagination_not_approved.current_page"
+            :pages="pagination_not_approved.last_page"
+            size="sm"
+            align="center"
+            @update:activePage="getAgencyNotApproved"
+            v-if="data.length > 0"
+          />
         </div>
       </template>
       <template v-slot:footer-wrapper>
@@ -310,11 +329,34 @@
         </div>
       </template>
       <template v-slot:footer>
-        <CButton color="dark" size="sm" class="m-2" @click="closeModalDelete">
+        <CButton color="dark" size="sm" class="mr-2" @click="closeModalDelete">
           Cancel
         </CButton>
-        <CButton color="primary" size="sm" class="m-2" @click="submitDelete">
+        <CButton color="primary" size="sm" @click="submitDelete">
           {{ modal.delete.labelButton }}
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.active.title"
+      :color="modal.active.color"
+      :show.sync="modal.active.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.active.message }}
+            <strong>{{ modal.active.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="mr-2" @click="closeModalActive">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" @click="active">
+          {{ modal.active.labelButton }}
         </CButton>
       </template>
     </CModal>
@@ -458,6 +500,7 @@ export default {
   data() {
     return {
       spinner: true,
+      spinner_not_approved: true,
       listFilter: false,
       alert: {
         message: null,
@@ -472,6 +515,14 @@ export default {
           color: null,
         },
         delete: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+        },
+        active: {
           showModal: false,
           title: null,
           color: null,
@@ -535,6 +586,10 @@ export default {
         current_page: 1,
         last_page: 10,
       },
+      pagination_not_approved: {
+        current_page: 1,
+        last_page: 10,
+      },
     }
   },
   computed: {
@@ -571,16 +626,20 @@ export default {
       this.modal.not_approved.title = 'Daftar Permintaan Penambahan Instansi'
       this.modal.not_approved.color = 'primary'
     },
-    active(item) {
+    active() {
       this.$http
-        .patch(`/parinstansi/approved/${item.id}`)
-        .then(() => {
-          this.spinner = false
-          this.alert.show = true
-          this.alert.message = `Data Berhasil di Perbaharui`
-          this.alert.style = 'success'
-          this.alert.counter = 3
+        .patch(`/parinstansi/approved/${this.modal.active.uniqueId}`)
+        .then((response) => {
+          // this.spinner = false
+          // this.alert.show = true
+          // this.alert.message = `Data Berhasil di Perbaharui`
+          // this.alert.style = 'success'
+          // this.alert.counter = 3
+          this.$toastr.s(response.data.messages, 'Pemberitahuan')
           this.getAgencyNotApproved()
+          this.getData()
+          this.modal.active.showModal = false
+          this.modal.not_approved.showModal = true
         })
         .catch((error) => {
           console.log(error)
@@ -610,11 +669,21 @@ export default {
       }
     },
     getAgencyNotApproved() {
+      this.spinner = true
+
       this.$http
-        .get('/parinstansi/not/approved')
+        .get('/parinstansi/not/approved', {
+          params: {
+            page: this.pagination_not_approved.current_page,
+          },
+        })
         .then((response) => {
           this.not_approved.data = response.data.data
-          this.not_approved.total_data = response.data.data.length
+          this.not_approved.total_data = response.data.meta.total
+          this.pagination_not_approved.current_page =
+            response.data.meta.current_page
+          this.pagination_not_approved.last_page = response.data.meta.last_page
+          this.spinner_not_approved = false
         })
         .catch((error) => {
           console.log(error)
@@ -719,6 +788,16 @@ export default {
       this.modal.delete.message = 'Ingin Menghapus Data'
       this.modal.delete.labelButton = 'Hapus'
     },
+    confirmActive(item) {
+      this.modal.not_approved.showModal = false
+      this.modal.active.showModal = true
+      this.modal.active.title = 'Konfirmasi Aktifkan Instansi'
+      this.modal.active.color = 'success'
+      this.modal.active.data = item.name
+      this.modal.active.uniqueId = item.id
+      this.modal.active.message = 'Ingin Mengaktifkan Instansi'
+      this.modal.active.labelButton = 'Update'
+    },
     clearForm() {
       this.forms.id = null
       this.forms.name = null
@@ -755,6 +834,14 @@ export default {
       this.modal.delete.message = null
       this.modal.delete.labelButton = null
     },
+    clearModalActive() {
+      this.modal.active.title = null
+      this.modal.active.color = null
+      this.modal.active.data = null
+      this.modal.active.uniqueId = null
+      this.modal.active.message = null
+      this.modal.active.labelButton = null
+    },
     clearModalPostPut() {
       this.modal.post_put.title = null
       this.modal.post_put.color = null
@@ -767,6 +854,10 @@ export default {
       this.modal.delete.showModal = false
       this.clearModalDelete()
     },
+    closeModalActive() {
+      this.modal.active.showModal = false
+      this.clearModalActive()
+    },
     closeModalPostPut() {
       this.modal.post_put.showModal = false
       this.clearModalPostPut()
@@ -775,20 +866,15 @@ export default {
     submitDelete() {
       this.$http
         .delete(`/parinstansi/${this.modal.delete.uniqueId}`)
-        .then(() => {
+        .then((response) => {
           this.filterData()
           this.closeModalDelete()
-          this.alert.show = true
-          this.alert.message = 'Data Berhasil di Hapus'
-          this.alert.style = 'success'
-          this.alert.counter = 3
+          this.getAgencyNotApproved()
+          this.$toastr.s(response.data.messages, 'Pemberitahuan')
         })
-        .catch(() => {
+        .catch((error) => {
           this.closeModalDelete()
-          this.alert.show = true
-          this.alert.style = 'danger'
-          this.alert.message = 'Data Gagal di Hapus'
-          this.alert.counter = 3
+          this.$toastr.s(error.response.data.messages, 'Pemberitahuan')
         })
     },
     submitPostPut() {
