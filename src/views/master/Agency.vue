@@ -79,21 +79,6 @@
         </template>
       </CCardBody>
     </CCard>
-    <CAlert
-      :color="alert.style"
-      :show.sync="alert.counter"
-      closeButton
-      v-if="alert.show"
-    >
-      {{ alert.message }}
-      <CProgress
-        :max="3"
-        :value="alert.counter"
-        height="3px"
-        :color="alert.style"
-        animate
-      />
-    </CAlert>
     <a @click.prevent="modalNotApproved" href="">
       <div
         class="alert alert-warning"
@@ -370,7 +355,14 @@
           <CRow>
             <CCol sm="12">
               <label for="kelompok">Kelompok</label>
-              <select v-model="forms.kelompok" class="form-control">
+              <select
+                v-model="forms.kelompok"
+                class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.kelompok.length > 0,
+                }"
+                @blur="errorValidations.kelompok = []"
+              >
                 <option value="" selected="selected"> Pilih Kategori </option>
                 <option
                   :value="value.id"
@@ -384,7 +376,14 @@
             </CCol>
             <CCol sm="12">
               <label for="kategori">Kategori</label>
-              <select v-model="forms.kategori" class="form-control">
+              <select
+                v-model="forms.kategori"
+                class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.kategori.length > 0,
+                }"
+                @blur="errorValidations.kategori = []"
+              >
                 <option value="" selected="selected"> Pilih Kategori </option>
                 <option
                   :value="value.id"
@@ -403,6 +402,9 @@
                 type="text"
                 placeholder="Masukan Nama Instansi"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.name.length > 0,
+                }"
                 @blur="errorValidations.name = []"
               />
               <message :messages="errorValidations.name" />
@@ -414,6 +416,10 @@
                 cols="30"
                 rows="10"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.alamat.length > 0,
+                }"
+                @blur="errorValidations.alamat = []"
               ></textarea>
               <message :messages="errorValidations.alamat" />
             </CCol>
@@ -422,6 +428,9 @@
               <select
                 v-model="forms.propinsi"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.propinsi.length > 0,
+                }"
                 @change="getDistrict"
                 @blur="errorValidations.propinsi = []"
               >
@@ -441,6 +450,9 @@
               <select
                 v-model="forms.kota"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.kota.length > 0,
+                }"
                 @blur="errorValidations.kota = []"
               >
                 <option value="" selected="selected"> Pilih Kota </option>
@@ -462,6 +474,9 @@
                 maxlength="5"
                 placeholder="Masukan Kode Pos"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.kode_pos.length > 0,
+                }"
                 @input="validateKodePos"
                 @blur="errorValidations.kode_pos = []"
               />
@@ -474,6 +489,9 @@
                 type="text"
                 placeholder="Masukan Domain Website"
                 class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.website.length > 0,
+                }"
                 @input="validateWebsite"
                 @blur="errorValidations.website = []"
               />
@@ -502,12 +520,6 @@ export default {
       spinner: true,
       spinner_not_approved: true,
       listFilter: false,
-      alert: {
-        message: null,
-        show: false,
-        style: 'danger',
-        counter: 3,
-      },
       modal: {
         not_approved: {
           showModal: false,
@@ -581,6 +593,7 @@ export default {
         propinsi: [],
         kota: [],
         kode_pos: [],
+        website: [],
       },
       pagination: {
         current_page: 1,
@@ -630,19 +643,18 @@ export default {
       this.$http
         .patch(`/parinstansi/approved/${this.modal.active.uniqueId}`)
         .then((response) => {
-          // this.spinner = false
-          // this.alert.show = true
-          // this.alert.message = `Data Berhasil di Perbaharui`
-          // this.alert.style = 'success'
-          // this.alert.counter = 3
-          this.$toastr.s(response.data.messages, 'Pemberitahuan')
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.getAgencyNotApproved()
           this.getData()
           this.modal.active.showModal = false
           this.modal.not_approved.showModal = true
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getAgencyGroup() {
@@ -652,7 +664,11 @@ export default {
           this.dataSelect.kelompok = response.data.data
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     validateKodePos() {
@@ -686,7 +702,11 @@ export default {
           this.spinner_not_approved = false
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getProvince() {
@@ -696,7 +716,11 @@ export default {
           this.dataSelect.provinsi = response.data.data
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getDistrict() {
@@ -707,7 +731,11 @@ export default {
           this.forms.kota = ''
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     resetFilter() {
@@ -727,7 +755,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     filter() {
@@ -755,7 +787,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getData() {
@@ -776,7 +812,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     destroy(item) {
@@ -870,11 +910,15 @@ export default {
           this.filterData()
           this.closeModalDelete()
           this.getAgencyNotApproved()
-          this.$toastr.s(response.data.messages, 'Pemberitahuan')
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
           this.closeModalDelete()
-          this.$toastr.s(error.response.data.messages, 'Pemberitahuan')
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     submitPostPut() {
@@ -916,10 +960,7 @@ export default {
           this.filterData()
           this.getAgencyNotApproved()
           this.closeModalPostPut()
-          this.alert.show = true
-          this.alert.message = response.data.messages
-          this.alert.style = 'success'
-          this.alert.counter = 3
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
           if (error.response.status === 422) {
@@ -956,10 +997,11 @@ export default {
                 ? []
                 : error.response.data.errors.website
           }
-          this.alert.show = true
-          this.alert.style = 'danger'
-          this.alert.message = error.response.data.messages
-          this.alert.counter = 3
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     edit(item) {
