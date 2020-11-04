@@ -1,20 +1,20 @@
 <template>
-    <div class="c-app">
-        <TheSidebar/>
-            <CWrapper>
-        <TheHeader/>
-        <div class="c-body">
-            <main class="c-main">
-                <CContainer fluid>
-                    <transition name="fade" mode="out-in">
-                    <router-view :key="$route.path"></router-view>
-                    </transition>
-                </CContainer>
-            </main>
-        </div>
-        <TheFooter/>
-        </CWrapper>
-    </div>
+  <div class="c-app">
+    <TheSidebar />
+    <CWrapper>
+      <TheHeader />
+      <div class="c-body">
+        <main class="c-main">
+          <CContainer fluid>
+            <transition name="fade" mode="out-in">
+              <router-view :key="$route.path"></router-view>
+            </transition>
+          </CContainer>
+        </main>
+      </div>
+      <TheFooter />
+    </CWrapper>
+  </div>
 </template>
 
 <script>
@@ -27,8 +27,8 @@ export default {
   components: {
     TheSidebar,
     TheHeader,
-    TheFooter
-  }
+    TheFooter,
+  },
 }
 </script>
 

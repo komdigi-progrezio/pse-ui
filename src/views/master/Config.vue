@@ -67,17 +67,19 @@
         <template v-if="listFilter">
           <CRow class="my-3">
             <CCol sm="12">
-              <label for="name">Kategori</label>
-              <select v-model="search.category" class="form-control">
-                <option value="">Pilih Kategori</option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.category"
-                  :key="`category-${index}`"
-                >
-                  {{ value.name }}
-                </option>
-              </select>
+              <div class="form-group">
+                <label for="name">Kategori</label>
+                <select v-model="search.category" class="form-control">
+                  <option value="">Pilih Kategori</option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.category"
+                    :key="`category-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+              </div>
             </CCol>
           </CRow>
         </template>
@@ -211,38 +213,42 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="name">Kategori</label>
-              <select
-                v-model="forms.category"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.category.length > 0,
-                }"
-                @blur="errorValidations.category = []"
-              >
-                <option value="">Pilih Kategori</option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.category"
-                  :key="`category-${index}`"
+              <div class="form-group">
+                <label for="name">Kategori</label>
+                <select
+                  v-model="forms.category"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.category.length > 0,
+                  }"
+                  @blur="errorValidations.category = []"
                 >
-                  {{ value.name }}
-                </option>
-              </select>
-              <message :messages="errorValidations.category" />
+                  <option value="">Pilih Kategori</option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.category"
+                    :key="`category-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+                <message :messages="errorValidations.category" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="name">Value</label>
-              <input
-                v-model="forms.param_value"
-                type="text"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.param_value.length > 0,
-                }"
-                @blur="errorValidations.param_value = []"
-              />
-              <message :messages="errorValidations.param_value" />
+              <div class="form-group">
+                <label for="name">Value</label>
+                <input
+                  v-model="forms.param_value"
+                  type="text"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.param_value.length > 0,
+                  }"
+                  @blur="errorValidations.param_value = []"
+                />
+                <message :messages="errorValidations.param_value" />
+              </div>
             </CCol>
           </CRow>
         </div>

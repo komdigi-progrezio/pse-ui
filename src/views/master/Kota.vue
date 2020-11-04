@@ -64,14 +64,16 @@
     <template v-if="listFilter">
       <CRow class="my-3">
         <CCol sm="12">
-          <label for="name">Nama Kabupaten / Kota</label>
-          <input
-            v-model="search.nama"
-            type="text"
-            name="nama"
-            placeholder="Masukan Nama Kabupaten / Kota"
-            class="form-control"
-          />
+          <div class="form-group">
+            <label for="name">Nama Kabupaten / Kota</label>
+            <input
+              v-model="search.nama"
+              type="text"
+              name="nama"
+              placeholder="Masukan Nama Kabupaten / Kota"
+              class="form-control"
+            />
+          </div>
         </CCol>
       </CRow>
     </template>
@@ -202,19 +204,21 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="name">Nama Kabupaten / Kota</label>
-              <input
-                v-model="forms.nama"
-                type="text"
-                name="nama"
-                placeholder="Masukan Nama Kabupaten / Kota"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.nama.length > 0,
-                }"
-                @blur="errorValidations.nama = []"
-              />
-              <message :messages="errorValidations.nama" />
+              <div class="form-group">
+                <label for="name">Nama Kabupaten / Kota</label>
+                <input
+                  v-model="forms.nama"
+                  type="text"
+                  name="nama"
+                  placeholder="Masukan Nama Kabupaten / Kota"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.nama.length > 0,
+                  }"
+                  @blur="errorValidations.nama = []"
+                />
+                <message :messages="errorValidations.nama" />
+              </div>
             </CCol>
           </CRow>
         </div>

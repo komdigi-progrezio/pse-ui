@@ -67,14 +67,16 @@
         <template v-if="listFilter">
           <CRow class="my-3">
             <CCol sm="12">
-              <label for="name">Nama Satuan Kerja</label>
-              <input
-                v-model="search.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Satuan Kerja"
-                class="form-control"
-              />
+              <div class="form-group">
+                <label for="name">Nama Satuan Kerja</label>
+                <input
+                  v-model="search.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Satuan Kerja"
+                  class="form-control"
+                />
+              </div>
             </CCol>
           </CRow>
         </template>
@@ -208,162 +210,180 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="instansi_id">Instansi</label>
-              <select
-                v-model="forms.instansi_id"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.instansi_id.length > 0,
-                }"
-                @change="getPerAgency"
-                :disabled="disabled.instansi_id"
-              >
-                <option value="" selected="selected"> Pilih Instansi </option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.instansi"
-                  :key="`instansi-${index}`"
+              <div class="form-group">
+                <label for="instansi_id">Instansi</label>
+                <select
+                  v-model="forms.instansi_id"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.instansi_id.length > 0,
+                  }"
+                  @change="getPerAgency"
+                  :disabled="disabled.instansi_id"
                 >
-                  {{ value.name }}
-                </option>
-              </select>
-              <message :messages="errorValidations.instansi_id" />
+                  <option value="" selected="selected"> Pilih Instansi </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.instansi"
+                    :key="`instansi-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+                <message :messages="errorValidations.instansi_id" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="parent_id">Satuan Kerja Utama</label>
-              <select
-                v-model="forms.parent_id"
-                class="form-control"
-                :disabled="disabled.parent_id"
-              >
-                <option value="" selected="selected">
-                  Pilih Satuan Kerja
-                </option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.satuan_kerja"
-                  :key="`instansi-${index}`"
+              <div class="form-group">
+                <label for="parent_id">Satuan Kerja Utama</label>
+                <select
+                  v-model="forms.parent_id"
+                  class="form-control"
+                  :disabled="disabled.parent_id"
                 >
-                  {{ value.name }}
-                </option>
-              </select>
+                  <option value="" selected="selected">
+                    Pilih Satuan Kerja
+                  </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.satuan_kerja"
+                    :key="`instansi-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="name">Nama Satuan Kerja</label>
-              <input
-                v-model="forms.name"
-                type="text"
-                placeholder="Masukan Nama Satuan Kerja"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.name.length > 0,
-                }"
-                :disabled="disabled.name"
-                @blur="errorValidations.name = []"
-              />
-              <message :messages="errorValidations.name" />
+              <div class="form-group">
+                <label for="name">Nama Satuan Kerja</label>
+                <input
+                  v-model="forms.name"
+                  type="text"
+                  placeholder="Masukan Nama Satuan Kerja"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.name.length > 0,
+                  }"
+                  :disabled="disabled.name"
+                  @blur="errorValidations.name = []"
+                />
+                <message :messages="errorValidations.name" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="alamat">Alamat</label>
-              <textarea
-                v-model="forms.alamat"
-                cols="30"
-                rows="10"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.alamat.length > 0,
-                }"
-              ></textarea>
-              <message :messages="errorValidations.alamat" />
+              <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <textarea
+                  v-model="forms.alamat"
+                  cols="30"
+                  rows="10"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.alamat.length > 0,
+                  }"
+                ></textarea>
+                <message :messages="errorValidations.alamat" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="propinsi">Provinsi</label>
-              <select
-                v-model="forms.propinsi"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.propinsi.length > 0,
-                }"
-                @change="getDistrict"
-                @blur="errorValidations.propinsi = []"
-              >
-                <option value="" selected="selected"> Pilih Provinsi </option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.provinsi"
-                  :key="`provivnsi-${index}`"
+              <div class="form-group">
+                <label for="propinsi">Provinsi</label>
+                <select
+                  v-model="forms.propinsi"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.propinsi.length > 0,
+                  }"
+                  @change="getDistrict"
+                  @blur="errorValidations.propinsi = []"
                 >
-                  {{ value.nama }}
-                </option>
-              </select>
-              <message :messages="errorValidations.propinsi" />
+                  <option value="" selected="selected"> Pilih Provinsi </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.provinsi"
+                    :key="`provivnsi-${index}`"
+                  >
+                    {{ value.nama }}
+                  </option>
+                </select>
+                <message :messages="errorValidations.propinsi" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="kota">Kota</label>
-              <select
-                v-model="forms.kota"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.kota.length > 0,
-                }"
-                @blur="errorValidations.kota = []"
-              >
-                <option value="" selected="selected"> Pilih Kota </option>
-                <option
-                  :value="value.id"
-                  v-for="(value, index) in dataSelect.kota"
-                  :key="`kota-${index}`"
+              <div class="form-group">
+                <label for="kota">Kota</label>
+                <select
+                  v-model="forms.kota"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.kota.length > 0,
+                  }"
+                  @blur="errorValidations.kota = []"
                 >
-                  {{ value.nama }}
-                </option>
-              </select>
-              <message :messages="errorValidations.kota" />
+                  <option value="" selected="selected"> Pilih Kota </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.kota"
+                    :key="`kota-${index}`"
+                  >
+                    {{ value.nama }}
+                  </option>
+                </select>
+                <message :messages="errorValidations.kota" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="kode_pos">Kode Pos</label>
-              <input
-                v-model="forms.kode_pos"
-                type="text"
-                maxlength="5"
-                placeholder="Masukan Kode Pos"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.kode_pos.length > 0,
-                }"
-                @input="validateKodePos"
-                @blur="errorValidations.kode_pos = []"
-              />
-              <message :messages="errorValidations.kode_pos" />
+              <div class="form-group">
+                <label for="kode_pos">Kode Pos</label>
+                <input
+                  v-model="forms.kode_pos"
+                  type="text"
+                  maxlength="5"
+                  placeholder="Masukan Kode Pos"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.kode_pos.length > 0,
+                  }"
+                  @input="validateKodePos"
+                  @blur="errorValidations.kode_pos = []"
+                />
+                <message :messages="errorValidations.kode_pos" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="no_telp">No Telp</label>
-              <input
-                v-model="forms.no_telp"
-                type="text"
-                placeholder="Masukan Nomor Telepon"
-                maxlength="13"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.no_telp.length > 0,
-                }"
-                @input="validateNoTelp"
-                @blur="errorValidations.no_telp = []"
-              />
+              <div class="form-group">
+                <label for="no_telp">No Telp</label>
+                <input
+                  v-model="forms.no_telp"
+                  type="text"
+                  placeholder="Masukan Nomor Telepon"
+                  maxlength="13"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.no_telp.length > 0,
+                  }"
+                  @input="validateNoTelp"
+                  @blur="errorValidations.no_telp = []"
+                />
+              </div>
               <message :messages="errorValidations.no_telp" />
             </CCol>
             <CCol sm="12">
-              <label for="website">Website</label>
-              <input
-                v-model="forms.website"
-                type="text"
-                placeholder="Masukan Domain Website"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.website.length > 0,
-                }"
-                @blur="errorValidations.website = []"
-              />
-              <message :messages="errorValidations.website" />
+              <div class="form-group">
+                <label for="website">Website</label>
+                <input
+                  v-model="forms.website"
+                  type="text"
+                  placeholder="Masukan Domain Website"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.website.length > 0,
+                  }"
+                  @blur="errorValidations.website = []"
+                />
+                <message :messages="errorValidations.website" />
+              </div>
             </CCol>
           </CRow>
         </div>
