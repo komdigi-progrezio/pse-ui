@@ -1,80 +1,85 @@
 <template>
   <div>
-    <div class="d-flex mb-3">
-      <CButton
-        color="dark"
-        variant="outline"
-        size="sm"
-        class="mr-2"
-        :class="{ 'mr-auto': search.nama === null }"
-        v-c-tooltip="{
-          content: 'Filter',
-          placement: 'bottom',
-        }"
-        @click="filter"
-      >
-        Filter
-        <CIcon name="cil-filter" />
-      </CButton>
-      <CButton
-        v-show="search.nama !== null"
-        color="info"
-        variant="outline"
-        size="sm"
-        class="mr-auto"
-        v-c-tooltip="{
-          content: 'Bershikan',
-          placement: 'bottom',
-        }"
-        @click="clearFilter"
-      >
-        Clear All
-        <CIcon name="cil-clear-all" />
-      </CButton>
-      <template v-if="listFilter">
-        <CButton
-          color="primary"
-          variant="outline"
-          size="sm"
-          class="mr-2"
-          v-c-tooltip="{
-            content: 'Cari',
-            placement: 'bottom',
-          }"
-          @click="filterData"
-        >
-          Search
-          <CIcon name="cil-search" />
-        </CButton>
-        <CButton
-          color="danger"
-          variant="outline"
-          size="sm"
-          v-c-tooltip="{
-            content: 'Reset',
-            placement: 'bottom',
-          }"
-          @click="resetFilter"
-        >
-          Reset
-          <CIcon name="cil-reload" />
-        </CButton>
-      </template>
-    </div>
-    <template v-if="listFilter">
-      <CRow class="my-3">
-        <CCol sm="12">
-          <label for="name">Nama Provinsi</label>
-          <input
-            v-model="search.nama"
-            type="text"
-            name="nama"
-            placeholder="Masukan Nama Provinsi"
-            class="form-control"
-          />
-        </CCol>
-      </CRow>
-    </template>
+    <CCard>
+      <CCardHeader> Filter </CCardHeader>
+      <CCardBody>
+        <div class="d-flex mb-3">
+          <CButton
+            color="dark"
+            variant="outline"
+            size="sm"
+            class="mr-2"
+            :class="{ 'mr-auto': search.nama === null }"
+            v-c-tooltip="{
+              content: 'Filter',
+              placement: 'bottom',
+            }"
+            @click="filter"
+          >
+            Filter
+            <CIcon :name="setIconFilter" />
+          </CButton>
+          <CButton
+            v-show="search.nama !== null"
+            color="info"
+            variant="outline"
+            size="sm"
+            class="mr-auto"
+            v-c-tooltip="{
+              content: 'Bershikan',
+              placement: 'bottom',
+            }"
+            @click="clearFilter"
+          >
+            Clear All
+            <CIcon name="cil-clear-all" />
+          </CButton>
+          <template v-if="listFilter">
+            <CButton
+              color="primary"
+              variant="outline"
+              size="sm"
+              class="mr-2"
+              v-c-tooltip="{
+                content: 'Cari',
+                placement: 'bottom',
+              }"
+              @click="filterData"
+            >
+              Search
+              <CIcon name="cil-search" />
+            </CButton>
+            <CButton
+              color="danger"
+              variant="outline"
+              size="sm"
+              v-c-tooltip="{
+                content: 'Reset',
+                placement: 'bottom',
+              }"
+              @click="resetFilter"
+            >
+              Reset
+              <CIcon name="cil-reload" />
+            </CButton>
+          </template>
+        </div>
+        <template v-if="listFilter">
+          <CRow class="my-3">
+            <CCol sm="12">
+              <label for="name">Nama Provinsi</label>
+              <input
+                v-model="search.nama"
+                type="text"
+                name="nama"
+                placeholder="Masukan Nama Provinsi"
+                class="form-control"
+              />
+            </CCol>
+          </CRow>
+        </template>
+      </CCardBody>
+    </CCard>
     <CRow>
       <CCol lg="12">
         <CCard>
@@ -281,6 +286,15 @@ export default {
         last_page: 10,
       },
     }
+  },
+  computed: {
+    setIconFilter() {
+      if (this.listFilter) {
+        return 'cil-filter-x'
+      }
+
+      return 'cil-filter'
+    },
   },
   created() {
     this.getData()
