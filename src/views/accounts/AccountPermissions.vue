@@ -220,19 +220,21 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="name">Nama Hak Akses</label>
-              <input
-                v-model="forms.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Hak Akses"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.name.length > 0,
-                }"
-                @blur="errorValidations.name = []"
-              />
-              <message :messages="errorValidations.name" />
+              <div class="form-group">
+                <label for="name">Nama Hak Akses</label>
+                <input
+                  v-model="forms.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Hak Akses"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.name.length > 0,
+                  }"
+                  @blur="errorValidations.name = []"
+                />
+                <message :messages="errorValidations.name" />
+              </div>
             </CCol>
           </CRow>
         </div>

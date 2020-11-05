@@ -1,129 +1,131 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import Router from 'vue-router'
 
 // Containers
-const TheContainer = () => import('@/containers/TheContainer');
+const TheContainer = () => import('@/containers/TheContainer')
 
 // Views
-import account from '@/router/partials/account.js';
-import master from '@/router/partials/master.js';
+import account from '@/router/partials/account.js'
+import master from '@/router/partials/master.js'
+import systems from '@/router/partials/systems.js'
 
-const Dashboard = () => import('@/views/Dashboard');
-const Report = () => import('@/views/reports/Report');
-const Login = () => import('@/views/pages/Login');
-const OfficialNew = () => import('@/views/pages/OfficialNew');
-const OfficiaReplace = () => import('@/views/pages/OfficiaReplace');
+const Dashboard = () => import('@/views/Dashboard')
+const Report = () => import('@/views/reports/Report')
+const Login = () => import('@/views/pages/Login')
+const OfficialNew = () => import('@/views/pages/OfficialNew')
+const OfficiaReplace = () => import('@/views/pages/OfficiaReplace')
 
-Vue.use(Router);
+Vue.use(Router)
 
 const createRouter = new Router({
-    mode: 'history', // https://router.vuejs.org/api/#mode
-    linkActiveClass: 'active',
-    scrollBehavior: () => ({ y: 0 }),
-    routes: configRoutes()
-});
+  mode: 'history', // https://router.vuejs.org/api/#mode
+  linkActiveClass: 'active',
+  scrollBehavior: () => ({ y: 0 }),
+  routes: configRoutes(),
+})
 
 function configRoutes() {
-    return [
+  return [
+    {
+      path: '',
+      redirect: '/login',
+      name: 'Auth',
+      component: {
+        render(c) {
+          return c('router-view')
+        },
+      },
+      children: [
         {
-            path: '',
-            redirect: '/login',
-            name: 'Auth',
-            component: {
-                render(c) {
-                    return c('router-view');
-                }
+          path: 'login',
+          name: 'Login',
+          component: Login,
+        },
+      ],
+    },
+    {
+      path: '/register',
+      name: 'Daftar Pejabat',
+      component: OfficialNew,
+    },
+    {
+      path: '/register/replace',
+      name: 'Daftar Pergantian Pejabat',
+      component: OfficiaReplace,
+    },
+    {
+      path: '/admin',
+      name: 'Home',
+      redirect: 'admin/dashboard',
+      component: TheContainer,
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'Dashboard',
+          component: Dashboard,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'report',
+          name: 'Laporan',
+          component: {
+            render(c) {
+              return c('router-view')
             },
-            children: [
-                {
-                    path: 'login',
-                    name: 'Login',
-                    component: Login,
-                }
-            ]
+          },
+          meta: { requiresAuth: true },
+          children: [
+            {
+              path: 'new',
+              name: 'Laporan Baru',
+              component: Report,
+              meta: { requiresAuth: true },
+            },
+            {
+              path: 'draft',
+              name: 'Laporan Draft',
+              component: Report,
+              meta: { requiresAuth: true },
+            },
+            {
+              path: 'reject',
+              name: 'Laporan Ditolak',
+              component: Report,
+              meta: { requiresAuth: true },
+            },
+            {
+              path: 'finished',
+              name: 'Laporan Selesai',
+              component: Report,
+              meta: { requiresAuth: true },
+            },
+          ],
         },
-        {
-            path: '/register',
-            name: 'Daftar Pejabat',
-            component: OfficialNew,
-        },
-        {
-            path: '/register/replace',
-            name: 'Daftar Pergantian Pejabat',
-            component: OfficiaReplace,
-        },
-        {
-            path: '/admin',
-            name: 'Home',
-            redirect: 'admin/dashboard',
-            component: TheContainer,
-            meta: { requiresAuth: true },
-            children: [
-                {
-                    path: 'dashboard',
-                    name: 'Dashboard',
-                    component: Dashboard,
-                    meta: { requiresAuth: true },
-                },
-                {
-                    path: 'report',
-                    name: 'Laporan',
-                    component: {
-                        render(c) {
-                            return c('router-view');
-                        }
-                    },
-                    meta: { requiresAuth: true },
-                    children: [
-                        {
-                            path: 'new',
-                            name: 'Laporan Baru',
-                            component: Report,
-                            meta: { requiresAuth: true },
-                        },
-                        {
-                            path: 'draft',
-                            name: 'Laporan Draft',
-                            component: Report,
-                            meta: { requiresAuth: true },
-                        },
-                        {
-                            path: 'reject',
-                            name: 'Laporan Ditolak',
-                            component: Report,
-                            meta: { requiresAuth: true },
-                        },
-                        {
-                            path: 'finished',
-                            name: 'Laporan Selesai',
-                            component: Report,
-                            meta: { requiresAuth: true },
-                        }
-                    ]
-                },
-                account,
-                master
-            ]
-        }
-    ];
+        systems,
+        account,
+        master,
+      ],
+    },
+  ]
 }
 
 createRouter.beforeEach((to, from, next) => {
-    const user = localStorage.getItem('user');
+  const user = localStorage.getItem('user')
 
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (user === null) {
-            next({ path: '/login' });
-        } else {
-            next();
-        }
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (user === null) {
+      next({ path: '/login' })
     } else {
-         if (user !== null) {
-            next({ path: '/admin/dashboard' });
-        } else {
-            next();
-        }
+      next()
     }
-});
+  } else {
+    if (user !== null) {
+      next({ path: '/admin/dashboard' })
+    } else {
+      next()
+    }
+  }
+})
 
-export default createRouter;
+export default createRouter

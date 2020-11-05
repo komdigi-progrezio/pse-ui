@@ -67,14 +67,16 @@
         <template v-if="listFilter">
           <CRow class="my-3">
             <CCol sm="12">
-              <label for="name">Nama Role</label>
-              <input
-                v-model="search.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Role"
-                class="form-control"
-              />
+              <div class="form-group">
+                <label for="name">Nama Role</label>
+                <input
+                  v-model="search.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Role"
+                  class="form-control"
+                />
+              </div>
             </CCol>
           </CRow>
         </template>
@@ -227,40 +229,44 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="name">Nama Role</label>
-              <input
-                v-model="forms.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Role"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.name.length > 0,
-                }"
-                @blur="errorValidations.name = []"
-              />
-              <message :messages="errorValidations.name" />
+              <div class="form-group">
+                <label for="name">Nama Role</label>
+                <input
+                  v-model="forms.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Role"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.name.length > 0,
+                  }"
+                  @blur="errorValidations.name = []"
+                />
+                <message :messages="errorValidations.name" />
+              </div>
             </CCol>
           </CRow>
           <CRow>
             <CCol sm="12">
-              <label class="form-label">Hak Akses</label>
-              <label
-                v-for="(value, index) in permissions"
-                :key="index"
-                class="custom-control custom-checkbox"
-              >
-                <input
-                  :id="value.name"
-                  v-model="forms.permissions"
-                  type="checkbox"
-                  class="custom-control-input"
-                  :value="value.name"
-                />
-                <span class="custom-control-label">{{
-                  value.name.toUpperCase()
-                }}</span>
-              </label>
+              <div class="form-group">
+                <label class="form-label">Hak Akses</label>
+                <label
+                  v-for="(value, index) in permissions"
+                  :key="index"
+                  class="custom-control custom-checkbox"
+                >
+                  <input
+                    :id="value.name"
+                    v-model="forms.permissions"
+                    type="checkbox"
+                    class="custom-control-input"
+                    :value="value.name"
+                  />
+                  <span class="custom-control-label">{{
+                    value.name.toUpperCase()
+                  }}</span>
+                </label>
+              </div>
             </CCol>
           </CRow>
         </div>

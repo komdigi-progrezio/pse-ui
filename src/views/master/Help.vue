@@ -67,14 +67,16 @@
         <template v-if="listFilter">
           <CRow class="my-3">
             <CCol sm="12">
-              <label for="name">Nama Bantuan</label>
-              <input
-                v-model="search.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Bantuan"
-                class="form-control"
-              />
+              <div class="form-group">
+                <label for="name">Nama Bantuan</label>
+                <input
+                  v-model="search.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Bantuan"
+                  class="form-control"
+                />
+              </div>
             </CCol>
           </CRow>
         </template>
@@ -176,23 +178,27 @@
         <div class="modal-body">
           <CRow>
             <CCol sm="12">
-              <label for="name">Nama Bantuan</label>
-              <input
-                v-model="forms.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Bantuan"
-                class="form-control"
-                :class="{
-                  'is-invalid': errorValidations.name.length > 0,
-                }"
-                @blur="errorValidations.name = []"
-              />
-              <message :messages="errorValidations.name" />
+              <div class="form-group">
+                <label for="name">Nama Bantuan</label>
+                <input
+                  v-model="forms.name"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Bantuan"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.name.length > 0,
+                  }"
+                  @blur="errorValidations.name = []"
+                />
+                <message :messages="errorValidations.name" />
+              </div>
             </CCol>
             <CCol sm="12">
-              <label for="name">Teks</label>
-              <editor v-model="forms.help" theme="snow" :options="options" />
+              <div class="form-group">
+                <label for="name">Teks</label>
+                <editor v-model="forms.help" theme="snow" :options="options" />
+              </div>
             </CCol>
           </CRow>
         </div>
