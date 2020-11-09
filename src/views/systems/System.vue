@@ -126,9 +126,9 @@
                         <th scope="row">
                           {{ index + 1 }}
                         </th>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.created_by }}</td>
-                        <td>{{ item.updated_by }}</td>
+                        <td>{{ item.organizer_profile }}</td>
+                        <td>{{ item.nama_eksternal }}</td>
+                        <td>{{ item.progress }}</td>
                       </tr>
                     </template>
                     <template v-else>
@@ -162,35 +162,9 @@ export default {
     return {
       spinner: false,
       listFilter: false,
-      modal: {
-        delete: {
-          showModal: false,
-          title: null,
-          color: null,
-          message: null,
-          labelButton: null,
-          uniqueId: null,
-        },
-        post_put: {
-          showModal: false,
-          title: null,
-          color: null,
-          labelButton: null,
-          method: null,
-        },
-      },
       data: [],
-      permissions: [],
-      forms: {
-        permissions: [],
-        id: null,
-        name: null,
-      },
       search: {
         name: null,
-      },
-      errorValidations: {
-        name: [],
       },
       pagination: {
         current_page: 1,
@@ -207,6 +181,9 @@ export default {
       return 'cil-filter'
     },
   },
+  created() {
+    this.getData()
+  },
   methods: {
     filter() {
       this.listFilter = !this.listFilter
@@ -214,6 +191,29 @@ export default {
     },
     clearFilter() {
       this.search.name = null
+    },
+    getData() {
+      this.$http
+        .get('/systems/filter', {
+          params: {
+            page: this.pagination.current_page,
+            filter: 'name',
+            q: this.search.name,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
     },
   },
 }
