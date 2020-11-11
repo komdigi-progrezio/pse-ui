@@ -9,7 +9,7 @@
             variant="outline"
             size="sm"
             class="mr-2"
-            :class="{ 'mr-auto': search.name === null }"
+            :class="{ 'mr-auto': search.nama_eksternal === null }"
             v-c-tooltip="{
               content: 'Filter',
               placement: 'bottom',
@@ -20,7 +20,7 @@
             <CIcon :name="setIconFilter" />
           </CButton>
           <CButton
-            v-show="search.name !== null"
+            v-show="search.nama_eksternal !== null"
             color="info"
             variant="outline"
             size="sm"
@@ -70,9 +70,9 @@
               <div class="form-group">
                 <label for="name">Nama Sistem Elektronik</label>
                 <input
-                  v-model="search.name"
+                  v-model="search.nama_eksternal"
                   type="text"
-                  name="name"
+                  name="nama_eksternal"
                   placeholder="Masukan Nama Sistem Elektronik"
                   class="form-control"
                 />
@@ -118,6 +118,7 @@
                       <th>Penyelenggara</th>
                       <th>Nama Sistem</th>
                       <th>Progress</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -129,11 +130,24 @@
                         <td>{{ item.organizer_profile }}</td>
                         <td>{{ item.nama_eksternal }}</td>
                         <td>{{ item.progress }}</td>
+                        <td>
+                          <CButton
+                            color="primary"
+                            size="sm"
+                            v-c-tooltip="{
+                              content: 'Detail Sistem Elektronik',
+                              placement: 'bottom',
+                            }"
+                            :to="`/admin/systems/${item.id}`"
+                          >
+                            <CIcon name="cil-description" />
+                          </CButton>
+                        </td>
                       </tr>
                     </template>
                     <template v-else>
                       <tr>
-                        <td colspan="4" class="text-center"> Data Kosong </td>
+                        <td colspan="5" class="text-center"> Data Kosong </td>
                       </tr>
                     </template>
                   </tbody>
@@ -164,7 +178,7 @@ export default {
       listFilter: false,
       data: [],
       search: {
-        name: null,
+        nama_eksternal: null,
       },
       pagination: {
         current_page: 1,
@@ -190,15 +204,65 @@ export default {
       this.clearFilter()
     },
     clearFilter() {
-      this.search.name = null
+      this.search.nama_eksternal = null
     },
     getData() {
+      this.spinner = true
       this.$http
         .get('/systems/filter', {
           params: {
             page: this.pagination.current_page,
-            filter: 'name',
-            q: this.search.name,
+            filter: 'nama_eksternal',
+            q: this.search.nama_eksternal,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    filterData() {
+      this.spinner = true
+
+      this.$http
+        .get('/systems/filter', {
+          params: {
+            page: 1,
+            filter: 'nama_eksternal',
+            q: this.search.nama_eksternal,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          }
+
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    resetFilter() {
+      this.spinner = true
+      this.clearFilter()
+
+      this.$http
+        .get('/systems/filter', {
+          params: {
+            page: 1,
           },
         })
         .then((response) => {

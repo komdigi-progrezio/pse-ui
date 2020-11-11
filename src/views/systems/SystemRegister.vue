@@ -340,6 +340,7 @@ export default {
         .then((response) => {
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
+          this.$refs.form.reset()
         })
         .catch((error) => {
           if (error.response.status === 422) {
