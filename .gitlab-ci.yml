@@ -1,0 +1,43 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+cache:
+  key: '$CI_BUILD_STAGE'
+  paths:
+    - node_modules
+
+stages:
+  - build
+  - package
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay
+
+npm-build:
+  image: node:lts-alpine
+  stage: build
+  script:
+    - 'echo $VUE_APP_BASE_API_URL'
+    - 'npm install'
+    - 'npm run build'
+  artifacts:
+    paths:
+      - dist
+  only:
+    - tags
+    - master
+    - development-eka
+
+docker-build:
+  stage: package
+  script:
+    - docker build -t registry.gitlab.com/deerand/pse-ui .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker push registry.gitlab.com/deerand/pse-ui
+  only:
+    - tags
+    - master
+    - dev
