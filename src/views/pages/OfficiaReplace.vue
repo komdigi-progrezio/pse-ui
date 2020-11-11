@@ -487,7 +487,7 @@
           <template v-else>
             <div class="d-flex mb-3">
               <CButton
-                color="secondary"
+                color="dark"
                 variant="outline"
                 size="sm"
                 class="mr-2"
@@ -707,6 +707,7 @@ export default {
         propinsi: [],
         kota: [],
         kode_pos: [],
+        website: [],
       },
       modal: {
         instansi: {

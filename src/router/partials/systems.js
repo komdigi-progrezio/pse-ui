@@ -1,5 +1,6 @@
 const System = () => import('@/views/systems/System')
 const SystemRegister = () => import('@/views/systems/SystemRegister')
+const SystemDetail = () => import('@/views/systems/SystemDetail')
 
 const systems = {
   path: 'systems',
@@ -21,6 +22,11 @@ const systems = {
     {
       path: 'register',
       component: SystemRegister,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: ':id',
+      component: SystemDetail,
       meta: { requiresAuth: true },
     },
   ],
