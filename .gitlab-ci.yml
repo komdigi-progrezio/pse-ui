@@ -29,7 +29,7 @@ npm-build:
   only:
     - tags
     - master
-    - development-eka
+    - dev
 
 docker-build:
   stage: package
