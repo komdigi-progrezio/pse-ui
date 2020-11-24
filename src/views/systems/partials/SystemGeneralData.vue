@@ -115,7 +115,7 @@
           <template v-if="scope.length > 0">
             <tr v-for="(value, index) in scope" :key="`scope-${index}`">
               <td>{{ index + 1 }}</td>
-              <td>{{ value.relation.scope.param_value }}</td>
+              <td>{{ value.relation.scope }}</td>
               <td>
                 <CButton
                   color="danger"
@@ -795,7 +795,7 @@ export default {
       this.modal.delete.showModal = true
       this.modal.delete.title = 'Hapus Data'
       this.modal.delete.color = 'danger'
-      this.modal.delete.data = item.relation.scope.param_value
+      this.modal.delete.data = item.relation.scope
       this.modal.delete.uniqueId = item.id
       this.modal.delete.message = 'Ingin Menghapus Data'
       this.modal.delete.labelButton = 'Hapus'
