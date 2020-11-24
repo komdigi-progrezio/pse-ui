@@ -368,12 +368,11 @@ export default {
               typeof error.response.data.errors.url === 'undefined'
                 ? []
                 : error.response.data.errors.url
-          }
-          if (error.response.status === 500) {
+          } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
   },

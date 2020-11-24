@@ -687,8 +687,7 @@ export default {
           },
         ],
       },
-
-      Validations: {
+      errorValidations: {
         name: [],
         username: [],
         password: [],
@@ -836,12 +835,11 @@ export default {
                 'undefined'
                   ? []
                   : error.response.data.errors.status_register
-            }
-            if (error.response.status === 500) {
+            } else if (error.response.status === 500) {
               this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+            } else {
+              this.$toastr.e(error.response.data.message, 'Pemberitahuan')
             }
-
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           })
       })
     },
@@ -866,9 +864,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getDistrict() {
@@ -883,9 +881,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getAgencyGroup() {
@@ -897,9 +895,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     cancelAddAgency() {
@@ -1015,12 +1013,11 @@ export default {
               typeof error.response.data.errors.website === 'undefined'
                 ? []
                 : error.response.data.errors.website
-          }
-          if (error.response.status === 500) {
+          } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getAgency() {
@@ -1042,9 +1039,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     resetFilter() {
@@ -1066,9 +1063,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     filter() {
@@ -1097,9 +1094,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     onFilePickedDocument() {

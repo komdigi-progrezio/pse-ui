@@ -310,9 +310,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     filter() {
@@ -342,9 +342,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getData() {
@@ -367,9 +367,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     destroy(item) {
@@ -438,9 +438,9 @@ export default {
           this.closeModalDelete()
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     submitPostPut() {
@@ -482,12 +482,11 @@ export default {
               typeof error.response.data.errors.name === 'undefined'
                 ? []
                 : error.response.data.errors.name
-          }
-          if (error.response.status === 500) {
+          } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     edit(item) {

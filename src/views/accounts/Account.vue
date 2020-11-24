@@ -420,7 +420,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
         })
     },
     filter() {
@@ -457,7 +461,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
         })
     },
     getData() {
@@ -482,7 +490,11 @@ export default {
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
-          console.log(error)
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
         })
     },
   },
