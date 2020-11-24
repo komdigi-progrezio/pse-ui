@@ -225,9 +225,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     filterData() {
@@ -250,9 +250,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     resetFilter() {
@@ -274,9 +274,9 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
-
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
   },
