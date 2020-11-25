@@ -29,7 +29,12 @@
             <system-experts></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
-            <system-governance></system-governance>
+            <system-governance
+              :system-id="data.system.id"
+              :legal-basis="data.legalBasis"
+              :sop="data.sop"
+              @update-data="getData"
+            ></system-governance>
           </CTab>
           <CTab title="Penanggung Jawab">
             <system-responsible-person></system-responsible-person>
@@ -136,9 +141,9 @@ export default {
           this.data.scope = response.data.data.relation.scope
           this.data.organizer = response.data.data.relation.organizer
           this.data.document = response.data.data.relation.document
-          this.data.legal_basis = response.data.data.relation.legalBasis
+          this.data.legalBasis = response.data.data.relation.legal_basis
           this.data.sop = response.data.data.relation.sop
-          this.data.help_desk = response.data.data.relation.helpDesk
+          this.data.helpDesk = response.data.data.relation.help_desk
           this.data.system.id = response.data.data.id
           this.data.system.account_id = response.data.data.account_id
           this.data.system.nama_internal = response.data.data.nama_internal
