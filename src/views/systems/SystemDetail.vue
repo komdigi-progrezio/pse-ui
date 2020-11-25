@@ -40,7 +40,11 @@
             <system-responsible-person></system-responsible-person>
           </CTab>
           <CTab title="Help Desk">
-            <system-help-desk></system-help-desk>
+            <system-help-desk
+              :system-id="data.system.id"
+              :help-desk="data.helpDesk"
+              @update-data="getData"
+            ></system-help-desk>
           </CTab>
           <CTab title="Dokumen">
             <system-document></system-document>

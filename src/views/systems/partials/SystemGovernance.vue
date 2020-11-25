@@ -32,9 +32,13 @@
     <hr />
 
     <template v-if="legalBasisAvailable">
-      <a href="" @click.prevent="openModalLegalBasis('simpan', 'Tambah Data')"
-        >Tambah Dasar Hukum</a
+      <button
+        class="btn btn-link d-flex"
+        @click.prevent="openModalLegalBasis('simpan', 'Tambah Data')"
       >
+        <CIcon name="cil-plus" class="align-self-center mr-2" />
+        <a href="" class="align-self-center">Tambah Dasar Hukum</a>
+      </button>
 
       <div class="table-responsive">
         <table class="table table-stripped">
@@ -137,9 +141,13 @@
     <hr />
 
     <template v-if="sopAvailable">
-      <a href="" @click.prevent="openModalSop('simpan', 'Tambah Data')"
-        >Tambah SOP</a
+      <button
+        class="btn btn-link d-flex"
+        @click.prevent="openModalSop('simpan', 'Tambah Data')"
       >
+        <CIcon name="cil-plus" class="align-self-center mr-2" />
+        <a href="" class="align-self-center">Tambah SOP</a>
+      </button>
 
       <div class="table-responsive">
         <table class="table table-stripped">
@@ -701,6 +709,8 @@ export default {
     },
 
     openModalLegalBasis(type, title, data = null) {
+      this.resetLegalBasisForm()
+
       if (data) {
         Object.assign(this.form.legalBasis, data)
       }
@@ -718,6 +728,10 @@ export default {
         no_dh: null,
         tahun_dh: null,
         keterangan: null,
+      })
+
+      this.$nextTick(() => {
+        this.$refs[this.legalBasisForm].reset()
       })
     },
 
@@ -822,6 +836,8 @@ export default {
     },
 
     openModalSop(type, title, data = null) {
+      this.resetSopForm()
+
       if (data) {
         Object.assign(this.form.sop, data)
       }
