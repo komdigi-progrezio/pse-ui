@@ -47,7 +47,11 @@
             ></system-help-desk>
           </CTab>
           <CTab title="Dokumen">
-            <system-document></system-document>
+            <system-document
+              :system-id="data.system.id"
+              :documents="data.document"
+              @update-data="getData"
+            ></system-document>
           </CTab>
         </CTabs>
       </CCardBody>

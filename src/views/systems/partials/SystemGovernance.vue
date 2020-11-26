@@ -633,6 +633,8 @@ export default {
      * Legal Basis Section
      */
     saveLegalbasis() {
+      this.form.legalBasis.sis_profil_id = this.systemId
+
       if (this.modal.legalBasis.type === 'simpan') {
         this.addLegalBasis()
       }
@@ -749,6 +751,8 @@ export default {
      * SOP Section
      */
     saveSop() {
+      this.form.sop.sis_profil_id = this.systemId
+
       if (this.modal.sop.type === 'simpan') {
         this.addSop()
       }

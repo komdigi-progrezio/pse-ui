@@ -336,6 +336,8 @@ export default {
      * Help Desk
      */
     saveHelpDesk() {
+      this.form.helpDesk.sis_profil_id = this.systemId
+
       if (this.modal.helpDesk.type === 'simpan') {
         this.addHelpDesk()
       }
