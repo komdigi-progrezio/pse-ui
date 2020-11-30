@@ -36,6 +36,13 @@
                       placeholder="Password"
                     />
                   </div>
+                  <vue-recaptcha
+                    sitekey="6LfdGPMZAAAAAE-G78-NsYoXUEW5-JV4oV-Thvyu"
+                    ref="recaptcha"
+                    @verify="onCaptchaVerified"
+                    @expired="onCaptchaExpired"
+                    size="invisible"
+                  ></vue-recaptcha>
                   <div class="row">
                     <div class="col-6">
                       <button class="btn btn-primary px-4" type="submit">
@@ -55,12 +62,6 @@
               <div
                 class="card-body text-center align-items-center d-flex justify-content-center"
               >
-                <!-- <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna
-                                    aliqua.
-                                </p> -->
                 <button
                   class="btn btn-lg btn-outline-light"
                   type="button"
@@ -101,8 +102,10 @@
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha'
 export default {
   name: 'Login',
+  components: { VueRecaptcha },
   data() {
     return {
       form: {
@@ -121,6 +124,31 @@ export default {
     }
   },
   methods: {
+    onCaptchaExpired: function () {
+      this.$refs.recaptcha.reset()
+      this.form.password = null
+    },
+    onCaptchaVerified: function (token) {
+      this.$refs.recaptcha.reset()
+      this.showMessage = false
+
+      this.$store
+        .dispatch('auth/retrieveToken', {
+          username: this.form.username,
+          password: this.form.password,
+          recaptcha: token,
+        })
+        .then(() => {
+          this.$toastr.s('Anda Berhasil Masuk Halaman Admin', 'Pemberitahuan')
+          this.$router.push('admin/dashboard')
+        })
+        .catch((error) => {
+          this.form.password = null
+          this.showMessage = true
+          this.message = error.response.data
+          this.$toastr.e(this.message, 'Pemberitahuan')
+        })
+    },
     showRegister() {
       this.modal.register.showModal = true
       this.modal.register.title = 'Register'
@@ -130,24 +158,7 @@ export default {
       this.showMessage = false
     },
     login() {
-      this.showMessage = false
-
-      this.$store
-        .dispatch('auth/retrieveToken', {
-          username: this.form.username,
-          password: this.form.password,
-        })
-        .then(() => {
-          this.$toastr.s('Anda Berhasil Masuk Halaman Admin', 'Pemberitahuan')
-          this.$router.push('admin/dashboard')
-        })
-        .catch((error) => {
-          console.log()
-          this.form.password = null
-          this.showMessage = true
-          this.message = error.response.data
-          this.$toastr.e(this.message, 'Pemberitahuan')
-        })
+      this.$refs.recaptcha.execute()
     },
   },
 }

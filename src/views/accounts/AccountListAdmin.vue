@@ -45,7 +45,7 @@
                         <th scope="row">
                           {{ index + 1 }}
                         </th>
-                        <td>{{ item.name }}</td>
+                        <td>{{ item.nama }}</td>
                         <td>{{ item.status }}</td>
                         <td>{{ item.last_login }}</td>
                         <td>
