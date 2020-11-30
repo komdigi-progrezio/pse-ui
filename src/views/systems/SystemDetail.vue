@@ -33,16 +33,29 @@
             <system-experts></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
-            <system-governance></system-governance>
+            <system-governance
+              :system-id="data.system.id"
+              :legal-basis="data.legalBasis"
+              :sop="data.sop"
+              @update-data="getData"
+            ></system-governance>
           </CTab>
           <CTab title="Penanggung Jawab">
             <system-responsible-person></system-responsible-person>
           </CTab>
           <CTab title="Help Desk">
-            <system-help-desk></system-help-desk>
+            <system-help-desk
+              :system-id="data.system.id"
+              :help-desk="data.helpDesk"
+              @update-data="getData"
+            ></system-help-desk>
           </CTab>
           <CTab title="Dokumen">
-            <system-document></system-document>
+            <system-document
+              :system-id="data.system.id"
+              :documents="data.document"
+              @update-data="getData"
+            ></system-document>
           </CTab>
         </CTabs>
       </CCardBody>
@@ -144,9 +157,9 @@ export default {
           this.data.scope = response.data.data.relation.scope
           this.data.organizer = response.data.data.relation.organizer
           this.data.document = response.data.data.relation.document
-          this.data.legal_basis = response.data.data.relation.legalBasis
+          this.data.legalBasis = response.data.data.relation.legal_basis
           this.data.sop = response.data.data.relation.sop
-          this.data.help_desk = response.data.data.relation.helpDesk
+          this.data.helpDesk = response.data.data.relation.help_desk
           this.data.related = response.data.data.relation.related
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
