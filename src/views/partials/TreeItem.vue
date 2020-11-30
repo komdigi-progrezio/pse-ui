@@ -1,11 +1,16 @@
 <template>
   <div>
-    <li>
-      <div :class="{ bold: isFolder }" @click="toggle">
+    <li class="list-group-item group-item">
+      <div :class="{ bold: isFolder }" @click="selectGroup">
         {{ item.name }}
-        <span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
+        <span v-if="isFolder" @click="toggle">[{{ isOpen ? '-' : '+' }}]</span>
       </div>
-      <ul v-show="isOpen" v-if="isFolder">
+      <ul
+        v-show="isOpen"
+        v-if="isFolder"
+        class="list-group"
+        @click="changeData"
+      >
         <tree-item
           class="item"
           v-for="(child, index) in item.children"
@@ -19,22 +24,22 @@
 
 <script>
 export default {
-  name: 'TreeView',
+  name: 'TreeItem',
   props: {
     item: {
-      required: true,
       type: Object,
-      default: () => {},
+      required: true,
+      default: () => [],
     },
   },
-  data() {
+  data: function () {
     return {
       isOpen: false,
     }
   },
   computed: {
     isFolder: function () {
-      return true
+      return this.item.children && this.item.children.length
     },
   },
   methods: {
@@ -42,6 +47,12 @@ export default {
       if (this.isFolder) {
         this.isOpen = !this.isOpen
       }
+    },
+    selectGroup: function () {
+      this.$store.dispatch('dispatchTreeViewOrganizer', this.item)
+    },
+    changeData() {
+      this.$emit('selected')
     },
   },
 }

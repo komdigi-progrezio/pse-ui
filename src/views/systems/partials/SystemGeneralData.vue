@@ -96,7 +96,7 @@
           </template>
           <template v-else>
             <tr>
-              <td colspan="4" class="text-center">Data Kosong</td>
+              <td colspan="5" class="text-center">Data Kosong</td>
             </tr>
           </template>
         </tbody>
@@ -151,7 +151,7 @@
           </template>
           <template v-else>
             <tr>
-              <td colspan="3" class="text-center">Data Kosong</td>
+              <td colspan="4" class="text-center">Data Kosong</td>
             </tr>
           </template>
         </tbody>
@@ -268,7 +268,7 @@
           </template>
           <template v-else>
             <tr>
-              <td colspan="4" class="text-center">Data Kosong</td>
+              <td colspan="5" class="text-center">Data Kosong</td>
             </tr>
           </template>
         </tbody>
@@ -328,7 +328,7 @@
           </template>
           <template v-else>
             <tr>
-              <td colspan="4" class="text-center">Data Kosong</td>
+              <td colspan="5" class="text-center">Data Kosong</td>
             </tr>
           </template>
         </tbody>

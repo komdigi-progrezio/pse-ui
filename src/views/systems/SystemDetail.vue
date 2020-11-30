@@ -21,7 +21,10 @@
             ></system-general-data>
           </CTab>
           <CTab title="Profil Penyelenggara">
-            <system-organizer-profile></system-organizer-profile>
+            <system-organizer-profile
+              :organizer="data.organizer"
+              @update-data="getData"
+            ></system-organizer-profile>
           </CTab>
           <CTab title="Perangkat Keras">
             <system-hardware></system-hardware>
@@ -134,7 +137,7 @@ export default {
         sop: [],
         helpDesk: [],
         document: [],
-        organizer: null,
+        organizer: {},
         related: [],
         security: [],
         certificate: [],
