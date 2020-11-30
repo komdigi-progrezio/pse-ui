@@ -19,6 +19,7 @@ import VueToastr from 'vue-toastr'
 import toastrConfig from '@/utils/toastr'
 //  Partials Component
 import Message from '@/views/notifications/Message.vue'
+import TreeView from '@/views/partials/TreeView.vue'
 
 api.interceptors.response.use(
   function (response) {
@@ -77,6 +78,7 @@ import './utils/validations'
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('message', Message)
+Vue.component('tree-item', TreeView)
 
 Vue.use(VueSweetalert2)
 
