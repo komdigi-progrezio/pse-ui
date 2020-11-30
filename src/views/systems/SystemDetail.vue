@@ -13,6 +13,10 @@
               :scope="data.scope"
               :system="data.system"
               :document="data.document"
+              :related="data.related"
+              :security="data.security"
+              :certificate="data.certificate"
+              :service-user="data.serviceUser"
               @update-data="getData"
             ></system-general-data>
           </CTab>
@@ -117,20 +121,24 @@ export default {
         sop: [],
         helpDesk: [],
         document: [],
-        organizer: {},
+        organizer: null,
+        related: [],
+        security: [],
+        certificate: [],
+        serviceUser: [],
       },
     }
   },
-  created() {
+  mounted() {
     this.getData()
   },
   methods: {
-    editSystem() {},
+    // editSystem() {},
     getData() {
       this.$http
         .get(`systems/${this.$route.params.id}`)
         .then((response) => {
-          this.data.kindOfService = response.data.data.relation.kind_or_service
+          this.data.kindOfService = response.data.data.relation.kind_of_service
           this.data.specialFunction =
             response.data.data.relation.special_function
           this.data.scope = response.data.data.relation.scope
@@ -139,6 +147,10 @@ export default {
           this.data.legal_basis = response.data.data.relation.legalBasis
           this.data.sop = response.data.data.relation.sop
           this.data.help_desk = response.data.data.relation.helpDesk
+          this.data.related = response.data.data.relation.related
+          this.data.security = response.data.data.relation.security
+          this.data.certificate = response.data.data.relation.certificate
+          this.data.serviceUser = response.data.data.relation.service_user
           this.data.system.id = response.data.data.id
           this.data.system.account_id = response.data.data.account_id
           this.data.system.nama_internal = response.data.data.nama_internal

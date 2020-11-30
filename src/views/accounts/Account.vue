@@ -132,7 +132,7 @@
                     name="created_at"
                     :config="optionsCreatedAt"
                     class="form-control"
-                    @dp-change="changeMinDate"
+                    @input="changeMinDate"
                   />
                   <div class="input-group-append">
                     <span class="input-group-text" id="basic-addon2"

@@ -1,5 +1,5 @@
 import { extend } from 'vee-validate'
-import { required, email, confirmed } from 'vee-validate/dist/rules'
+import { required, email, confirmed, mimes } from 'vee-validate/dist/rules'
 
 // Install rules
 extend('required', {
@@ -35,6 +35,10 @@ extend('confirmed', {
   ...confirmed,
   params: ['target'],
   message: '{_field_} Tidak Sama dengan {target}',
+})
+extend('mimes', {
+  ...mimes,
+  message: '{_field_} Tidak Sesuai',
 })
 extend('min', {
   validate(value, args) {
