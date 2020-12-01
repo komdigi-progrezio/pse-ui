@@ -823,6 +823,11 @@
                     <select
                       v-model="forms.related.id_sistem"
                       class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.related.id_sistem.length > 0,
+                      }"
                     >
                       <option value="">Pilih Sistem Terkait</option>
                       <option
@@ -1214,6 +1219,12 @@
                     <select
                       v-model="forms.serviceUsers.jenis_pengguna"
                       class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.serviceUsers.jenis_pengguna.length >
+                            0,
+                      }"
                     >
                       <option value="">Pilih Jenis Pengguna</option>
                       <option
@@ -1532,6 +1543,7 @@ export default {
           nama_sistem: [],
         },
         related: {
+          id_sistem: [],
           nama_sistem: [],
         },
         certificate: {

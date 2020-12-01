@@ -33,7 +33,11 @@
             <system-software></system-software>
           </CTab>
           <CTab title="Tenaga Ahli">
-            <system-experts></system-experts>
+            <system-experts
+              :availability-of-experts="data.availabilityOfExperts"
+              :experts-required="data.expertsRequired"
+              @update-data="getData"
+            ></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
             <system-governance
@@ -142,6 +146,8 @@ export default {
         security: [],
         certificate: [],
         serviceUser: [],
+        availabilityOfExperts: [],
+        expertsRequired: [],
       },
     }
   },
@@ -167,6 +173,10 @@ export default {
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
+          this.data.availabilityOfExperts =
+            response.data.data.relation.availability_of_expert
+          this.data.expertsRequired =
+            response.data.data.relation.expert_required
           this.data.system.id = response.data.data.id
           this.data.system.account_id = response.data.data.account_id
           this.data.system.nama_internal = response.data.data.nama_internal
