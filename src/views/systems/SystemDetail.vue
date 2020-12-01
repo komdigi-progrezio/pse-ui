@@ -21,7 +21,11 @@
             ></system-general-data>
           </CTab>
           <CTab title="Profil Penyelenggara">
-            <system-organizer-profile></system-organizer-profile>
+            <system-organizer-profile
+              :organizer="data.organizer"
+              :tree-data="treeData"
+              @update-data="getData"
+            ></system-organizer-profile>
           </CTab>
           <CTab title="Perangkat Keras">
             <system-hardware></system-hardware>
@@ -30,7 +34,11 @@
             <system-software></system-software>
           </CTab>
           <CTab title="Tenaga Ahli">
-            <system-experts></system-experts>
+            <system-experts
+              :availability-of-experts="data.availabilityOfExperts"
+              :experts-required="data.expertsRequired"
+              @update-data="getData"
+            ></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
             <system-governance
@@ -41,7 +49,11 @@
             ></system-governance>
           </CTab>
           <CTab title="Penanggung Jawab">
-            <system-responsible-person></system-responsible-person>
+            <system-responsible-person
+              :responsible="data.responsiblePerson"
+              :tree-data="treeData"
+              @update-data="getData"
+            ></system-responsible-person>
           </CTab>
           <CTab title="Help Desk">
             <system-help-desk
@@ -134,18 +146,40 @@ export default {
         sop: [],
         helpDesk: [],
         document: [],
-        organizer: null,
+        organizer: {},
         related: [],
         security: [],
         certificate: [],
         serviceUser: [],
+        availabilityOfExperts: [],
+        expertsRequired: [],
+      },
+      treeData: {
+        name: 'Satuan Kerja',
+        children: [],
       },
     }
   },
   mounted() {
     this.getData()
+    this.fetchTreeViewWorkUnit()
   },
   methods: {
+    //  Fetch Tree View
+    fetchTreeViewWorkUnit() {
+      this.$http
+        .get('parsatuankerja/tree-view')
+        .then((response) => {
+          this.treeData.children = response.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     // editSystem() {},
     getData() {
       this.$http
@@ -164,6 +198,12 @@ export default {
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
+          this.data.availabilityOfExperts =
+            response.data.data.relation.availability_of_expert
+          this.data.expertsRequired =
+            response.data.data.relation.expert_required
+          this.data.responsiblePerson =
+            response.data.data.relation.responsible_person
           this.data.system.id = response.data.data.id
           this.data.system.account_id = response.data.data.account_id
           this.data.system.nama_internal = response.data.data.nama_internal
