@@ -43,42 +43,6 @@
           </tr>
         </tbody>
       </table>
-      <table class="table table-stripped" v-if="organizer === null">
-        <tbody>
-          <tr>
-            <td> Instansi Penyelenggara Negara</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Nama Satuan Kerja</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Alamat</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Provinsi</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Kota / Kabupaten</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Kode POS</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>No Telepon</td>
-            <td>Kosong</td>
-          </tr>
-          <tr>
-            <td>Website</td>
-            <td>Kosong</td>
-          </tr>
-        </tbody>
-      </table>
       <table class="table table-stripped" v-else>
         <tbody>
           <tr>
@@ -127,7 +91,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <ul>
+                  <ul class="w-100 p-0">
                     <tree-item :item="treeData" @selected="onSelect">
                     </tree-item>
                   </ul>
@@ -176,6 +140,11 @@
 export default {
   name: 'SystemOrganizerProfile',
   props: {
+    treeData: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     organizer: {
       type: Object,
       required: true,
@@ -202,19 +171,12 @@ export default {
           name: null,
         },
       },
-      treeData: {
-        name: 'Satuan Kerja',
-        children: [],
-      },
       errorValidations: {
         organizer: {
           par_satuan_kerja_id: [],
         },
       },
     }
-  },
-  created() {
-    this.fetchTreeViewWorkUnit()
   },
   methods: {
     //  Organizer
@@ -242,8 +204,10 @@ export default {
       this.modal.organizer.labelButton = 'Simpan'
       this.modal.organizer.method = 'post'
 
-      this.forms.organizer.par_satuan_kerja_id = this.organizer.par_satuan_kerja_id
-      this.forms.organizer.name = this.organizer.name
+      this.forms.organizer.par_satuan_kerja_id =
+        this.organizer === null ? null : this.organizer.par_satuan_kerja_id
+      this.forms.organizer.name =
+        this.organizer === null ? null : this.organizer.name
     },
     submitOrganizer() {
       const url = '/organizers'
@@ -287,21 +251,6 @@ export default {
                 ? []
                 : error.response.data.errors.par_satuan_kerja_id
           } else if (error.response.status === 500) {
-            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
-          } else {
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
-          }
-        })
-    },
-    //  Fetch Tree View
-    fetchTreeViewWorkUnit() {
-      this.$http
-        .get('parsatuankerja/tree-view')
-        .then((response) => {
-          this.treeData.children = response.data
-        })
-        .catch((error) => {
-          if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')

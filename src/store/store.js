@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     treeView: {
-      organizer: {
+      workUnit: {
         id: null,
         name: null,
       },
@@ -16,8 +16,8 @@ export default new Vuex.Store({
   },
   mutations: {
     changeTreeViewOrganizer(state, data) {
-      state.treeView.organizer.id = data.id
-      state.treeView.organizer.name = data.name
+      state.treeView.workUnit.id = data.id
+      state.treeView.workUnit.name = data.name
     },
   },
   actions: {
