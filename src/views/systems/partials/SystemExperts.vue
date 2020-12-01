@@ -453,11 +453,13 @@ export default {
       },
       forms: {
         availabilityOfExperts: {
+          sis_profil_id: this.$route.params.id,
           jenis: null,
           jumlah_personil: null,
           kompetensi: null,
         },
         expertsRequired: {
+          sis_profil_id: this.$route.params.id,
           jenis: null,
           jumlah_personil: null,
           status: null,
