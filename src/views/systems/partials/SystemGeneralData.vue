@@ -1,8 +1,14 @@
 <template>
   <div class="mt-2">
-    <a :to="`/admin/systems/${this.$route.params.id}/edit`"
-      >Perbaharui Profil Layanan</a
+    <router-link
+      tag="button"
+      :to="`/admin/systems/${this.$route.params.id}/edit`"
+      class="btn btn-link d-flex"
     >
+      <CIcon name="cil-pencil" class="align-self-center mr-2" />
+
+      <span class="align-self-center"> Perbaharui Profil Layanan </span>
+    </router-link>
     <div class="table-responsive">
       <table class="table table-stripped">
         <tbody>

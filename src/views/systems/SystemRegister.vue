@@ -121,11 +121,12 @@
                   >
                     <option value="">Pilih Kategori Sistem Elektronik</option>
                     <option
-                      v-for="(value,
-                      index) in dataSelect.electronicSystemCategory"
+                      v-for="(
+                        value, index
+                      ) in dataSelect.electronicSystemCategory"
                       :value="value.id"
                       :key="`eletronic-system-category-${index}`"
-                      >{{ value.name }}</option
+                      >{{ value.param_value }}</option
                     >
                   </select>
                   <div v-if="errors.length > 0" class="invalid-feedback">
@@ -175,6 +176,7 @@
                     http://www.layanan.go.id)</p
                   >
                   <input v-model="forms.url" type="text" class="form-control" />
+                  <message :messages="errorValidations.url" />
                 </template>
               </div>
             </CCol>
@@ -270,20 +272,7 @@ export default {
             name: 'Internasional',
           },
         ],
-        electronicSystemCategory: [
-          {
-            id: 22,
-            name: 'Rendah',
-          },
-          {
-            id: 20,
-            name: 'Strategis',
-          },
-          {
-            id: 21,
-            name: 'Tinggi',
-          },
-        ],
+        electronicSystemCategory: [],
         accessCategory: [
           {
             id: 'Online',
@@ -297,7 +286,29 @@ export default {
       },
     }
   },
+  created() {
+    this.fetchCategorySpecialFeatures()
+  },
   methods: {
+    fetchCategorySpecialFeatures() {
+      this.$http
+        .get('parconfig/category', {
+          params: {
+            filter: 'category',
+            q: 'par_sifat_khusus',
+          },
+        })
+        .then((response) => {
+          this.dataSelect.electronicSystemCategory = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     openFilePKSE() {
       console.log(1)
     },
@@ -330,6 +341,12 @@ export default {
           formData.append(value[0], value[1] === null ? [] : value[1])
         }
       })
+      this.errorValidations.nama_internal = []
+      this.errorValidations.nama_eksternal = []
+      this.errorValidations.cakupan_wilayah = []
+      this.errorValidations.sifat_khusus = []
+      this.errorValidations.kategori_akses = []
+      this.errorValidations.url = []
       this.errorValidations.name = []
 
       this.$http({
