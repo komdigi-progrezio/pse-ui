@@ -28,7 +28,13 @@
             ></system-organizer-profile>
           </CTab>
           <CTab title="Perangkat Keras">
-            <system-hardware></system-hardware>
+            <system-hardware
+              :system-id="data.system.id"
+              :hardware="data.hardware"
+              :network="data.network"
+              :peripheral="data.peripheral"
+              @update-data="getData"
+            ></system-hardware>
           </CTab>
           <CTab title="Perangkat Lunak">
             <system-software></system-software>
@@ -153,10 +159,17 @@ export default {
         serviceUser: [],
         availabilityOfExperts: [],
         expertsRequired: [],
+        hardware: [],
+        peripheral: [],
+        network: [],
       },
       treeData: {
         name: 'Satuan Kerja',
         children: [],
+        hardware: [],
+        software: [],
+        network: [],
+        peripheral: [],
       },
     }
   },
@@ -195,6 +208,10 @@ export default {
           this.data.sop = response.data.data.relation.sop
           this.data.helpDesk = response.data.data.relation.help_desk
           this.data.related = response.data.data.relation.related
+          this.data.hardware = response.data.data.relation.hardware
+          this.data.software = response.data.data.relation.software
+          this.data.peripheral = response.data.data.relation.peripheral
+          this.data.network = response.data.data.relation.network
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
