@@ -293,7 +293,7 @@ export default {
   name: 'AccountRoles',
   data() {
     return {
-      spinner: true,
+      spinner: false,
       listFilter: false,
       modal: {
         delete: {

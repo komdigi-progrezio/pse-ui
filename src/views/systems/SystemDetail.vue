@@ -139,6 +139,13 @@ export default {
         security: [],
         certificate: [],
         serviceUser: [],
+        availabilityOfExperts: [],
+        expertsRequired: [],
+      },
+      treeData: {
+        name: 'Satuan Kerja',
+        id: null,
+        children: [],
       },
     }
   },
@@ -146,6 +153,21 @@ export default {
     this.getData()
   },
   methods: {
+    //  Fetch Tree View
+    fetchTreeViewWorkUnit() {
+      this.$http
+        .get('parsatuankerja/list/tree-view')
+        .then((response) => {
+          this.treeData.children = response.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     // editSystem() {},
     getData() {
       this.$http

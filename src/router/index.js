@@ -14,6 +14,7 @@ const Report = () => import('@/views/reports/Report')
 const Login = () => import('@/views/pages/Login')
 const OfficialNew = () => import('@/views/pages/OfficialNew')
 const OfficiaReplace = () => import('@/views/pages/OfficiaReplace')
+const StrukturOrganisasi = () => import('@/views/pages/StrukturOrganisasi')
 
 Vue.use(Router)
 
@@ -64,6 +65,12 @@ function configRoutes() {
           path: 'dashboard',
           name: 'Dashboard',
           component: Dashboard,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'organizational-structure',
+          name: 'Struktur Organisasi',
+          component: StrukturOrganisasi,
           meta: { requiresAuth: true },
         },
         {
