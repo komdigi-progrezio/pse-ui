@@ -8,48 +8,19 @@
     <template #toggler>
       <CHeaderNavLink>
         <div class="c-avatar">
-          <img src="img/avatars/6.jpg" class="c-avatar-img" />
+          <CIcon name="cil-user" />
         </div>
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
-      <strong>Account</strong>
-    </CDropdownHeader>
-    <CDropdownItem>
-      <CIcon name="cil-bell" /> Updates
-      <CBadge color="info" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-envelope-open" /> Messages
-      <CBadge color="success" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-task" /> Tasks
-      <CBadge color="danger" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-comment-square" /> Comments
-      <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Settings</strong>
     </CDropdownHeader>
-    <CDropdownItem> <CIcon name="cil-user" /> Profile </CDropdownItem>
-    <CDropdownItem> <CIcon name="cil-settings" /> Settings </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-dollar" /> Payments
-      <CBadge color="secondary" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-file" /> Projects
-      <CBadge color="primary" class="mfs-auto">{{ itemsCount }}</CBadge>
+    <CDropdownItem @click="profile">
+      <CIcon name="cil-user" /> Profile
     </CDropdownItem>
     <CDropdownDivider />
-    <CDropdownItem>
-      <CIcon name="cil-shield-alt" /> Lock Account
-    </CDropdownItem>
     <CDropdownItem @click="logout">
-      <CIcon name="cil-lock-locked" /> Logout
+      <CIcon name="cil-account-logout" /> Logout
     </CDropdownItem>
   </CDropdown>
 </template>
@@ -76,6 +47,9 @@ export default {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
         })
+    },
+    profile() {
+      this.$router.push('/admin/account/profile')
     },
   },
 }

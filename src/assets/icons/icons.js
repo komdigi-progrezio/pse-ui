@@ -40,6 +40,7 @@ import {
   cilFilterX,
   cilDescription,
   cilFork,
+  cilAccountLogout,
   cilCloud,
   cilBan,
   cilBasket,
@@ -107,7 +108,7 @@ export const iconsSet = Object.assign(
     cilFilterX,
     cilDescription,
     cilFork,
-
+    cilAccountLogout,
     cilCloud,
     cilBan,
     cilBasket,

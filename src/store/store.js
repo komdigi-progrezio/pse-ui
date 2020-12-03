@@ -12,12 +12,19 @@ export default new Vuex.Store({
         id: null,
         name: null,
       },
+      workUnitCheckbox: [],
     },
   },
   mutations: {
-    changeTreeViewOrganizer(state, data) {
-      state.treeView.workUnit.id = data.id
-      state.treeView.workUnit.name = data.name
+    changeTreeViewOrganizer(state, value) {
+      state.treeView.workUnit.id = value.id
+      state.treeView.workUnit.name = value.name
+    },
+    updateCheckBoxes(state, value) {
+      state.treeView.workUnitCheckbox = value
+    },
+    resetCheckbox(state) {
+      state.treeView.workUnitCheckbox = []
     },
   },
   actions: {

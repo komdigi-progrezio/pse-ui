@@ -244,6 +244,7 @@
                   <option value="" selected="selected">
                     Pilih Satuan Kerja
                   </option>
+                  <option value="0" selected="selected"> -- ROOT -- </option>
                   <option
                     :value="value.id"
                     v-for="(value, index) in dataSelect.satuan_kerja"
