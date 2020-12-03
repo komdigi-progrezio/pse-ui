@@ -31,7 +31,12 @@
             <system-hardware></system-hardware>
           </CTab>
           <CTab title="Perangkat Lunak">
-            <system-software></system-software>
+            <system-software
+              :software="data.software"
+              :software-tool="data.softwareTool"
+              :system-id="data.system.id"
+              @update-data="getData"
+            ></system-software>
           </CTab>
           <CTab title="Tenaga Ahli">
             <system-experts
@@ -153,6 +158,11 @@ export default {
         serviceUser: [],
         availabilityOfExperts: [],
         expertsRequired: [],
+        hardware: [],
+        peripheral: [],
+        network: [],
+        software: [],
+        softwareTool: [],
       },
       treeData: {
         name: 'Satuan Kerja',
@@ -195,6 +205,12 @@ export default {
           this.data.sop = response.data.data.relation.sop
           this.data.helpDesk = response.data.data.relation.help_desk
           this.data.related = response.data.data.relation.related
+          this.data.hardware = response.data.data.relation.hardware
+          this.data.software = response.data.data.relation.software
+          this.data.peripheral = response.data.data.relation.peripheral
+          this.data.network = response.data.data.relation.network
+          this.data.software = response.data.data.relation.software
+          this.data.softwareTool = response.data.data.relation.software_tool
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
