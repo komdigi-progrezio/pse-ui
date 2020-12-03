@@ -25,6 +25,7 @@
                   v-model="forms.username"
                   type="text"
                   class="form-control"
+                  placeholder="Masukan Email"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.username.length > 0,
@@ -52,6 +53,7 @@
                   v-model="forms.password"
                   type="password"
                   class="form-control"
+                  placeholder="Masukan Password"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.password.length > 0,
@@ -74,6 +76,7 @@
                 <input
                   v-model="forms.password_confirmation"
                   type="password"
+                  placeholder="Masukan Konfirmasi Password"
                   class="form-control"
                 />
               </ValidationProvider>
@@ -95,6 +98,7 @@
                   v-model="forms.name"
                   type="text"
                   class="form-control"
+                  placeholder="Masukan Nama Lengkap"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.name.length > 0,
@@ -121,6 +125,7 @@
                   type="text"
                   maxlength="18"
                   class="form-control"
+                  placeholder="Masukan NIP"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.nip.length > 0,
@@ -146,6 +151,7 @@
                   v-model="forms.jabatan"
                   type="text"
                   class="form-control"
+                  placeholder="Masukan Jabatan"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.jabatan.length > 0,
@@ -209,6 +215,7 @@
                   v-model="forms.no_telepon"
                   type="text"
                   class="form-control"
+                  placeholder="Masukan Nomor Telepon"
                   :class="{
                     'is-invalid':
                       errors.length > 0 ||
@@ -236,6 +243,7 @@
                   v-model="forms.no_hp"
                   type="text"
                   class="form-control"
+                  placeholder="Masukan Nomor HP"
                   :class="{
                     'is-invalid':
                       errors.length > 0 || errorValidations.no_hp.length > 0,
@@ -642,7 +650,7 @@
 import axios from 'axios'
 
 export default {
-  name: 'OfficialReplace',
+  name: 'OfficialNew',
   data() {
     return {
       forms: {
@@ -736,7 +744,7 @@ export default {
   },
   methods: {
     clearFormOfficial() {
-      this.forms.status_register = 2
+      this.forms.status_register = 1
       this.forms.username = ''
       this.forms.password = ''
       this.forms.password_confirmation = ''

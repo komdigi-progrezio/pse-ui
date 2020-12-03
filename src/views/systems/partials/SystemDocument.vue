@@ -24,40 +24,47 @@
           </tr>
         </thead>
         <tbody>
-          <tr :key="index" v-for="(document, index) in documents">
-            <td>{{ index + 1 }}</td>
-            <td>{{ getCurrentCategory(document.category) }}</td>
-            <td>{{ document.name }}</td>
-            <td>
-              <a :href="document.url_file" target="_blank">Lihat Dokumen</a>
-            </td>
-            <td>
-              <CButton
-                color="danger"
-                size="sm"
-                class="mr-2"
-                v-c-tooltip="{
-                  content: 'Hapus Dokumen',
-                  placement: 'bottom',
-                }"
-                @click="openModalDeleteDocument(document)"
-              >
-                <CIcon name="cil-trash" />
-              </CButton>
+          <template v-if="documents.length > 0">
+            <tr :key="index" v-for="(document, index) in documents">
+              <td>{{ index + 1 }}</td>
+              <td>{{ getCurrentCategory(document.category) }}</td>
+              <td>{{ document.name }}</td>
+              <td>
+                <a :href="document.url_file" target="_blank">Lihat Dokumen</a>
+              </td>
+              <td>
+                <CButton
+                  color="danger"
+                  size="sm"
+                  class="mr-2"
+                  v-c-tooltip="{
+                    content: 'Hapus Dokumen',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalDeleteDocument(document)"
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
 
-              <CButton
-                color="success"
-                size="sm"
-                v-c-tooltip="{
-                  content: 'Edit Dokumen',
-                  placement: 'bottom',
-                }"
-                @click="openModalDocument('update', 'Update Data', document)"
-              >
-                <CIcon name="cil-pencil" />
-              </CButton>
-            </td>
-          </tr>
+                <CButton
+                  color="success"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Edit Dokumen',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalDocument('update', 'Update Data', document)"
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr>
+              <td colspan="6" class="text-center">Data Kosong</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>

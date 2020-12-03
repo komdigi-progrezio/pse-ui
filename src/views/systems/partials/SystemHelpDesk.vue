@@ -25,41 +25,48 @@
         </thead>
 
         <tbody>
-          <tr v-for="(currentHelpDesk, index) in helpDesk" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ currentHelpDesk.nama }}</td>
-            <td>{{ currentHelpDesk.telepon }}</td>
-            <td>{{ currentHelpDesk.fax }}</td>
-            <td>{{ currentHelpDesk.email }}</td>
-            <td>
-              <CButton
-                color="danger"
-                size="sm"
-                class="mr-2"
-                v-c-tooltip="{
-                  content: 'Hapus Help Desk',
-                  placement: 'bottom',
-                }"
-                @click="openModalDeleteHelpDesk(currentHelpDesk)"
-              >
-                <CIcon name="cil-trash" />
-              </CButton>
+          <template v-if="helpDesk.length > 0">
+            <tr v-for="(currentHelpDesk, index) in helpDesk" :key="index">
+              <td>{{ index + 1 }}</td>
+              <td>{{ currentHelpDesk.nama }}</td>
+              <td>{{ currentHelpDesk.telepon }}</td>
+              <td>{{ currentHelpDesk.fax }}</td>
+              <td>{{ currentHelpDesk.email }}</td>
+              <td>
+                <CButton
+                  color="danger"
+                  size="sm"
+                  class="mr-2"
+                  v-c-tooltip="{
+                    content: 'Hapus Help Desk',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalDeleteHelpDesk(currentHelpDesk)"
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
 
-              <CButton
-                color="success"
-                size="sm"
-                v-c-tooltip="{
-                  content: 'Edit Help Desk',
-                  placement: 'bottom',
-                }"
-                @click="
-                  openModalHelpDesk('update', 'Update Data', currentHelpDesk)
-                "
-              >
-                <CIcon name="cil-pencil" />
-              </CButton>
-            </td>
-          </tr>
+                <CButton
+                  color="success"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Edit Help Desk',
+                    placement: 'bottom',
+                  }"
+                  @click="
+                    openModalHelpDesk('update', 'Update Data', currentHelpDesk)
+                  "
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr>
+              <td colspan="7" class="text-center">Data Kosong</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>

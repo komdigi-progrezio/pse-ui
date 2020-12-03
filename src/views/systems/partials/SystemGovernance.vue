@@ -1,210 +1,146 @@
 <template>
   <div class="mt-2">
     <h5>Dasar Hukum</h5>
-
-    <div class="form-group">
-      <label for="name">Data Tersedia ? </label>
-      <div class="form-check form-check-inline ml-2">
-        <input
-          class="form-check-input"
-          id="hide-legal"
-          type="radio"
-          :value="false"
-          name="hide-legal"
-          v-model="legalBasisAvailable"
-        />
-        <label class="form-check-label" for="inline-radio1">Tidak</label>
-      </div>
-
-      <div class="form-check form-check-inline mr-1">
-        <input
-          class="form-check-input"
-          id="show-legal"
-          type="radio"
-          :value="true"
-          name="show-legal"
-          v-model="legalBasisAvailable"
-        />
-        <label class="form-check-label" for="inline-radio1">Ya</label>
-      </div>
-    </div>
-
     <hr />
+    <button
+      class="btn btn-link d-flex"
+      @click.prevent="openModalLegalBasis('simpan', 'Tambah Data')"
+    >
+      <CIcon name="cil-plus" class="align-self-center mr-2" />
+      <a href="" class="align-self-center">Tambah Dasar Hukum</a>
+    </button>
 
-    <template v-if="legalBasisAvailable">
-      <button
-        class="btn btn-link d-flex"
-        @click.prevent="openModalLegalBasis('simpan', 'Tambah Data')"
-      >
-        <CIcon name="cil-plus" class="align-self-center mr-2" />
-        <a href="" class="align-self-center">Tambah Dasar Hukum</a>
-      </button>
+    <div class="table-responsive">
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <td>No</td>
+            <td>Nama Dasar Hukum</td>
+            <td>No</td>
+            <td>Tahun</td>
+            <td>Tentang</td>
+            <td>Aksi</td>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="legalBasis.length > 0">
+            <tr :key="index" v-for="(currentLegalbasis, index) in legalBasis">
+              <td>{{ index + 1 }}</td>
+              <td>{{ currentLegalbasis.nama_dh }}</td>
+              <td>{{ currentLegalbasis.no_dh }}</td>
+              <td>{{ currentLegalbasis.tahun_dh }}</td>
+              <td>
+                <p>
+                  {{ currentLegalbasis.keterangan }}
+                </p>
+              </td>
+              <td>
+                <CButton
+                  color="danger"
+                  size="sm"
+                  class="mr-2"
+                  v-c-tooltip="{
+                    content: 'Hapus Dasar Hukum',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalDeleteLegalBasis(currentLegalbasis)"
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
 
-      <div class="table-responsive">
-        <table class="table table-stripped">
-          <thead>
-            <tr>
-              <td>No</td>
-              <td>Nama Dasar Hukum</td>
-              <td>No</td>
-              <td>Tahun</td>
-              <td>Tentang</td>
-              <td>Aksi</td>
+                <CButton
+                  color="success"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Edit Dasar Hukum',
+                    placement: 'bottom',
+                  }"
+                  @click="
+                    openModalLegalBasis(
+                      'update',
+                      'Update Data',
+                      currentLegalbasis
+                    )
+                  "
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <template v-if="legalBasis.length > 0">
-              <tr :key="index" v-for="(currentLegalbasis, index) in legalBasis">
-                <td>{{ index + 1 }}</td>
-                <td>{{ currentLegalbasis.nama_dh }}</td>
-                <td>{{ currentLegalbasis.no_dh }}</td>
-                <td>{{ currentLegalbasis.tahun_dh }}</td>
-                <td>
-                  <p>
-                    {{ currentLegalbasis.keterangan }}
-                  </p>
-                </td>
-                <td>
-                  <CButton
-                    color="danger"
-                    size="sm"
-                    class="mr-2"
-                    v-c-tooltip="{
-                      content: 'Hapus Dasar Hukum',
-                      placement: 'bottom',
-                    }"
-                    @click="openModalDeleteLegalBasis(currentLegalbasis)"
-                  >
-                    <CIcon name="cil-trash" />
-                  </CButton>
+          </template>
 
-                  <CButton
-                    color="success"
-                    size="sm"
-                    v-c-tooltip="{
-                      content: 'Edit Dasar Hukum',
-                      placement: 'bottom',
-                    }"
-                    @click="
-                      openModalLegalBasis(
-                        'update',
-                        'Update Data',
-                        currentLegalbasis
-                      )
-                    "
-                  >
-                    <CIcon name="cil-pencil" />
-                  </CButton>
-                </td>
-              </tr>
-            </template>
-
-            <template v-else>
-              <tr>
-                <td colspan="6" class="text-center">Data Kosong</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
-    </template>
-
+          <template v-else>
+            <tr>
+              <td colspan="6" class="text-center">Data Kosong</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
     <h5>SOP</h5>
-
-    <div class="form-group">
-      <label for="name">Data Tersedia ? </label>
-      <div class="form-check form-check-inline ml-2">
-        <input
-          class="form-check-input"
-          id="hide-sop"
-          type="radio"
-          :value="false"
-          name="hide-sop"
-          v-model="sopAvailable"
-        />
-        <label class="form-check-label" for="inline-radio1">Tidak</label>
-      </div>
-
-      <div class="form-check form-check-inline mr-1">
-        <input
-          class="form-check-input"
-          id="show-sop"
-          type="radio"
-          :value="true"
-          name="show-sop"
-          v-model="sopAvailable"
-        />
-        <label class="form-check-label" for="inline-radio1">Ya</label>
-      </div>
-    </div>
-
     <hr />
+    <button
+      class="btn btn-link d-flex"
+      @click.prevent="openModalSop('simpan', 'Tambah Data')"
+    >
+      <CIcon name="cil-plus" class="align-self-center mr-2" />
+      <a href="" class="align-self-center">Tambah SOP</a>
+    </button>
 
-    <template v-if="sopAvailable">
-      <button
-        class="btn btn-link d-flex"
-        @click.prevent="openModalSop('simpan', 'Tambah Data')"
-      >
-        <CIcon name="cil-plus" class="align-self-center mr-2" />
-        <a href="" class="align-self-center">Tambah SOP</a>
-      </button>
-
-      <div class="table-responsive">
-        <table class="table table-stripped">
-          <thead>
-            <tr>
-              <td>No</td>
-              <td>Nama SOP</td>
-              <td>Keterangan</td>
-              <td>Aksi</td>
+    <div class="table-responsive">
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <td>No</td>
+            <td>Nama SOP</td>
+            <td>Keterangan</td>
+            <td>Aksi</td>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="sop.length > 0">
+            <tr :key="index" v-for="(currentSop, index) in sop">
+              <td>{{ index + 1 }}</td>
+              <td>{{ currentSop.nama_sop }}</td>
+              <td>{{
+                currentSop.keterangan !== 'null' ? currentSop.keterangan : '-'
+              }}</td>
+              <td>
+                <CButton
+                  color="danger"
+                  size="sm"
+                  class="mr-2"
+                  v-c-tooltip="{
+                    content: 'Hapus SOP',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalDeleteSop(currentSop)"
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
+                <CButton
+                  color="success"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Edit SOP',
+                    placement: 'bottom',
+                  }"
+                  @click="openModalSop('update', 'Update Data', currentSop)"
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <template v-if="sop.length > 0">
-              <tr :key="index" v-for="(currentSop, index) in sop">
-                <td>{{ index + 1 }}</td>
-                <td>{{ currentSop.nama_sop }}</td>
-                <td>{{
-                  currentSop.keterangan !== 'null' ? currentSop.keterangan : '-'
-                }}</td>
-                <td>
-                  <CButton
-                    color="danger"
-                    size="sm"
-                    class="mr-2"
-                    v-c-tooltip="{
-                      content: 'Hapus SOP',
-                      placement: 'bottom',
-                    }"
-                    @click="openModalDeleteSop(currentSop)"
-                  >
-                    <CIcon name="cil-trash" />
-                  </CButton>
-                  <CButton
-                    color="success"
-                    size="sm"
-                    v-c-tooltip="{
-                      content: 'Edit SOP',
-                      placement: 'bottom',
-                    }"
-                    @click="openModalSop('update', 'Update Data', currentSop)"
-                  >
-                    <CIcon name="cil-pencil" />
-                  </CButton>
-                </td>
-              </tr>
-            </template>
+          </template>
 
-            <template v-else>
-              <tr>
-                <td colspan="4" class="text-center">Data Kosong</td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div>
-    </template>
-
+          <template v-else>
+            <tr>
+              <td colspan="4" class="text-center">Data Kosong</td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
     <!-- Modal Legal Basis -->
     <ValidationObserver v-slot="{ invalid }" :ref="legalBasisForm">
       <CModal
