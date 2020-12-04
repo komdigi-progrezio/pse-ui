@@ -373,8 +373,10 @@ export default {
     fetchOptions() {
       this.$http
         .get('parconfig/category', {
-          filter: 'category',
-          q: 'kategori_dokumen',
+          params: {
+            filter: 'category',
+            q: 'kategori_dokumen',
+          },
         })
         .then((response) => {
           this.options = response.data.data
