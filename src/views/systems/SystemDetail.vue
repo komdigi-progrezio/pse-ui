@@ -180,6 +180,7 @@ export default {
   },
   mounted() {
     this.getData()
+    this.fetchTreeViewWorkUnit()
   },
   methods: {
     //  Fetch Tree View
