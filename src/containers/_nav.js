@@ -77,6 +77,27 @@ export default [
         ],
       },
       {
+        _name: 'CSidebarNavItem',
+        name: 'Sturktur Organisasi',
+        to: '/admin/organizational-structure',
+        icon: 'cil-fork',
+      },
+      {
+        _name: 'CSidebarNavDropdown',
+        name: 'Profil Pejabat Pendaftar',
+        icon: 'cil-user',
+        items: [
+          {
+            name: 'Profil',
+            to: '/admin/account/profile',
+          },
+          {
+            name: 'Pengguna',
+            to: '/admin/account/parent',
+          },
+        ],
+      },
+      {
         _name: 'CSidebarNavDropdown',
         name: 'Data Master',
         icon: 'cil-storage',

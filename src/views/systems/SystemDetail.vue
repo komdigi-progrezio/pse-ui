@@ -21,14 +21,16 @@
             ></system-general-data>
           </CTab>
           <CTab title="Profil Penyelenggara">
-            <system-organizer-profile
-              :organizer="data.organizer"
-              :tree-data="treeData"
-              @update-data="getData"
-            ></system-organizer-profile>
+            <system-organizer-profile></system-organizer-profile>
           </CTab>
           <CTab title="Perangkat Keras">
-            <system-hardware></system-hardware>
+            <system-hardware
+              :system-id="data.system.id"
+              :hardware="data.hardware"
+              :network="data.network"
+              :peripheral="data.peripheral"
+              @update-data="getData"
+            ></system-hardware>
           </CTab>
           <CTab title="Perangkat Lunak">
             <system-software
@@ -39,11 +41,7 @@
             ></system-software>
           </CTab>
           <CTab title="Tenaga Ahli">
-            <system-experts
-              :availability-of-experts="data.availabilityOfExperts"
-              :experts-required="data.expertsRequired"
-              @update-data="getData"
-            ></system-experts>
+            <system-experts></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
             <system-governance
@@ -54,11 +52,7 @@
             ></system-governance>
           </CTab>
           <CTab title="Penanggung Jawab">
-            <system-responsible-person
-              :responsible="data.responsiblePerson"
-              :tree-data="treeData"
-              @update-data="getData"
-            ></system-responsible-person>
+            <system-responsible-person></system-responsible-person>
           </CTab>
           <CTab title="Help Desk">
             <system-help-desk
@@ -151,7 +145,7 @@ export default {
         sop: [],
         helpDesk: [],
         document: [],
-        organizer: {},
+        organizer: null,
         related: [],
         security: [],
         certificate: [],
@@ -166,19 +160,23 @@ export default {
       },
       treeData: {
         name: 'Satuan Kerja',
+        id: null,
         children: [],
+        hardware: [],
+        software: [],
+        network: [],
+        peripheral: [],
       },
     }
   },
   mounted() {
     this.getData()
-    this.fetchTreeViewWorkUnit()
   },
   methods: {
     //  Fetch Tree View
     fetchTreeViewWorkUnit() {
       this.$http
-        .get('parsatuankerja/tree-view')
+        .get('parsatuankerja/list/tree-view')
         .then((response) => {
           this.treeData.children = response.data
         })
@@ -214,12 +212,6 @@ export default {
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
-          this.data.availabilityOfExperts =
-            response.data.data.relation.availability_of_expert
-          this.data.expertsRequired =
-            response.data.data.relation.expert_required
-          this.data.responsiblePerson =
-            response.data.data.relation.responsible_person
           this.data.system.id = response.data.data.id
           this.data.system.account_id = response.data.data.account_id
           this.data.system.nama_internal = response.data.data.nama_internal

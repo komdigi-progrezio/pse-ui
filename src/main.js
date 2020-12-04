@@ -20,6 +20,7 @@ import toastrConfig from '@/utils/toastr'
 //  Partials Component
 import Message from '@/views/notifications/Message.vue'
 import TreeItem from '@/views/partials/TreeItem.vue'
+import TreeItemCheckbox from '@/views/partials/TreeItemCheckbox.vue'
 
 api.interceptors.response.use(
   function (response) {
@@ -79,6 +80,7 @@ Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.component('message', Message)
 Vue.component('tree-item', TreeItem)
+Vue.component('tree-item-checkbox', TreeItemCheckbox)
 
 Vue.use(VueSweetalert2)
 
