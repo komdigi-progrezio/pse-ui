@@ -17,7 +17,7 @@
                     <td>:</td>
                     <td>{{ treeData.name }}</td>
                   </tr>
-                  <tr>
+                  <tr v-if="$store.state.treeView.workUnit.id !== 'parent'">
                     <td>Satuan Kerja</td>
                     <td>:</td>
                     <td>{{ $store.state.treeView.workUnit.name }}</td>
@@ -69,7 +69,7 @@
                   </template>
                   <template v-else>
                     <tr>
-                      <td colspan="6" class="text-center"></td>
+                      <td colspan="6" class="text-center">Data Kosong</td>
                     </tr>
                   </template>
                 </tbody>

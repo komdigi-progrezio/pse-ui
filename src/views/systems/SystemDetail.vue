@@ -21,7 +21,11 @@
             ></system-general-data>
           </CTab>
           <CTab title="Profil Penyelenggara">
-            <system-organizer-profile></system-organizer-profile>
+            <system-organizer-profile
+              :organizer="data.organizer"
+              :tree-data="treeData"
+              @update-data="getData"
+            ></system-organizer-profile>
           </CTab>
           <CTab title="Perangkat Keras">
             <system-hardware
@@ -41,7 +45,11 @@
             ></system-software>
           </CTab>
           <CTab title="Tenaga Ahli">
-            <system-experts></system-experts>
+            <system-experts
+              :availability-of-experts="data.availabilityOfExperts"
+              :experts-required="data.expertsRequired"
+              @update-data="getData"
+            ></system-experts>
           </CTab>
           <CTab title="Tata Kelola">
             <system-governance
@@ -52,7 +60,11 @@
             ></system-governance>
           </CTab>
           <CTab title="Penanggung Jawab">
-            <system-responsible-person></system-responsible-person>
+            <system-responsible-person
+              :responsible="data.responsible_person"
+              :tree-data="treeData"
+              @update-data="getData"
+            ></system-responsible-person>
           </CTab>
           <CTab title="Help Desk">
             <system-help-desk
@@ -157,15 +169,12 @@ export default {
         network: [],
         software: [],
         softwareTool: [],
+        responsible_person: null,
       },
       treeData: {
         name: 'Satuan Kerja',
         id: null,
         children: [],
-        hardware: [],
-        software: [],
-        network: [],
-        peripheral: [],
       },
     }
   },
@@ -198,6 +207,8 @@ export default {
             response.data.data.relation.special_function
           this.data.scope = response.data.data.relation.scope
           this.data.organizer = response.data.data.relation.organizer
+          this.data.responsible_person =
+            response.data.data.relation.responsible_person
           this.data.document = response.data.data.relation.document
           this.data.legalBasis = response.data.data.relation.legal_basis
           this.data.sop = response.data.data.relation.sop

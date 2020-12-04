@@ -1,31 +1,14 @@
 <template>
   <div class="mt-2">
     <h5>Ketersediaan Tenaga Ahli</h5>
-    <div class="form-group">
-      <label for="name">Apakah Tenaga Ahli Tersedia ? </label>
-      <div class="form-check form-check-inline ml-2">
-        <input
-          class="form-check-input"
-          id="inline-radio1"
-          type="radio"
-          value="0"
-          name="inline-radios"
-        />
-        <label class="form-check-label" for="inline-radio1">Tidak</label>
-      </div>
-      <div class="form-check form-check-inline mr-1">
-        <input
-          class="form-check-input"
-          id="inline-radio1"
-          type="radio"
-          value="1"
-          name="inline-radios"
-        />
-        <label class="form-check-label" for="inline-radio1">Ya</label>
-      </div>
-    </div>
     <hr />
-    <a href="" @click.prevent="editSystem">Tambah Ketersediaan Tenaga Ahli</a>
+    <button
+      class="btn btn-link d-flex"
+      @click.prevent="addAvailabilityOfExperts"
+    >
+      <CIcon name="cil-plus" class="align-self-center mr-2" />
+      <a href="" class="align-self-center">Tambah Ketersediaan Tenaga Ahli</a>
+    </button>
     <div class="table-responsive">
       <table class="table table-stripped">
         <thead>
@@ -34,45 +17,60 @@
             <td>Jenis</td>
             <td>Jumlah</td>
             <td>Status</td>
-            <td>Aksi</td>
+            <td colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Data Dummy</td>
-            <td>Data Dummy</td>
-            <td>Data Dummy</td>
-            <td>
-              <CButton
-                color="danger"
-                size="sm"
-                class="mr-2"
-                v-c-tooltip="{
-                  content: 'Hapus Ketersediaan Tenaga Ahli',
-                  placement: 'bottom',
-                }"
-              >
-                <CIcon name="cil-trash" />
-              </CButton>
-              <CButton
-                color="success"
-                size="sm"
-                v-c-tooltip="{
-                  content: 'Edit Ketersediaan Tenaga Ahli',
-                  placement: 'bottom',
-                }"
-              >
-                <CIcon name="cil-pencil" />
-              </CButton>
-            </td>
-          </tr>
+          <template v-if="availabilityOfExperts.length > 0">
+            <tr
+              v-for="(value, index) in availabilityOfExperts"
+              :key="`availability-of-expert-${index}`"
+            >
+              <td>{{ index + 1 }}</td>
+              <td>{{ value.name_jenis }}</td>
+              <td>{{ value.jumlah_personil }}</td>
+              <td>{{ value.name_kompetensi }}</td>
+              <td>
+                <CButton
+                  color="danger"
+                  size="sm"
+                  class="mr-2"
+                  v-c-tooltip="{
+                    content: 'Hapus Ketersediaan Tenaga Ahli',
+                    placement: 'bottom',
+                  }"
+                  @click="destroyAvailabilityOfExperts(value)"
+                >
+                  <CIcon name="cil-trash" />
+                </CButton>
+                <CButton
+                  color="success"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Edit Ketersediaan Tenaga Ahli',
+                    placement: 'bottom',
+                  }"
+                  @click="editAvailabilityOfExperts(value)"
+                >
+                  <CIcon name="cil-pencil" />
+                </CButton>
+              </td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr>
+              <td colspan="6" class="text-center">Data Kosong</td>
+            </tr>
+          </template>
         </tbody>
       </table>
     </div>
     <h5>Tenaga Ahli Yang Dibutuhkan</h5>
     <hr />
-    <a href="" @click.prevent="editSystem">Tambah Tenaga Ahli</a>
+    <button class="btn btn-link d-flex" @click.prevent="addExpertsRequired">
+      <CIcon name="cil-plus" class="align-self-center mr-2" />
+      <a href="" class="align-self-center">Tambah Tenaga Ahli</a>
+    </button>
     <div class="table-responsive">
       <table class="table table-stripped">
         <thead>
@@ -81,7 +79,7 @@
             <td>Jenis</td>
             <td>Jumlah</td>
             <td>Kompetensi</td>
-            <td>Aksi</td>
+            <td colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -93,7 +91,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ value.name_jenis }}</td>
               <td>{{ value.jumlah_personil }}</td>
-              <td>{{ value.name_status }}</td>
+              <td>{{ value.status }}</td>
               <td>
                 <CButton
                   color="danger"
@@ -435,6 +433,365 @@
 <script>
 export default {
   name: 'SystemExperts',
+  props: {
+    availabilityOfExperts: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+    expertsRequired: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      dataSelect: {
+        typeAvailabilityOfExperts: [],
+        statusAvailabilityOfExperts: [],
+      },
+      forms: {
+        availabilityOfExperts: {
+          jenis: null,
+          jumlah_personil: null,
+          kompetensi: null,
+        },
+        expertsRequired: {
+          jenis: null,
+          jumlah_personil: null,
+          status: null,
+        },
+      },
+      modal: {
+        delete: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+          url: null,
+        },
+        availabilityOfExperts: {
+          showModal: false,
+          title: null,
+          color: null,
+          labelButton: null,
+          method: null,
+          url: null,
+        },
+        expertsRequired: {
+          showModal: false,
+          title: null,
+          color: null,
+          labelButton: null,
+          method: null,
+          url: null,
+        },
+      },
+      errorValidations: {
+        availabilityOfExperts: {
+          jenis: [],
+          jumlah_personil: [],
+          kompetensi: [],
+        },
+        expertsRequired: {
+          jenis: [],
+          jumlah_personil: [],
+          status: [],
+        },
+      },
+    }
+  },
+  created() {
+    this.fetchStatusAvailabilityOfExperts()
+    this.fetchTypeAvailabilityOfExperts()
+  },
+  methods: {
+    //  Ketersediaan Tenaga Ahli
+    clearModalAvailabilityOfExperts() {
+      this.modal.availabilityOfExperts.title = null
+      this.modal.availabilityOfExperts.color = null
+      this.modal.availabilityOfExperts.labelButton = null
+      this.modal.availabilityOfExperts.method = null
+    },
+    closeModalAvailabilityOfExperts() {
+      this.modal.availabilityOfExperts.showModal = false
+      this.clearFormAvailabilityOfExperts()
+      this.clearModalAvailabilityOfExperts()
+    },
+    clearFormAvailabilityOfExperts() {
+      this.forms.availabilityOfExperts.id = null
+      this.forms.availabilityOfExperts.sis_profil_id = this.$route.params.id
+      this.forms.availabilityOfExperts.jenis = ''
+      this.forms.availabilityOfExperts.jumlah_personil = null
+      this.forms.availabilityOfExperts.kompetensi = ''
+    },
+    addAvailabilityOfExperts() {
+      this.clearFormAvailabilityOfExperts()
+      this.modal.availabilityOfExperts.showModal = true
+      this.modal.availabilityOfExperts.title = 'Tambah Data'
+      this.modal.availabilityOfExperts.color = 'success'
+      this.modal.availabilityOfExperts.labelButton = 'Simpan'
+      this.modal.availabilityOfExperts.method = 'post'
+    },
+    submitAvailabilityOfExperts() {
+      const url = '/availability-of-experts'
+      const formData = new FormData()
+      let urlAction = null
+      if (this.modal.availabilityOfExperts.method === 'patch') {
+        urlAction = `${url}/${this.forms.availabilityOfExperts.id}`
+        formData.append('_method', 'patch')
+      } else {
+        urlAction = url
+        formData.append('_method', 'POST')
+      }
+      const forMapData = Object.entries(this.forms.availabilityOfExperts)
+      forMapData.forEach((value) => {
+        if (Array.isArray(value[1])) {
+          for (let index = 0; index < value[1].length; index++) {
+            formData.append(`${value[0]}[${index}]`, value[1][index])
+          }
+        } else {
+          formData.append(value[0], value[1] === null ? [] : value[1])
+        }
+      })
+      this.errorValidations.availabilityOfExperts.jenis = []
+      this.errorValidations.availabilityOfExperts.jumlah_personil = []
+      this.errorValidations.availabilityOfExperts.kompetensi = []
+
+      this.$http({
+        method: 'post',
+        url: urlAction,
+        data: formData,
+      })
+        .then((response) => {
+          this.$emit('update-data')
+          this.closeModalAvailabilityOfExperts()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+          this.$refs.form_availability_of_experts.reset()
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            this.errorValidations.availabilityOfExperts.jenis =
+              typeof error.response.data.errors.jenis === 'undefined'
+                ? []
+                : error.response.data.errors.jenis
+            this.errorValidations.availabilityOfExperts.jumlah_personil =
+              typeof error.response.data.errors.jumlah_personil === 'undefined'
+                ? []
+                : error.response.data.errors.jumlah_personil
+            this.errorValidations.availabilityOfExperts.kompetensi =
+              typeof error.response.data.errors.kompetensi === 'undefined'
+                ? []
+                : error.response.data.errors.kompetensi
+          } else if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    destroyAvailabilityOfExperts(item) {
+      this.modal.delete.showModal = true
+      this.modal.delete.title = 'Hapus Data'
+      this.modal.delete.color = 'danger'
+      this.modal.delete.data = item.name_jenis
+      this.modal.delete.uniqueId = item.id
+      this.modal.delete.message = 'Ingin Menghapus Data'
+      this.modal.delete.labelButton = 'Hapus'
+      this.modal.delete.url = 'availability-of-experts'
+    },
+    editAvailabilityOfExperts(item) {
+      this.forms.availabilityOfExperts.id = item.id
+      this.forms.availabilityOfExperts.jenis = item.jenis
+      this.forms.availabilityOfExperts.jumlah_personil = item.jumlah_personil
+      this.forms.availabilityOfExperts.kompetensi = item.kompetensi
+
+      this.modal.availabilityOfExperts.showModal = true
+      this.modal.availabilityOfExperts.title = 'Update Data'
+      this.modal.availabilityOfExperts.color = 'success'
+      this.modal.availabilityOfExperts.labelButton = 'Update'
+      this.modal.availabilityOfExperts.method = 'patch'
+    },
+    //  Tenaga Ahli
+    clearModalExpertsRequired() {
+      this.modal.expertsRequired.title = null
+      this.modal.expertsRequired.color = null
+      this.modal.expertsRequired.labelButton = null
+      this.modal.expertsRequired.method = null
+    },
+    closeModalExpertsRequired() {
+      this.modal.expertsRequired.showModal = false
+      this.clearFormExpertsRequired()
+      this.clearModalExpertsRequired()
+    },
+    clearFormExpertsRequired() {
+      this.forms.expertsRequired.id = null
+      this.forms.expertsRequired.sis_profil_id = this.$route.params.id
+      this.forms.expertsRequired.jenis = ''
+      this.forms.expertsRequired.jumlah_personil = null
+      this.forms.expertsRequired.status = ''
+    },
+    addExpertsRequired() {
+      this.clearFormExpertsRequired()
+      this.modal.expertsRequired.showModal = true
+      this.modal.expertsRequired.title = 'Tambah Data'
+      this.modal.expertsRequired.color = 'success'
+      this.modal.expertsRequired.labelButton = 'Simpan'
+      this.modal.expertsRequired.method = 'post'
+    },
+    submitExpertsRequired() {
+      const url = '/experts-required'
+      const formData = new FormData()
+      let urlAction = null
+      if (this.modal.expertsRequired.method === 'patch') {
+        urlAction = `${url}/${this.forms.expertsRequired.id}`
+        formData.append('_method', 'patch')
+      } else {
+        urlAction = url
+        formData.append('_method', 'POST')
+      }
+      const forMapData = Object.entries(this.forms.expertsRequired)
+      forMapData.forEach((value) => {
+        if (Array.isArray(value[1])) {
+          for (let index = 0; index < value[1].length; index++) {
+            formData.append(`${value[0]}[${index}]`, value[1][index])
+          }
+        } else {
+          formData.append(value[0], value[1] === null ? [] : value[1])
+        }
+      })
+      this.errorValidations.expertsRequired.jenis = []
+      this.errorValidations.expertsRequired.jumlah_personil = []
+      this.errorValidations.expertsRequired.status = []
+
+      this.$http({
+        method: 'post',
+        url: urlAction,
+        data: formData,
+      })
+        .then((response) => {
+          this.$emit('update-data')
+          this.closeModalExpertsRequired()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+          this.$refs.form_experts_required.reset()
+        })
+        .catch((error) => {
+          if (error.response.status === 422) {
+            this.errorValidations.expertsRequired.jenis =
+              typeof error.response.data.errors.jenis === 'undefined'
+                ? []
+                : error.response.data.errors.jenis
+            this.errorValidations.expertsRequired.jumlah_personil =
+              typeof error.response.data.errors.jumlah_personil === 'undefined'
+                ? []
+                : error.response.data.errors.jumlah_personil
+            this.errorValidations.expertsRequired.status =
+              typeof error.response.data.errors.status === 'undefined'
+                ? []
+                : error.response.data.errors.status
+          } else if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    destroyExpertsRequired(item) {
+      this.modal.delete.showModal = true
+      this.modal.delete.title = 'Hapus Data'
+      this.modal.delete.color = 'danger'
+      this.modal.delete.data = item.name_jenis
+      this.modal.delete.uniqueId = item.id
+      this.modal.delete.message = 'Ingin Menghapus Data'
+      this.modal.delete.labelButton = 'Hapus'
+      this.modal.delete.url = 'experts-required'
+    },
+    editExpertsRequired(item) {
+      this.forms.expertsRequired.id = item.id
+      this.forms.expertsRequired.jenis = item.jenis
+      this.forms.expertsRequired.jumlah_personil = item.jumlah_personil
+      this.forms.expertsRequired.status = item.status
+
+      this.modal.expertsRequired.showModal = true
+      this.modal.expertsRequired.title = 'Update Data'
+      this.modal.expertsRequired.color = 'success'
+      this.modal.expertsRequired.labelButton = 'Update'
+      this.modal.expertsRequired.method = 'patch'
+    },
+    //  Fetch Status Ketersediaan Tenaga Ahli
+    fetchStatusAvailabilityOfExperts() {
+      this.$http
+        .get('parconfig/category', {
+          params: {
+            filter: 'category',
+            q: 'par_status_tenaga_ahli',
+          },
+        })
+        .then((response) => {
+          this.dataSelect.statusAvailabilityOfExperts = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    //  Fetch Type Ketersediaan Tenaga Ahli
+    fetchTypeAvailabilityOfExperts() {
+      this.$http
+        .get('parconfig/category', {
+          params: {
+            filter: 'category',
+            q: 'par_jenis_tenaga_ahli',
+          },
+        })
+        .then((response) => {
+          this.dataSelect.typeAvailabilityOfExperts = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    //  Delete
+    submitDelete() {
+      this.$http
+        .delete(`${this.modal.delete.url}/${this.modal.delete.uniqueId}`)
+        .then((response) => {
+          this.$emit('update-data')
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+          this.closeModalDelete()
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    closeModalDelete() {
+      this.modal.delete.showModal = false
+      this.clearModalDelete()
+    },
+    clearModalDelete() {
+      this.modal.delete.title = null
+      this.modal.delete.color = null
+      this.modal.delete.data = null
+      this.modal.delete.uniqueId = null
+      this.modal.delete.message = null
+      this.modal.delete.labelButton = null
+      this.modal.delete.url = null
+    },
+  },
 }
 </script>
 
