@@ -146,7 +146,6 @@ export default {
       default: () => {},
     },
     organizer: {
-      type: Object,
       required: true,
       default: () => {},
     },
