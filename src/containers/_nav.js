@@ -19,28 +19,10 @@ export default [
         icon: 'cil-cloud',
       },
       {
-        _name: 'CSidebarNavDropdown',
-        name: 'Laporan',
-        route: '/admin/report',
-        icon: 'cil-pencil',
-        items: [
-          {
-            name: 'Baru',
-            to: '/admin/report/new',
-          },
-          {
-            name: 'Draft',
-            to: '/admin/report/draft',
-          },
-          {
-            name: 'Ditolak',
-            to: '/admin/report/reject',
-          },
-          {
-            name: 'Selesai',
-            to: '/admin/report/finished',
-          },
-        ],
+        _name: 'CSidebarNavItem',
+        name: 'Pelaporan',
+        to: '/admin/repository',
+        icon: 'cil-file',
       },
       {
         _name: 'CSidebarNavDropdown',
