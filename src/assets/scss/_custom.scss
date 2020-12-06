@@ -1,2 +1,51 @@
 // Here you can add other styles
 @import 'vue-select/src/scss/vue-select.scss';
+.font-montserrat{
+    font-family: 'Montserrat';
+    font-weight: 500;
+}
+#login{
+
+    #left-side, #right-side{
+        width: 100%;
+    }
+    #left-side{
+        background-color: #FF5F5F;
+        justify-content: center;
+        align-items: center;
+
+        #illustration{
+            width: 60%;
+            margin-top: 100px;
+        }
+        #identity{
+            position: absolute;
+            top: 50px;
+            left: 50px;
+                
+            #logo{
+                width: 150px;
+            }
+            p{
+                font-family: 'Montserrat';
+                font-weight: 500;
+                color: #fff;
+                font-size: 16px;
+                line-height: 1.5;
+                margin-top: 20px;
+            }
+        }
+    }
+    #right-side{
+        background-color: #fff;
+
+        form{
+            min-width: 300px;
+        }
+        #daftar-btn{
+            position: absolute;
+            right: 50px;
+            top: 50px;
+        }
+    }
+}

@@ -1,79 +1,64 @@
 <template>
-  <div class="c-app flex-row align-items-center">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card-group">
-            <div class="card">
-              <div class="card-body">
-                <img src="@/assets/images/logo.png" alt="PSE" class="w-100" />
-                <form @submit.prevent="login" method="POST">
-                  <h1>Login</h1>
-                  <p class="text-muted"> Sign In to your account </p>
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <CIcon name="cil-user" />
-                      </span>
-                    </div>
-                    <input
-                      v-model="form.username"
-                      class="form-control"
-                      type="text"
-                      placeholder="Username"
-                    />
-                  </div>
-                  <div class="input-group mb-4">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">
-                        <CIcon name="cil-lock-locked" />
-                      </span>
-                    </div>
-                    <input
-                      v-model="form.password"
-                      class="form-control"
-                      type="password"
-                      placeholder="Password"
-                    />
-                  </div>
-                  <vue-recaptcha
-                    sitekey="6LfdGPMZAAAAAE-G78-NsYoXUEW5-JV4oV-Thvyu"
-                    ref="recaptcha"
-                    @verify="onCaptchaVerified"
-                    @expired="onCaptchaExpired"
-                    size="invisible"
-                  ></vue-recaptcha>
-                  <div class="row">
-                    <div class="col-6">
-                      <button class="btn btn-primary px-4" type="submit">
-                        Login
-                      </button>
-                    </div>
-                    <div class="col-6 text-right">
-                      <button class="btn btn-link px-0" type="button">
-                        Forgot password?
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="card text-white bg-primary">
-              <div
-                class="card-body text-center align-items-center d-flex justify-content-center"
-              >
-                <button
-                  class="btn btn-lg btn-outline-light"
-                  type="button"
-                  @click="showRegister"
-                >
-                  Register Now!
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="c-app flex-row justify-content-center" id="login">
+    
+    <div class="align-items-center d-none d-lg-flex" id="left-side">
+      <div id="identity">
+        <img id="logo" src="@/assets/images/logo.svg" alt="PSE" width="200" />
+        <p>Pendaftaran Aplikasi Elektronik <br>&amp; Repositori Pemerintah</p>
       </div>
+      <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
+    </div>
+    <div class="d-flex align-items-center justify-content-center" id="right-side" >
+      <router-link to="/register"
+        id="daftar-btn"
+        class="btn btn-primary font-montserrat"
+        type="button"
+        @click="showRegister"
+      >
+        DAFTAR PEJABAT
+     </router-link>
+      <form @submit.prevent="login" method="POST">
+        <h1 class="text-center font-montserrat font-weight-bold mb-5">LOGIN</h1>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <CIcon name="cil-user" />
+            </span>
+          </div>
+          <input
+            v-model="form.username"
+            class="form-control"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <div class="input-group mb-4">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <CIcon name="cil-lock-locked" />
+            </span>
+          </div>
+          <input
+            v-model="form.password"
+            class="form-control"
+            type="password"
+            placeholder="Password"
+          />
+        </div>
+        <vue-recaptcha
+          sitekey="6LfdGPMZAAAAAE-G78-NsYoXUEW5-JV4oV-Thvyu"
+          ref="recaptcha"
+          @verify="onCaptchaVerified"
+          @expired="onCaptchaExpired"
+          size="invisible"
+        ></vue-recaptcha>
+        <button class="btn btn-primary btn-lg px-4 d-block mb-2 w-100" type="submit">
+          Login
+        </button>
+        <button class="btn btn-link px-0" type="button">
+          Lupa password?
+        </button>
+      </form>
     </div>
     <CModal
       :title="modal.register.title"
@@ -94,11 +79,9 @@
           </router-link>
         </div>
       </template>
-      <template v-slot:footer-wrapper>
-        <div></div>
-      </template>
     </CModal>
   </div>
+  
 </template>
 
 <script>
