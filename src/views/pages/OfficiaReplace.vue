@@ -166,42 +166,6 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="satuan_kerja" class="col-sm-2 col-form-label"
-              >Satuan Kerja</label
-            >
-            <div class="col-sm-10">
-              <ValidationProvider
-                name="Satuan Kerja"
-                rules="required|alpha_spaces"
-                v-slot="{ errors }"
-              >
-                <!-- <input
-                  v-model="forms.satuan_kerja"
-                  type="text"
-                  class="form-control"
-                  :class="{
-                    'is-invalid':
-                      errors.length > 0 ||
-                      errorValidations.satuan_kerja.length > 0,
-                  }"
-                /> -->
-                <input
-                  v-model="forms.satuan_kerja"
-                  type="text"
-                  class="form-control"
-                  :class="{
-                    'is-invalid': errors.length > 0,
-                  }"
-                  @blur="errorValidations.satuan_kerja = []"
-                />
-                <div v-if="errors.length > 0" class="invalid-feedback">
-                  {{ errors[0] }}
-                </div>
-              </ValidationProvider>
-              <!-- <message :messages="errorValidations.satuan_kerja" /> -->
-            </div>
-          </div>
-          <div class="form-group row">
             <label for="no_telepon" class="col-sm-2 col-form-label"
               >Nomor Telepon</label
             >
@@ -661,7 +625,6 @@ export default {
         name: null,
         nip: null,
         jabatan: null,
-        satuan_kerja: null,
         no_telepon: null,
         no_hp: null,
         instansi_induk: null,
@@ -751,7 +714,6 @@ export default {
       this.forms.name = ''
       this.forms.nip = ''
       this.forms.jabatan = ''
-      this.forms.satuan_kerja = ''
       this.forms.no_telepon = ''
       this.forms.no_hp = ''
       this.forms.instansi_induk = ''

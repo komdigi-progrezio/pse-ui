@@ -204,6 +204,32 @@
                         <td>{{ value.modified_at }}</td>
                         <td>{{ value.status }}</td>
                         <td>
+                          <template v-if="value.is_active">
+                            <CButton
+                              color="dark"
+                              size="sm"
+                              v-c-tooltip="{
+                                content: 'Non Aktifkan User',
+                                placement: 'bottom',
+                              }"
+                              @click="active(value)"
+                            >
+                              <CIcon name="cil-x-circle" />
+                            </CButton>
+                          </template>
+                          <template v-else>
+                            <CButton
+                              color="dark"
+                              size="sm"
+                              v-c-tooltip="{
+                                content: 'Aktifkan User',
+                                placement: 'bottom',
+                              }"
+                              @click="active(value)"
+                            >
+                              <CIcon name="cil-check-circle" />
+                            </CButton>
+                          </template>
                           <CButton
                             color="primary"
                             size="sm"
@@ -400,6 +426,22 @@ export default {
     this.getData()
   },
   methods: {
+    active(item) {
+      this.$http
+        .patch(`/users/active/${item.id}`)
+        .then((response) => {
+          this.spinner = false
+          this.getData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     changeMinDate() {
       this.optionsModifiedAt.minDate = this.search.created_at
     },

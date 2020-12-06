@@ -1,4 +1,4 @@
 {
-  "*.{vue,js,css,scss,md,json,yml}": ["prettier --write", "git add"],
-  "*.{vue,js,css,scss}": ["yarn lint", "prettier --write", "git add"]
+  "*.{vue,js,css,md,json,yml}": ["prettier --write", "git add"],
+  "*.{vue,js,css}": ["yarn lint", "prettier --write", "git add"]
 }
