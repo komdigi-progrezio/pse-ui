@@ -1,6 +1,6 @@
 <template>
   <div>
-    <WidgetsDropdown/>
+    <!-- <WidgetsDropdown/>
     <CCard>
       <CCardBody>
         <CRow>
@@ -449,41 +449,49 @@
           </CCardBody>
         </CCard>
       </CCol>
-    </CRow>
+    </CRow> -->
   </div>
 </template>
 
 <script>
-import MainChartExample from './charts/MainChartExample'
-import WidgetsDropdown from './widgets/WidgetsDropdown'
-import WidgetsBrand from './widgets/WidgetsBrand'
+// import MainChartExample from './charts/MainChartExample'
+// import WidgetsDropdown from './widgets/WidgetsDropdown'
+// import WidgetsBrand from './widgets/WidgetsBrand'
 
 export default {
   name: 'Dashboard',
-  components: {
-    MainChartExample,
-    WidgetsDropdown,
-    WidgetsBrand
-  },
-  data () {
+  // components: {
+  //   MainChartExample,
+  //   WidgetsDropdown,
+  //   WidgetsBrand,
+  // },
+  data() {
     return {
       selected: 'Month',
       tableItems: [
         {
           avatar: { url: 'img/avatars/1.jpg', status: 'success' },
-          user: { name: 'Yiorgos Avraamu', new: true, registered: 'Jan 1, 2015' },
+          user: {
+            name: 'Yiorgos Avraamu',
+            new: true,
+            registered: 'Jan 1, 2015',
+          },
           country: { name: 'USA', flag: 'cif-us' },
           usage: { value: 50, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'Mastercard', icon: 'cib-cc-mastercard' },
-          activity: '10 sec ago'
+          activity: '10 sec ago',
         },
         {
           avatar: { url: 'img/avatars/2.jpg', status: 'danger' },
-          user: { name: 'Avram Tarasios', new: false, registered: 'Jan 1, 2015' },
+          user: {
+            name: 'Avram Tarasios',
+            new: false,
+            registered: 'Jan 1, 2015',
+          },
           country: { name: 'Brazil', flag: 'cif-br' },
           usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'Visa', icon: 'cib-cc-visa' },
-          activity: '5 minutes ago'
+          activity: '5 minutes ago',
         },
         {
           avatar: { url: 'img/avatars/3.jpg', status: 'warning' },
@@ -491,7 +499,7 @@ export default {
           country: { name: 'India', flag: 'cif-in' },
           usage: { value: 74, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'Stripe', icon: 'cib-stripe' },
-          activity: '1 hour ago'
+          activity: '1 hour ago',
         },
         {
           avatar: { url: 'img/avatars/4.jpg', status: '' },
@@ -499,24 +507,32 @@ export default {
           country: { name: 'France', flag: 'cif-fr' },
           usage: { value: 98, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'PayPal', icon: 'cib-paypal' },
-          activity: 'Last month'
+          activity: 'Last month',
         },
         {
           avatar: { url: 'img/avatars/5.jpg', status: 'success' },
-          user: { name: 'Agapetus Tadeáš', new: true, registered: 'Jan 1, 2015' },
+          user: {
+            name: 'Agapetus Tadeáš',
+            new: true,
+            registered: 'Jan 1, 2015',
+          },
           country: { name: 'Spain', flag: 'cif-es' },
           usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'Google Wallet', icon: 'cib-google-pay' },
-          activity: 'Last week'
+          activity: 'Last week',
         },
         {
           avatar: { url: 'img/avatars/6.jpg', status: 'danger' },
-          user: { name: 'Friderik Dávid', new: true, registered: 'Jan 1, 2015' },
+          user: {
+            name: 'Friderik Dávid',
+            new: true,
+            registered: 'Jan 1, 2015',
+          },
           country: { name: 'Poland', flag: 'cif-pl' },
           usage: { value: 43, period: 'Jun 11, 2015 - Jul 10, 2015' },
           payment: { name: 'Amex', icon: 'cib-cc-amex' },
-          activity: 'Last week'
-        }
+          activity: 'Last week',
+        },
       ],
       tableFields: [
         { key: 'avatar', label: '', _classes: 'text-center' },
@@ -525,11 +541,11 @@ export default {
         { key: 'usage' },
         { key: 'payment', label: 'Payment method', _classes: 'text-center' },
         { key: 'activity' },
-      ]
+      ],
     }
   },
   methods: {
-    color (value) {
+    color(value) {
       let $color
       if (value <= 25) {
         $color = 'info'
@@ -541,7 +557,7 @@ export default {
         $color = 'danger'
       }
       return $color
-    }
-  }
+    },
+  },
 }
 </script>

@@ -1,130 +1,97 @@
-import 'core-js/stable';
-import Vue from 'vue';
-import App from './App';
-import router from './router';
-import CoreuiVue from '@coreui/vue';
-import { iconsSet as icons } from './assets/icons/icons.js';
-import { extend } from 'vee-validate';
-import * as rules from 'vee-validate/dist/rules';
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import VueSweetalert2 from 'vue-sweetalert2';
-import datePicker from 'vue-bootstrap-datetimepicker';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-import store from '@/store/store.js';
-import api from '@/utils/api';
-import axios from 'axios';
-import { getToken } from '@/utils/auth.js';
-
+import 'core-js/stable'
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+import CoreuiVue from '@coreui/vue'
+import { iconsSet as icons } from './assets/icons/icons.js'
+import { extend } from 'vee-validate'
+import * as rules from 'vee-validate/dist/rules'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import VueSweetalert2 from 'vue-sweetalert2'
+import datePicker from 'vue-bootstrap-datetimepicker'
+import store from '@/store/store.js'
+import api from '@/utils/api'
+import axios from 'axios'
+import { getToken } from '@/utils/auth.js'
+import '@morioh/v-quill-editor/dist/editor.css'
+import Editor from '@morioh/v-quill-editor'
+import VueToastr from 'vue-toastr'
+import toastrConfig from '@/utils/toastr'
 //  Partials Component
-import Message from '@/views/notifications/Message.vue';
-
-Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL;
-Vue.prototype.$http = api;
+import Message from '@/views/notifications/Message.vue'
+import TreeItem from '@/views/partials/TreeItem.vue'
+import TreeItemCheckbox from '@/views/partials/TreeItemCheckbox.vue'
+import vSelect from 'vue-select'
 
 api.interceptors.response.use(
-    function(response) {
-        return response;
-    },
-    function(error) {
-        const originalRequest = error.config;
+  function (response) {
+    return response
+  },
+  function (error) {
+    const originalRequest = error.config
 
-        if (error.response.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
 
-            const refreshToken = window.localStorage.getItem('refresh_token');
-            return axios
-                .post(`${process.env.VUE_APP_BASE_API_URL}users/oauth/refresh`, {
-                    refresh_token: refreshToken
-                })
-                .then(({ data }) => {
-                    window.localStorage.setItem('token', data.access_token);
-                    window.localStorage.setItem(
-                        'refresh_token',
-                        data.refresh_token
-                    );
-                    axios.defaults.headers.common['Authorization'] =
-                        'Bearer ' + data.access_token;
-                    originalRequest.headers['Authorization'] =
-                        'Bearer ' + data.access_token;
-                    return axios(originalRequest);
-                });
-        }
-
-        return Promise.reject(error);
+      const refreshToken = window.localStorage.getItem('refresh_token')
+      return axios
+        .post(`${process.env.VUE_APP_BASE_API_URL}users/oauth/refresh`, {
+          refresh_token: refreshToken,
+        })
+        .then(({ data }) => {
+          window.localStorage.setItem('token', data.access_token)
+          window.localStorage.setItem('refresh_token', data.refresh_token)
+          axios.defaults.headers.common['Authorization'] =
+            'Bearer ' + data.access_token
+          originalRequest.headers['Authorization'] =
+            'Bearer ' + data.access_token
+          return axios(originalRequest)
+        })
     }
-);
-api.interceptors.request.use(function(config) {
-    const token = store.state.auth.token ? store.state.auth.token : getToken();
-    config.headers.common['Authorization'] = token ? `Bearer ${token}` : '';
 
-    return config;
-});
+    return Promise.reject(error)
+  }
+)
+api.interceptors.request.use(function (config) {
+  const token = store.state.auth.token ? store.state.auth.token : getToken()
+  config.headers.common['Authorization'] = token ? `Bearer ${token}` : ''
 
-// api.interceptors.response.use(
-//     response => {
-//         if (response.status === 200 || response.status === 201) {
-//             return Promise.resolve(response);
-//         } else {
-//             return Promise.reject(response);
-//         }
-//     },
-//     error => {
-//         if (error.response.status) {
-//             switch (error.response.status) {
-//                 case 400:
+  return config
+})
 
-//                 //do something
-//                 break;
+Vue.prototype.$apiAdress = process.env.VUE_APP_BASE_API_URL
+Vue.prototype.$http = api
 
-//                 case 401:
-//                 alert("session expired");
-//                 break;
-//                 case 403:
-//                 router.replace({
-//                     path: "/login",
-//                     query: { redirect: router.currentRoute.fullPath }
-//                 });
-//                 break;
-//                 case 404:
-//                 alert('page not exist');
-//                 break;
-//                 case 502:
-//                 setTimeout(() => {
-//                     router.replace({
-//                     path: "/login",
-//                     query: {
-//                         redirect: router.currentRoute.fullPath
-//                     }
-//                     });
-//                 }, 1000);
-//             }
-//         return Promise.reject(error.response);
-//         }
-//     }
-// );
-Vue.config.performance = true;
-Vue.use(CoreuiVue);
-Vue.use(datePicker);
-Vue.prototype.$log = console.log.bind(console);
+// global register
+Vue.config.performance = true
+Vue.use(CoreuiVue)
+Vue.use(datePicker)
+Vue.use(Editor)
+Vue.use(VueToastr, {
+  toastrConfig,
+})
+Vue.prototype.$log = console.log.bind(console)
 
-Object.keys(rules).forEach(rule => {
-    extend(rule, rules[rule]);
-});
+Object.keys(rules).forEach((rule) => {
+  extend(rule, rules[rule])
+})
 
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
-Vue.component('message', Message);
-
-Vue.use(VueSweetalert2);
+import './utils/validations'
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)
+Vue.component('message', Message)
+Vue.component('tree-item', TreeItem)
+Vue.component('tree-item-checkbox', TreeItemCheckbox)
+Vue.component('v-select', vSelect)
+Vue.use(VueSweetalert2)
 
 new Vue({
-    el: '#app',
-    router,
-    store,
-    icons,
-    template: '<App/>',
-    components: {
-        App
-    }
-});
+  el: '#app',
+  router,
+  store,
+  icons,
+  template: '<App/>',
+  components: {
+    App,
+  },
+})

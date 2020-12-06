@@ -1,134 +1,146 @@
 <template>
-    <div class="c-app flex-row align-items-center">
-        <CContainer>
-            <CRow class="justify-content-center">
-                <CCol md="5">
-                    <CCardGroup>
-                        <CCard class="p-4">
-                            <CCardBody>
-                                <CForm @submit.prevent="login" method="POST">
-                                    <h1>Login</h1>
-                                    <p class="text-muted">
-                                        Sign In to your account
-                                    </p>
-                                    <div
-                                        v-if="showMessage"
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                    >
-                                        {{ message }}
-                                        <button
-                                            class="close"
-                                            type="button"
-                                            data-dismiss="alert"
-                                            aria-label="Close"
-                                            @click="dismissError"
-                                        >
-                                            <span aria-hidden="true"> × </span>
-                                        </button>
-                                    </div>
-                                    <CInput
-                                        v-model="form.username"
-                                        placeholder="Masukan Email atau Username"
-                                        autocomplete="username email"
-                                    >
-                                        <template #prepend-content
-                                            ><CIcon name="cil-user"
-                                        /></template>
-                                    </CInput>
-                                    <CInput
-                                        v-model="form.password"
-                                        placeholder="Password"
-                                        type="password"
-                                        autocomplete="curent-password"
-                                    >
-                                        <template #prepend-content
-                                            ><CIcon name="cil-lock-locked"
-                                        /></template>
-                                    </CInput>
-                                    <CRow>
-                                        <CCol col="6" class="text-left">
-                                            <CButton
-                                                type="submit"
-                                                color="primary"
-                                                class="px-4"
-                                            >
-                                                Login
-                                            </CButton>
-                                        </CCol>
-                                        <CCol col="6" class="text-right">
-                                            <CButton color="link" class="px-0">
-                                                Forgot password?
-                                            </CButton>
-                                            <!-- <CButton color="link" class="d-lg-none">Register now!</CButton> -->
-                                        </CCol>
-                                    </CRow>
-                                </CForm>
-                            </CCardBody>
-                        </CCard>
-                        <!-- <CCard
-                    color="primary"
-                    text-color="white"
-                    class="text-center py-5 d-md-down-none"
-                    body-wrapper
-                    >
-                    <CCardBody>
-                        <h2>Sign up</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        <CButton
-                        color="light"
-                        variant="outline"
-                        size="lg"
-                        >
-                        Register Now!
-                        </CButton>
-                    </CCardBody>
-                    </CCard> -->
-                    </CCardGroup>
-                </CCol>
-            </CRow>
-        </CContainer>
+  <div class="c-app flex-row justify-content-center" id="login">
+    
+    <div class="align-items-center d-none d-lg-flex" id="left-side">
+      <div id="identity">
+        <img id="logo" src="@/assets/images/logo.svg" alt="PSE" width="200" />
+        <p>Pendaftaran Aplikasi Elektronik <br>&amp; Repositori Pemerintah</p>
+      </div>
+      <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
+    <div class="d-flex align-items-center justify-content-center" id="right-side" >
+      <form @submit.prevent="login" method="POST">
+        <h1 class="text-center font-montserrat font-weight-bold mb-5">LOGIN</h1>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <CIcon name="cil-user" />
+            </span>
+          </div>
+          <input
+            v-model="form.username"
+            class="form-control"
+            type="text"
+            placeholder="Username"
+          />
+        </div>
+        <div class="input-group mb-4">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <CIcon name="cil-lock-locked" />
+            </span>
+          </div>
+          <input
+            v-model="form.password"
+            class="form-control"
+            type="password"
+            placeholder="Password"
+          />
+        </div>
+        <vue-recaptcha
+          sitekey="6LfdGPMZAAAAAE-G78-NsYoXUEW5-JV4oV-Thvyu"
+          ref="recaptcha"
+          @verify="onCaptchaVerified"
+          @expired="onCaptchaExpired"
+          size="invisible"
+        ></vue-recaptcha>
+        <button class="btn btn-primary font-montserrat btn-lg px-4 d-block mb-3 w-100" type="submit">
+          LOGIN
+        </button>
+        <router-link to="/register"
+          id="daftar-btn"
+          class="btn btn-primary font-montserrat mx-auto d-block"
+          @click="showRegister"
+        >
+          DAFTAR PEJABAT
+      </router-link>
+        <!-- <button class="btn btn-link px-0" type="button">
+          Lupa password?
+        </button> -->
+      </form>
+    </div>
+    <CModal
+      :title="modal.register.title"
+      :color="modal.register.color"
+      :show.sync="modal.register.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <label for="register">Silahkan Pilih Metode Pendaftaran :</label>
+          <router-link to="/register" class="btn btn-primary d-flex w-100 mb-2">
+            Pendaftaran Pejabat Baru
+          </router-link>
+          <router-link
+            to="/register/replace"
+            class="btn btn-primary d-flex w-100"
+          >
+            Pendaftaran Pejabat Pengganti
+          </router-link>
+        </div>
+      </template>
+    </CModal>
+  </div>
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha'
 export default {
-    name: 'Login',
-    data() {
-        return {
-            form: {
-                username: '',
-                password: '',
-            },
-            showMessage: false,
-            message: '',
-        };
-    },
-    methods: {
-        // goRegister(){
-        //   this.$router.push({ path: 'register' });
-        // },
-        dismissError() {
-            this.showMessage = false;
+  name: 'Login',
+  components: { VueRecaptcha },
+  data() {
+    return {
+      form: {
+        username: '',
+        password: '',
+      },
+      showMessage: false,
+      message: '',
+      modal: {
+        register: {
+          showModal: false,
+          title: null,
+          color: null,
         },
-        login() {
-            this.showMessage = false;
+      },
+    }
+  },
+  methods: {
+    onCaptchaExpired: function () {
+      this.$refs.recaptcha.reset()
+      this.form.password = null
+    },
+    onCaptchaVerified: function (token) {
+      this.$refs.recaptcha.reset()
+      this.showMessage = false
 
-            this.$store
-                .dispatch('auth/retrieveToken', {
-                    username: this.form.username,
-                    password: this.form.password,
-                })
-                .then(() => {
-                    this.$router.push('admin/dashboard');
-                })
-                .catch((error) => {
-                    console.log();
-                    this.form.password = null;
-                    this.showMessage = true;
-                    this.message = error.response.data;
-                });
-        },
+      this.$store
+        .dispatch('auth/retrieveToken', {
+          username: this.form.username,
+          password: this.form.password,
+          recaptcha: token,
+        })
+        .then(() => {
+          this.$toastr.s('Anda Berhasil Masuk Halaman Admin', 'Pemberitahuan')
+          this.$router.push('admin/dashboard')
+        })
+        .catch((error) => {
+          this.form.password = null
+          this.showMessage = true
+          this.message = error.response.data
+          this.$toastr.e(this.message, 'Pemberitahuan')
+        })
     },
-};
+    showRegister() {
+      this.modal.register.showModal = true
+      this.modal.register.title = 'Register'
+      this.modal.register.color = 'primary'
+    },
+    dismissError() {
+      this.showMessage = false
+    },
+    login() {
+      this.$refs.recaptcha.execute()
+    },
+  },
+}
 </script>
