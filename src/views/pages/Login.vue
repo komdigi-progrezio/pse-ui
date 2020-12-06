@@ -9,14 +9,6 @@
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
     <div class="d-flex align-items-center justify-content-center" id="right-side" >
-      <router-link to="/register"
-        id="daftar-btn"
-        class="btn btn-primary font-montserrat"
-        type="button"
-        @click="showRegister"
-      >
-        DAFTAR PEJABAT
-     </router-link>
       <form @submit.prevent="login" method="POST">
         <h1 class="text-center font-montserrat font-weight-bold mb-5">LOGIN</h1>
         <div class="input-group mb-3">
@@ -52,12 +44,19 @@
           @expired="onCaptchaExpired"
           size="invisible"
         ></vue-recaptcha>
-        <button class="btn btn-primary btn-lg px-4 d-block mb-2 w-100" type="submit">
-          Login
+        <button class="btn btn-primary font-montserrat btn-lg px-4 d-block mb-3 w-100" type="submit">
+          LOGIN
         </button>
-        <button class="btn btn-link px-0" type="button">
+        <router-link to="/register"
+          id="daftar-btn"
+          class="btn btn-primary font-montserrat mx-auto d-block"
+          @click="showRegister"
+        >
+          DAFTAR PEJABAT
+      </router-link>
+        <!-- <button class="btn btn-link px-0" type="button">
           Lupa password?
-        </button>
+        </button> -->
       </form>
     </div>
     <CModal

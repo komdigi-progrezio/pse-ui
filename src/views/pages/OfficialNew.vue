@@ -7,10 +7,11 @@
         </div>
       </div>
       <div id="right-side">
+        <router-link to="/login" class="btn btn-link px-0 d-flex align-items-center" >
+          <img width="12" src="@/assets/svgs/arrow-left.svg"  /> <span class="ml-1">Kembali</span>
+        </router-link>
+        <h3 class="font-montserrat font-weight-bold">Pendaftaran Pejabat Pendaftar Sistem Elektronik</h3>
         <div class="card">
-          <div class="card-header">
-            Pendaftaran Pejabat Pendaftar Sistem Elektronik
-          </div>
           <div class="card-body">
             <ValidationObserver v-slot="{ invalid }" ref="form">
               <h5>Data Akun</h5>
@@ -329,11 +330,14 @@
                   <message :messages="errorValidations.dokumen" />
                 </div>
               </div>
-              <div class="text-center">
-                <button class="btn btn-secondary mr-2">Reset</button>
+              <div class="d-flex" id="action">
+                <router-link to="/login" class="btn btn-link px-0 d-flex align-items-center" >
+                  <img width="12" src="@/assets/svgs/arrow-left.svg"  /> <span class="ml-1">Kembali</span>
+                </router-link>
+                <button class="btn btn-secondary ml-auto mr-2 btn-lg">Reset</button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  class="btn btn-primary btn-lg"
                   :disabled="invalid"
                   @click="handleSubmit"
                 >
