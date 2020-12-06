@@ -10,11 +10,11 @@ import master from '@/router/partials/master.js'
 import systems from '@/router/partials/systems.js'
 
 const Dashboard = () => import('@/views/Dashboard')
-const Report = () => import('@/views/reports/Report')
 const Login = () => import('@/views/pages/Login')
 const OfficialNew = () => import('@/views/pages/OfficialNew')
 const OfficiaReplace = () => import('@/views/pages/OfficiaReplace')
 const StrukturOrganisasi = () => import('@/views/pages/StrukturOrganisasi')
+const SistemEletronik = () => import('@/views/pages/SistemEletronik')
 
 Vue.use(Router)
 
@@ -74,40 +74,10 @@ function configRoutes() {
           meta: { requiresAuth: true },
         },
         {
-          path: 'report',
-          name: 'Laporan',
-          component: {
-            render(c) {
-              return c('router-view')
-            },
-          },
+          path: 'repository',
+          name: 'Sistem Elektronik',
+          component: SistemEletronik,
           meta: { requiresAuth: true },
-          children: [
-            {
-              path: 'new',
-              name: 'Laporan Baru',
-              component: Report,
-              meta: { requiresAuth: true },
-            },
-            {
-              path: 'draft',
-              name: 'Laporan Draft',
-              component: Report,
-              meta: { requiresAuth: true },
-            },
-            {
-              path: 'reject',
-              name: 'Laporan Ditolak',
-              component: Report,
-              meta: { requiresAuth: true },
-            },
-            {
-              path: 'finished',
-              name: 'Laporan Selesai',
-              component: Report,
-              meta: { requiresAuth: true },
-            },
-          ],
         },
         systems,
         account,
