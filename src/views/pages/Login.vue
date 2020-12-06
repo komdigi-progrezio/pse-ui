@@ -81,7 +81,6 @@
       </template>
     </CModal>
   </div>
-  
 </template>
 
 <script>

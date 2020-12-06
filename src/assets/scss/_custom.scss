@@ -16,7 +16,7 @@
 
         #illustration{
             width: 60%;
-            margin-top: 100px;
+            margin-top: 150px;
         }
         #identity{
             position: absolute;
@@ -46,6 +46,64 @@
             position: absolute;
             right: 50px;
             top: 50px;
+        }
+    }
+}
+
+#register{
+    
+    #right-side{
+        width: 100%;
+        padding: 50px;
+        background-color: #fff;
+
+        
+        @media (max-width: 991px) {
+            padding: 0;
+        }
+    }
+    
+    
+    #left-side{
+        width: 400px;
+        flex: none;
+        background-color: #FF5F5F;
+
+        @media (max-width: 1024px) {
+            width: 300px;
+        }
+        @media (max-width: 991px) {
+            width: 100%;
+        }
+
+
+        #identity{
+            position: relative;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            margin-left: 50px;
+
+            #logo{
+                width: 150px;
+            }
+            p{
+                font-family: 'Montserrat';
+                font-weight: 500;
+                color: #fff;
+                font-size: 16px;
+                line-height: 1.5;
+                margin-top: 20px;
+            }
+            
+            @media (max-width: 1024px) {
+                margin-top: 24px;
+                margin-bottom: 24px;
+                margin-left: 24px;
+                    
+                #logo{
+                    width: 120px;
+                }
+            }
         }
     }
 }
