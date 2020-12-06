@@ -706,7 +706,7 @@ export default {
   data() {
     return {
       forms: {
-        status_register: 1,
+        status_register: null,
         username: null,
         password: null,
         password_confirmation: null,
