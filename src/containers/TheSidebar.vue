@@ -9,13 +9,13 @@
     >
         <CSidebarBrand class="d-md-down-none" to="/">
             <img
-                src="@/assets/images/logo.png"
+                src="@/assets/images/logo.svg"
                 alt="PSE"
                 height="35"
                 class="c-sidebar-brand-full"
             />
             <!-- <img
-                src="@/assets/images/logo.png"
+                src="@/assets/images/logo.svg"
                 alt="PSE"
                 height="35"
                 class="c-sidebar-brand-minimized"
