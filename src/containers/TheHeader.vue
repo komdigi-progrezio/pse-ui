@@ -11,7 +11,7 @@
       @click="$store.commit('dashboard/toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <img src="@/assets/images/logo.png" alt="PSE" width="200" />
+      <img src="@/assets/images/logo.svg" alt="PSE" width="200" />
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
