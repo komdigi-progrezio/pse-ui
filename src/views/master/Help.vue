@@ -3,7 +3,7 @@
     <CCard>
       <CCardHeader> Filter </CCardHeader>
       <CCardBody>
-        <div class="d-flex mb-3">
+        <div class="d-flex p-3 p-lg-0">
           <CButton
             color="dark"
             variant="outline"
@@ -65,7 +65,7 @@
           </template>
         </div>
         <template v-if="listFilter">
-          <CRow class="my-3">
+          <CRow class="px-3 p-lg-0 my-3">
             <CCol sm="12">
               <div class="form-group">
                 <label for="name">Nama Bantuan</label>
@@ -82,70 +82,71 @@
         </template>
       </CCardBody>
     </CCard>
-    <CRow>
-      <CCol lg="12">
-        <CCard>
-          <CCardHeader> <CIcon name="cil-speech" /> Bantuan </CCardHeader>
-          <CCardBody>
-            <div>
-              <div v-if="spinner" class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table v-if="!spinner" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Bantuan</th>
-                      <th colspan="2">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="data.length > 0">
-                      <tr v-for="(item, index) in data" :key="index">
-                        <th scope="row">
-                          {{ index + 1 }}
-                        </th>
-                        <td>{{ item.name }}</td>
-                        <td>
-                          <CButton
-                            color="success"
-                            size="sm"
-                            class="mr-2"
-                            v-c-tooltip="{
-                              content: 'Edit Bantuan',
-                              placement: 'bottom',
-                            }"
-                            @click="edit(item)"
-                          >
-                            <CIcon name="cil-pencil" />
-                          </CButton>
-                        </td>
-                      </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
-                        <td colspan="3" class="text-center"> Data Kosong </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
+    <CCard>
+      <CCardHeader> <CIcon name="cil-speech" /> Bantuan </CCardHeader>
+      <CCardBody>
+        <div>
+          <div v-if="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-          </CCardBody>
-        </CCard>
-        <CPagination
-          :activePage.sync="pagination.current_page"
-          :pages="pagination.last_page"
-          size="sm"
-          align="center"
-          @update:activePage="getData"
-          v-if="data.length > 0"
-        />
-      </CCol>
-    </CRow>
+          </div>
+          <div class="table-responsive">
+            <table v-if="!spinner" class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Bantuan</th>
+                  <th colspan="2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="data.length > 0">
+                  <tr v-for="(item, index) in data" :key="index">
+                    <th scope="row">
+                      {{
+                        (pagination.current_page - 1) * pagination.per_page +
+                        index +
+                        1
+                      }}
+                    </th>
+                    <td>{{ item.name }}</td>
+                    <td>
+                      <CButton
+                        color="success"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Edit Bantuan',
+                          placement: 'bottom',
+                        }"
+                        @click="edit(item)"
+                      >
+                        <CIcon name="cil-pencil" />
+                        <span class="mobile-only ml-1">Edit Bantuan</span>
+                      </CButton>
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="3" class="text-center"> Data Kosong </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
+    <CPagination
+      :activePage.sync="pagination.current_page"
+      :pages="pagination.last_page"
+      size="sm"
+      align="center"
+      @update:activePage="getData"
+      v-if="data.length > 0"
+    />
     <CModal
       :title="modal.delete.title"
       :color="modal.delete.color"
@@ -275,6 +276,7 @@ export default {
       pagination: {
         current_page: 1,
         last_page: 10,
+        per_page: null,
       },
     }
   },
@@ -305,6 +307,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -337,6 +340,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -362,6 +366,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -478,6 +483,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.name =
               typeof error.response.data.errors.name === 'undefined'
                 ? []

@@ -1,21 +1,22 @@
 <template>
   <div>
     <li class="list-group-item group-item">
-      <div :class="{ bold: isFolder }" @click="selectGroup">
-        {{ item.name }}
+      <div :class="{ bold: isFolder }" class="d-flex justify-content-between">
+        <p @click="selectGroup">
+          {{ item.name }}
+        </p>
+
         <span v-if="isFolder" @click="toggle">[{{ isOpen ? '-' : '+' }}]</span>
       </div>
-      <ul
-        v-show="isOpen"
-        v-if="isFolder"
-        class="list-group"
-        @click="changeData"
-      >
+
+      <ul v-show="isOpen" v-if="isFolder" class="list-group">
         <tree-item
           class="item"
+          :is-crud="isCrud"
           v-for="(child, index) in item.children"
           :key="index"
           :item="child"
+          @selected="passChildData"
         ></tree-item>
       </ul>
     </li>
@@ -30,6 +31,10 @@ export default {
       type: Object,
       required: true,
       default: () => [],
+    },
+    isCrud: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function () {
@@ -48,12 +53,21 @@ export default {
         this.isOpen = !this.isOpen
       }
     },
+
     selectGroup: function () {
-      this.$store.dispatch('dispatchTreeViewOrganizer', this.item)
-      this.$emit('selected')
+      if (!this.isCrud) {
+        this.$store.dispatch('dispatchTreeViewOrganizer', this.item)
+      }
+
+      this.$emit('selected', this.item)
     },
+
     changeData() {
-      this.$emit('selected')
+      this.$emit('selected', this.item)
+    },
+
+    passChildData(child) {
+      this.$emit('selected', child)
     },
   },
 }

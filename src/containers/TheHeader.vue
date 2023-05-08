@@ -40,6 +40,13 @@
           <CIcon name="cil-envelope-open" />
         </CHeaderNavLink>
       </CHeaderNavItem> -->
+      <template v-if="isAdmin">
+        <NotifikasiNew />
+        <Notifikasi100 />
+        <NotifikasiGantiPenjabat />
+        <NotifikasiUbahData />
+        <NotifikasiPejabatBaru />
+      </template>
       <TheHeaderDropdownAccnt />
     </CHeaderNav>
     <CSubheader class="px-3">
@@ -50,11 +57,30 @@
 
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+import Notifikasi100 from './Notifikasi100'
+import NotifikasiNew from './NotifikasiNew'
+import NotifikasiUbahData from './NotifikasiUbahData'
+import NotifikasiGantiPenjabat from './NotifikasiGantiPenjabat'
+import NotifikasiPejabatBaru from './NotifikasiPejabatBaru'
 
 export default {
   name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt,
+    Notifikasi100,
+    NotifikasiNew,
+    NotifikasiUbahData,
+    NotifikasiGantiPenjabat,
+    NotifikasiPejabatBaru,
+  },
+  computed: {
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
 }
 </script>

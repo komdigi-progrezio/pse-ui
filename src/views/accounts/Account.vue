@@ -3,7 +3,7 @@
     <CCard>
       <CCardHeader> Filter </CCardHeader>
       <CCardBody>
-        <div class="d-flex mb-3">
+        <div class="d-flex p-3 p-lg-0">
           <CButton
             color="dark"
             variant="outline"
@@ -65,7 +65,7 @@
           </template>
         </div>
         <template v-if="listFilter">
-          <CRow class="my-3">
+          <CRow class="px-3 p-lg-0 my-3">
             <CCol sm="12">
               <div class="form-group">
                 <label for="status">Status</label>
@@ -164,131 +164,308 @@
         </template>
       </CCardBody>
     </CCard>
-    <CRow>
-      <CCol lg="12">
-        <CCard>
-          <CCardHeader> <CIcon name="cil-user" /> Akun </CCardHeader>
-          <CCardBody>
-            <div class="mt-4">
-              <div v-if="spinner" class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table v-if="!spinner" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama</th>
-                      <th>NIP</th>
-                      <th>Jabatan</th>
-                      <th>Instansi</th>
-                      <th>Tanggal Daftar</th>
-                      <th>Tanggal Update</th>
-                      <th>Status</th>
-                      <th colspan="2">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="data.length > 0">
-                      <tr v-for="(value, index) in data" :key="`user-${index}`">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ value.nama }}</td>
-                        <td>{{ value.nip }}</td>
-                        <td>{{ value.jabatan }}</td>
-                        <td>
-                          {{ value.instansi_induk_text }}
-                        </td>
-                        <td>{{ value.created_at }}</td>
-                        <td>{{ value.modified_at }}</td>
-                        <td>{{ value.status }}</td>
-                        <td>
-                          <template v-if="value.is_active">
-                            <CButton
-                              color="dark"
-                              size="sm"
-                              v-c-tooltip="{
-                                content: 'Non Aktifkan User',
-                                placement: 'bottom',
-                              }"
-                              @click="active(value)"
-                            >
-                              <CIcon name="cil-x-circle" />
-                            </CButton>
-                          </template>
-                          <template v-else>
-                            <CButton
-                              color="dark"
-                              size="sm"
-                              v-c-tooltip="{
-                                content: 'Aktifkan User',
-                                placement: 'bottom',
-                              }"
-                              @click="active(value)"
-                            >
-                              <CIcon name="cil-check-circle" />
-                            </CButton>
-                          </template>
-                          <CButton
-                            color="primary"
-                            size="sm"
-                            class="mr-2"
-                            v-c-tooltip="{
-                              content: 'Lihat Detail User',
-                              placement: 'bottom',
-                            }"
-                            :to="{
-                              path: `/admin/account/${value.id}/official`,
-                            }"
-                          >
-                            <CIcon name="cil-description" />
-                          </CButton>
-                          <CButton
-                            color="info"
-                            size="sm"
-                            class="mr-2"
-                            v-c-tooltip="{
-                              content: 'Lihat Daftar Sistem Elektronik',
-                              placement: 'bottom',
-                            }"
-                          >
-                            <CIcon name="cil-storage" />
-                          </CButton>
-                          <CButton
-                            color="success"
-                            size="sm"
-                            v-c-tooltip="{
-                              content: 'Lihat Daftar Pejabat di Bawahnya',
-                              placement: 'bottom',
-                            }"
-                          >
-                            <CIcon name="cil-fork" />
-                          </CButton>
-                        </td>
-                      </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
-                        <td colspan="10" class="text-center"> Data Kosong </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
+    <CCard>
+      <CCardHeader> <CIcon name="cil-user" /> Akun </CCardHeader>
+      <CCardBody>
+        <div class="mt-lg-4">
+          <div v-if="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-          </CCardBody>
-        </CCard>
-        <CPagination
-          :activePage.sync="pagination.current_page"
-          :pages="pagination.last_page"
+          </div>
+          <div class="table-responsive">
+            <table v-if="!spinner" class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama</th>
+                  <th>NIP</th>
+                  <th>Jabatan</th>
+                  <th>Instansi</th>
+                  <th>Tanggal Daftar</th>
+                  <th>Tanggal Update</th>
+                  <th>Status</th>
+                  <th colspan="2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="data.length > 0">
+                  <tr v-for="(value, index) in data" :key="`user-${index}`">
+                    <td>{{
+                      (pagination.current_page - 1) * pagination.per_page +
+                      index +
+                      1
+                    }}</td>
+                    <td>
+                      {{ value.nama }}
+                    </td>
+                    <td
+                      ><span class="mobile-only mr-1">NIP: </span>
+                      {{ value.nip }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Jabatan: </span>
+                      {{ value.jabatan }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Instansi: </span>
+                      {{ value.instansi_induk_text }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Tanggal Daftar: </span>
+                      {{ value.created_at }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Tanggal Update: </span>
+                      {{ value.modified_at }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Status: </span>
+                      {{ value.nama_status }}</td
+                    >
+                    <td>
+                      <template v-if="value.status">
+                        <CButton
+                          class="mr-2 mt-1"
+                          color="dark"
+                          size="sm"
+                          v-c-tooltip="{
+                            content: 'Non-aktifkan User',
+                            placement: 'bottom',
+                          }"
+                          @click="confirmDisable(value)"
+                        >
+                          <CIcon name="cil-x-circle" />
+                          <span class="mobile-only ml-1"
+                            >Non-aktifkan User</span
+                          >
+                        </CButton>
+                      </template>
+
+                      <template v-else>
+                        <CButton
+                          color="dark"
+                          class="mr-2 mt-1"
+                          size="sm"
+                          v-c-tooltip="{
+                            content: 'Aktifkan User',
+                            placement: 'bottom',
+                          }"
+                          @click="confirmEnable(value)"
+                        >
+                          <CIcon name="cil-check-circle" />
+                          <span class="mobile-only ml-1">Aktifkan User</span>
+                        </CButton>
+                      </template>
+
+                      <CButton
+                        color="primary"
+                        size="sm"
+                        class="mr-2 mt-1"
+                        v-c-tooltip="{
+                          content: 'Lihat Detail User',
+                          placement: 'bottom',
+                        }"
+                        :to="{
+                          path: `/admin/account/${value.id}/official`,
+                        }"
+                      >
+                        <CIcon name="cil-description" />
+                        <span class="mobile-only ml-1">Lihat Detail User</span>
+                      </CButton>
+
+                      <CButton
+                        color="info"
+                        size="sm"
+                        class="mr-2 mt-1"
+                        v-c-tooltip="{
+                          content: 'Lihat Daftar Sistem Elektronik',
+                          placement: 'bottom',
+                        }"
+                        :to="{
+                          path: `/admin/account/${value.id}/electronic-system`,
+                        }"
+                      >
+                        <CIcon name="cil-storage" />
+                        <span class="mobile-only ml-1"
+                          >Lihat Daftar Sistem Elektronik</span
+                        >
+                      </CButton>
+
+                      <CButton
+                        color="warning"
+                        size="sm"
+                        class="mr-2 mt-1"
+                        v-c-tooltip="{
+                          content: 'Lihat Daftar Sub-Pejabat',
+                          placement: 'bottom',
+                        }"
+                        @click="accountParent(value.id)"
+                      >
+                        <CIcon name="cil-fork" />
+                        <span class="mobile-only ml-1"
+                          >Lihat Daftar Sub-Pejabat</span
+                        >
+                      </CButton>
+                      <CButton
+                        color="success"
+                        size="sm"
+                        class="mt-1"
+                        v-c-tooltip="{
+                          content: 'Edit User',
+                          placement: 'bottom',
+                        }"
+                        @click="editUser(value.id)"
+                      >
+                        <CIcon name="cil-pencil" />
+                        <span class="mobile-only ml-1">Edit User</span>
+                      </CButton>
+                      <!-- <CButton
+                        color="secondary"
+                        size="sm"
+                        class="mt-1"
+                        v-c-tooltip="{
+                          content: 'Ganti Password',
+                          placement: 'bottom',
+                        }"
+                        @click="showModalChangePassword(value)"
+                      >
+                        <CIcon name="cil-lock-locked" />
+                      </CButton> -->
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="10" class="text-center"> Data Kosong </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
+    <CPagination
+      :activePage.sync="pagination.current_page"
+      :pages="pagination.last_page"
+      size="sm"
+      align="center"
+      @update:activePage="getData"
+      v-if="data.length > 0"
+    />
+    <!-- <CModal
+      :title="modal.changePassword.title"
+      :color="modal.changePassword.color"
+      :show.sync="modal.changePassword.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="current_password"> Password Sekarang </label>
+            <input
+              class="form-control"
+              :class="{
+                'is-invalid': errorValidations.current_password.length > 0,
+              }"
+              id="current_password"
+              type="password"
+              placeholder="Masukan Password Sekarang"
+              v-model="formChangePassword.current_password"
+            />
+            <message :messages="errorValidations.current_password" />
+          </div>
+          <div class="form-group">
+            <label for="password"> Password Baru </label>
+            <input
+              class="form-control"
+              :class="{
+                'is-invalid': errorValidations.password.length > 0,
+              }"
+              id="password"
+              type="password"
+              placeholder="Masukan Password Baru"
+              v-model="formChangePassword.password"
+            />
+            <message :messages="errorValidations.password" />
+          </div>
+          <div class="form-group">
+            <label for="password"> Konfirmasi Password </label>
+            <input
+              class="form-control"
+              id="password_confirmation"
+              type="password"
+              placeholder="Masukan Konfirmasi Password"
+              v-model="formChangePassword.password_confirmation"
+            />
+          </div>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton
+          color="secondary"
           size="sm"
-          align="center"
-          @update:activePage="getData"
-          v-if="data.length > 0"
-        />
-      </CCol>
-    </CRow>
+          class="m-2"
+          @click="closeModalChangePassword"
+        >
+          Cancel
+        </CButton>
+        <CButton
+          color="primary"
+          size="sm"
+          class="m-2"
+          @click="submitChangePassword"
+        >
+          {{ modal.changePassword.labelButton }}
+        </CButton>
+      </template>
+    </CModal> -->
+    <CModal
+      :title="modal.disable.title"
+      :color="modal.disable.color"
+      :show.sync="modal.disable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.disable.message }}
+            <strong>{{ modal.disable.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="disable">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.enable.title"
+      :color="modal.enable.color"
+      :show.sync="modal.enable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.enable.message }}
+            <strong>{{ modal.enable.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="enable">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -300,6 +477,45 @@ export default {
       spinner: false,
       listFilter: false,
       data: [],
+      // formChangePassword: {
+      //   current_password: null,
+      //   password: null,
+      //   password_confirmation: null,
+      // },
+      // modal: {
+      //   changePassword: {
+      //     showModal: false,
+      //     title: null,
+      //     color: null,
+      //     labelButton: 'Submit',
+      //     method: null,
+      //     uniqueId: null,
+      //   },
+      // },
+      // errorValidations: {
+      //   current_password: [],
+      //   password: [],
+      // },
+      modal: {
+        disable: {
+          showModal: false,
+          title: 'Konfirmasi Penontifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Menonaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
+        enable: {
+          showModal: false,
+          title: 'Konfirmasi Aktifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Mengaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
+      },
       search: {
         status: 'all',
         filter: 'all',
@@ -311,6 +527,7 @@ export default {
       pagination: {
         current_page: 1,
         last_page: 10,
+        per_page: null,
       },
       dataSelect: {
         status: [
@@ -426,16 +643,69 @@ export default {
     this.getData()
   },
   methods: {
-    active(item) {
-      this.$http
-        .patch(`/users/active/${item.id}`)
+    closeModal() {
+      this.modal.disable.showModal = false
+      this.modal.enable.showModal = false
+    },
+    confirmDisable(value) {
+      this.modal.disable.showModal = true
+      this.modal.disable.uniqueId = value.id
+      this.modal.disable.data = value.nama
+    },
+    confirmEnable(value) {
+      this.modal.enable.showModal = true
+      this.modal.enable.uniqueId = value.id
+      this.modal.enable.data = value.nama
+    },
+    // showModalChangePassword(value) {
+    //   this.modal.changePassword.showModal = true
+    //   this.modal.changePassword.title = `Ganti Password ${value.nama}`
+    //   this.modal.changePassword.color = 'primary'
+    //   this.modal.changePassword.label = value.nama
+    //   this.modal.changePassword.uniqueId = value.id
+    // },
+    // closeModalChangePassword() {},
+    // submitChangePassword() {},
+    editUser(id) {
+      this.$router.push(`/admin/account/${id}/edit`)
+    },
+    accountParent(id) {
+      this.$router.push(`/admin/account/parent/${id}`)
+    },
+    enable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/enable/${this.modal.enable.uniqueId}`,
+      })
         .then((response) => {
+          this.modal.enable.showModal = false
           this.spinner = false
-          this.getData()
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.modal.disable.showModal = false
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    disable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/disable/${this.modal.disable.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.disable.showModal = false
+          this.spinner = false
+          this.filterData()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
           if (error.response.status === 500) {
+            this.modal.disable.showModal = false
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
@@ -459,6 +729,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -500,6 +771,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -529,6 +801,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {

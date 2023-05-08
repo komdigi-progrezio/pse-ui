@@ -3,7 +3,7 @@
     <CCard>
       <CCardHeader> Filter </CCardHeader>
       <CCardBody>
-        <div class="d-flex mb-3">
+        <div class="d-flex p-3 p-lg-0">
           <CButton
             color="dark"
             variant="outline"
@@ -65,7 +65,7 @@
           </template>
         </div>
         <template v-if="listFilter">
-          <CRow class="my-3">
+          <CRow class="px-3 p-lg-0 my-3">
             <CCol sm="12">
               <div class="form-group">
                 <label for="name">Nama Instansi</label>
@@ -91,116 +91,148 @@
         Instansi.
       </div>
     </a>
-    <CRow>
-      <CCol lg="12">
-        <CCard>
-          <CCardHeader>
-            <CIcon name="cil-building" /> Instansi
-            <div class="card-header-actions">
-              <CButton
-                color="success"
-                shape="pill"
-                class="m-1"
-                size="sm"
-                variant="outline"
-                v-c-tooltip="{
-                  content: 'Tambah Instansi',
-                  placement: 'bottom',
-                }"
-                @click="post"
-              >
-                <CIcon name="cil-plus" />
-              </CButton>
+    <CCard>
+      <CCardHeader>
+        <div class="d-flex align-items-center">
+          <CIcon name="cil-building" class="mr-1" />
+          <strong>Instansi</strong>
+          <div class="card-header-actions ml-auto">
+            <CButton
+              color="success"
+              shape="pill"
+              class="m-1"
+              size="sm"
+              variant="outline"
+              v-c-tooltip="{
+                content: 'Tambah Instansi',
+                placement: 'bottom',
+              }"
+              @click="post"
+            >
+              <CIcon name="cil-plus" />
+            </CButton>
+          </div>
+        </div>
+      </CCardHeader>
+      <CCardBody>
+        <div>
+          <div v-if="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-          </CCardHeader>
-          <CCardBody>
-            <div>
-              <div v-if="spinner" class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table v-if="!spinner" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Kategori</th>
-                      <th>Kelompok</th>
-                      <th>Nama Instansi</th>
-                      <th>Alamat</th>
-                      <th>Provinsi</th>
-                      <th>Kabupaten / Kota</th>
-                      <th>Kode Pos</th>
-                      <th>Website</th>
-                      <th colspan="3">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="data.length > 0">
-                      <tr v-for="(item, index) in data" :key="index">
-                        <th scope="row">
-                          {{ index + 1 }}
-                        </th>
-                        <td>{{ item.kategori }}</td>
-                        <td>{{ item.kelompok }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.alamat }}</td>
-                        <td>
-                          {{ item.nama_propinsi }}
-                        </td>
-                        <td>{{ item.nama_kota }}</td>
-                        <td>{{ item.kode_pos }}</td>
-                        <td>{{ item.website }}</td>
-                        <td>
-                          <CButton
-                            color="danger"
-                            size="sm"
-                            class="mr-2"
-                            v-c-tooltip="{
-                              content: 'Hapus Instansi',
-                              placement: 'bottom',
-                            }"
-                            @click="destroy(item)"
-                          >
-                            <CIcon name="cil-trash" />
-                          </CButton>
-                          <CButton
-                            color="success"
-                            size="sm"
-                            class="mr-2"
-                            v-c-tooltip="{
-                              content: 'Edit Instansi',
-                              placement: 'bottom',
-                            }"
-                            @click="edit(item)"
-                          >
-                            <CIcon name="cil-pencil" />
-                          </CButton>
-                        </td>
-                      </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
-                        <td colspan="10" class="text-center"> Data Kosong </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </CCardBody>
-        </CCard>
-        <CPagination
-          :activePage.sync="pagination.current_page"
-          :pages="pagination.last_page"
-          size="sm"
-          align="center"
-          @update:activePage="getData"
-          v-if="data.length > 0"
-        />
-      </CCol>
-    </CRow>
+          </div>
+          <div class="table-responsive">
+            <table v-if="!spinner" class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Kategori</th>
+                  <th>Kelompok</th>
+                  <th>Nama Instansi</th>
+                  <th>Alamat</th>
+                  <th>Provinsi</th>
+                  <th>Kabupaten / Kota</th>
+                  <th>Kode Pos</th>
+                  <th>Website</th>
+                  <th colspan="3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="data.length > 0">
+                  <tr v-for="(item, index) in data" :key="index">
+                    <th scope="row">
+                      {{
+                        (pagination.current_page - 1) * pagination.per_page +
+                        index +
+                        1
+                      }}
+                    </th>
+                    <td>{{ item.kategori }}</td>
+                    <td>{{ item.kelompok }}</td>
+                    <td>{{ item.name }}</td>
+                    <td
+                      ><span class="mobile-only mr-1">Alamat: </span>
+                      {{ item.alamat }}</td
+                    >
+                    <td>
+                      <span class="mobile-only mr-1">Provinsi: </span>
+                      {{ item.nama_propinsi }}
+                    </td>
+                    <td
+                      ><span class="mobile-only mr-1">Kabupaten / Kota: </span>
+                      {{ item.nama_kota }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Kode pos: </span>
+                      {{ item.kode_pos }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Website: </span>
+                      {{ item.website }}</td
+                    >
+                    <td>
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Hapus Instansi',
+                          placement: 'bottom',
+                        }"
+                        @click="destroy(item)"
+                      >
+                        <CIcon name="cil-trash" />
+                        <span class="mobile-only ml-1">Hapus Instansi</span>
+                      </CButton>
+                      <CButton
+                        color="success"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Edit Instansi',
+                          placement: 'bottom',
+                        }"
+                        @click="edit(item)"
+                      >
+                        <CIcon name="cil-pencil" />
+                        <span class="mobile-only ml-1">Edit Instansi</span>
+                      </CButton>
+                      <CButton
+                        color="warning"
+                        size="sm"
+                        v-c-tooltip="{
+                          content: 'Lihat Struktur Unit',
+                          placement: 'bottom',
+                        }"
+                        @click="treeView(item.id)"
+                      >
+                        <CIcon name="cil-fork" />
+                        <span class="mobile-only ml-1"
+                          >Lihat Struktur Unit</span
+                        >
+                      </CButton>
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="10" class="text-center"> Data Kosong </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
+    <CPagination
+      :activePage.sync="pagination.current_page"
+      :pages="pagination.last_page"
+      size="sm"
+      align="center"
+      @update:activePage="getData"
+      v-if="data.length > 0"
+    />
     <CModal
       :title="modal.not_approved.title"
       :color="modal.not_approved.color"
@@ -240,7 +272,11 @@
                 <template v-if="not_approved.data.length > 0">
                   <tr v-for="(item, index) in not_approved.data" :key="index">
                     <th scope="row">
-                      {{ index + 1 }}
+                      {{
+                        (pagination.current_page - 1) * pagination.per_page +
+                        index +
+                        1
+                      }}
                     </th>
                     <td>{{ item.kategori }}</td>
                     <td>{{ item.kelompok }}</td>
@@ -323,6 +359,41 @@
           {{ modal.delete.labelButton }}
         </CButton>
       </template>
+    </CModal>
+    <CModal
+      :title="modal.delete.title"
+      :color="modal.delete.color"
+      :show.sync="modal.delete.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.delete.message }}
+            <strong>{{ modal.delete.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="mr-2" @click="closeModalDelete">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" @click="submitDelete">
+          {{ modal.delete.labelButton }}
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.treeView.title"
+      :color="modal.treeView.color"
+      :show.sync="modal.treeView.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <tree-item :item="treeData"></tree-item>
+        </div>
+      </template>
+      <template v-slot:footer> </template>
     </CModal>
     <CModal
       :title="modal.active.title"
@@ -544,6 +615,11 @@ export default {
           title: null,
           color: null,
         },
+        treeView: {
+          showModal: false,
+          title: null,
+          color: null,
+        },
         delete: {
           showModal: false,
           title: null,
@@ -616,10 +692,17 @@ export default {
       pagination: {
         current_page: 1,
         last_page: 10,
+        per_page: null,
       },
       pagination_not_approved: {
         current_page: 1,
         last_page: 10,
+        per_page: null,
+      },
+      treeData: {
+        id: null,
+        name: null,
+        children: [],
       },
     }
   },
@@ -639,8 +722,26 @@ export default {
     this.getAgencyGroup()
   },
   methods: {
+    treeView(id) {
+      this.$http
+        .get(`/parinstansi/${id}`)
+        .then((response) => {
+          this.modal.treeView.showModal = true
+          this.modal.treeView.title = 'Struktur Unit'
+          this.modal.treeView.color = 'warning'
+          this.treeData.name = response.data.data.name
+          this.treeData.children = response.data.data.children
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     validateWebsite() {
-      const regex = new RegExp(/[a-z0-9]+\.go.id$/g)
+      const regex = new RegExp(/[a-z0-9.]+\.id?[\S]+/g)
       const value = this.forms.website
         .toString()
         .replace(/[^a-zA-Z0-9.]/, '')
@@ -770,6 +871,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -802,6 +904,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -827,6 +930,7 @@ export default {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -838,6 +942,7 @@ export default {
         })
     },
     destroy(item) {
+      this.modal.not_approved.showModal = false
       this.modal.delete.showModal = true
       this.modal.delete.title = 'Hapus Data'
       this.modal.delete.color = 'danger'
@@ -982,6 +1087,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.kelompok =
               typeof error.response.data.errors.kelompok === 'undefined'
                 ? []

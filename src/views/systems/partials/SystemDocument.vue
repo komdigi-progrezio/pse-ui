@@ -5,14 +5,15 @@
     <hr />
 
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click.prevent="openModalDocument('simpan', 'Tambah Data')"
+      @click.prevent="openModalDocument('Simpan', 'Tambah Data')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Dokumen</a>
     </button>
 
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -20,19 +21,19 @@
             <td>Kategori</td>
             <td>Nama Dokumen</td>
             <td>Dokumen</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
           <template v-if="documents.length > 0">
             <tr :key="index" v-for="(document, index) in documents">
               <td>{{ index + 1 }}</td>
-              <td>{{ getCurrentCategory(document.category) }}</td>
+              <td>{{ document.nama_category }}</td>
               <td>{{ document.name }}</td>
               <td>
                 <a :href="document.url_file" target="_blank">Lihat Dokumen</a>
               </td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -69,7 +70,11 @@
       </table>
     </div>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="documentForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="documentForm"
+    >
       <CModal
         :title="modal.document.title"
         :show.sync="modal.document.show"
@@ -249,6 +254,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.documentDelete.title"
       color="danger"
       :show.sync="modal.documentDelete.show"
@@ -291,6 +297,11 @@
 export default {
   name: 'SystemDocument',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     documents: {
       type: Array,
       default: () => [],
@@ -425,27 +436,17 @@ export default {
       return isValid
     },
 
-    getCurrentCategory(categoryId) {
-      const option = this.options.filter((option) => {
-        return option.id === categoryId
-      })
-
-      return option.length > 0
-        ? option[0].param_name ?? option[0].param_value
-        : '-'
-    },
-
     /**
      * Document
      */
     saveDocument() {
       this.form.document.sis_profil_id = this.systemId
 
-      if (this.modal.document.type === 'simpan') {
+      if (this.modal.document.type === 'Simpan') {
         this.addDocument()
       }
 
-      if (this.modal.document.type === 'update') {
+      if (this.modal.document.type === 'Update') {
         this.updateDocument()
       }
     },

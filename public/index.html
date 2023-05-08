@@ -10,11 +10,70 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
-    <title>PSE</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Source+Code+Pro:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/svg"
+      sizes="192x192"
+      href="/icon.png"
+    />
+    <!-- <style>
+      [v-cloak] {
+        display: none;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      #loader {
+        background-color: #f26060;
+        text-align: center;
+        vertical-align: middle;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
+      }
+      #spinner {
+        border: 5px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 5px solid #f26060;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      /* Safari */
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style> -->
     <!-- favicons for all devices -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
+    <!-- <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png" />
     <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png" />
@@ -51,28 +110,101 @@
     />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" /> -->
     <link rel="manifest" href="/manifest.json" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-    <meta name="theme-color" content="#ffffff" />
-    <!-- geotagging -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || []
-
-      function gtag() {
-        dataLayer.push(arguments)
+    <style>
+      #spinner {
+        border: 5px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 5px solid #f26060;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
       }
-      gtag('js', new Date())
-      // Shared ID
-      gtag('config', 'UA-118965717-3')
-      // Vue.js ID
-      gtag('config', 'UA-118965717-7')
-    </script>
+      .font-montserrat {
+        font-family: 'Montserrat';
+        font-weight: 500;
+      }
+      .text-white{
+        color: #fff;
+      }
+      
+      /* Safari */
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .primary-color {
+        color: #fff;
+        background-color: #ff5f5f;
+      }
+      .vld-shown {
+        overflow: hidden;
+      }
+
+      .vld-overlay {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        display: none;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        overflow: hidden;
+        z-index: 9999;
+      }
+
+      .vld-overlay.is-active {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+      }
+
+      .vld-overlay.is-full-page {
+        z-index: 9999;
+        position: fixed;
+      }
+
+      .vld-overlay .vld-background {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #fff;
+        opacity: 0.5;
+      }
+
+      .vld-overlay .vld-icon, .vld-parent {
+        position: relative;
+      }
+
+
+    </style>
+    
+    <title>PSE</title>
   </head>
 
   <body>
@@ -82,12 +214,18 @@
         enabled. Please enable it to continue.</strong
       >
     </noscript>
-    <div id="app"></div>
-    <script
+    <div id="app"> 
+      <div tabindex="0" aria-label="Loading" class="vld-overlay is-active is-full-page"><div class="vld-background" style="background: rgb(242, 96, 96); opacity: 1; backdrop-filter: blur(2px);"></div><div class="vld-icon"><div id="spinner"></div><p class="font-montserrat text-white">Loading ...</p></div></div>
+    </div>
+    <!-- <div id="loader">
+      <div id="spinner"></div>
+      <p class="font-montserrat">Loading .... </p>
+    </div> -->
+    <!-- <script
       src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit"
       async
       defer
-    ></script>
+    ></script> -->
     <!-- built files will be auto injected -->
   </body>
 </html>

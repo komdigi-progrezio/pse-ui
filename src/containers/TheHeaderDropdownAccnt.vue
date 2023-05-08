@@ -28,17 +28,16 @@
 <script>
 export default {
   name: 'TheHeaderDropdownAccnt',
-  data() {
-    return {
-      itemsCount: 42,
-    }
-  },
   methods: {
     logout() {
       this.$store
-        .dispatch('auth/destroyToken')
+        .dispatch('dispatchLogoutText')
         .then(() => {
-          this.$router.push('/login')
+          this.$store.dispatch('dispatchEnableLoading').then(() => {
+            this.$store.dispatch('auth/destroyToken').then(() => {
+              window.location = '/login'
+            })
+          })
         })
         .catch((error) => {
           if (error.response.status === 500) {

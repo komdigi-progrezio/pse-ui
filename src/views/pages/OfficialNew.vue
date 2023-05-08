@@ -12,7 +12,7 @@
     <div id="right-side">
       <router-link
         to="/login"
-        class="btn btn-link px-0 d-flex align-items-center"
+        class="btn primary-color-link px-0 d-flex align-items-center"
       >
         <img width="12" src="@/assets/svgs/arrow-left.svg" />
         <span class="ml-1">Kembali</span>
@@ -21,7 +21,7 @@
         >Pendaftaran Pejabat Pendaftar Sistem Elektronik</h3
       >
       <div class="card">
-        <div class="card-body">
+        <div class="card-body p-3">
           <ValidationObserver v-slot="{ invalid }" ref="form">
             <h5>Data Akun</h5>
             <div class="form-group row">
@@ -34,7 +34,7 @@
                   :rules="{
                     required: true,
                     email: true,
-                    regex: /[a-z0-9]+@[a-z0-9]+\.go.id$/,
+                    regex: /[^\s@]+@[^\s@]+\.go.id$/,
                   }"
                   v-slot="{ errors }"
                 >
@@ -57,7 +57,7 @@
                 <message :messages="errorValidations.username" />
               </div>
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
               <label for="password" class="col-sm-2 col-form-label"
                 >Password</label
               >
@@ -100,7 +100,7 @@
                   />
                 </ValidationProvider>
               </div>
-            </div>
+            </div> -->
             <hr />
             <h5>Data Diri</h5>
             <div class="form-group row">
@@ -155,7 +155,7 @@
                   v-slot="{ errors }"
                 >
                   <input
-                    v-model="forms.name"
+                    v-model="forms.nama"
                     type="text"
                     class="form-control"
                     placeholder="Masukan Nama Lengkap"
@@ -177,7 +177,7 @@
               <div class="col-sm-10">
                 <ValidationProvider
                   name="NIP"
-                  rules="required|digits:18"
+                  rules="required"
                   v-slot="{ errors }"
                 >
                   <input
@@ -288,6 +288,57 @@
                 <message :messages="errorValidations.no_hp" />
               </div>
             </div>
+
+            <div class="form-group row">
+              <label for="provinsi" class="col-sm-2 col-form-label">
+                Provinsi
+              </label>
+              <div class="col-sm-10">
+                <select
+                  v-model="forms.propinsi"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.propinsi.length > 0,
+                  }"
+                  @change="getDistrictDaftar"
+                  @blur="errorValidations.propinsi = []"
+                >
+                  <option value="" selected="selected"> Pilih Provinsi </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.provinsi"
+                    :key="`provivnsi-${index}`"
+                  >
+                    {{ value.nama }}
+                  </option>
+                </select>
+              </div>
+              <message :messages="errorValidations.propinsi" />
+            </div>
+            <div class="form-group row">
+              <label for="kota" class="col-sm-2 col-form-label">Kota</label>
+              <div class="col-sm-10">
+                <select
+                  v-model="forms.kota"
+                  class="form-control"
+                  :class="{
+                    'is-invalid': errorValidations.kota.length > 0,
+                  }"
+                  @blur="errorValidations.kota = []"
+                >
+                  <option value="" selected="selected"> Pilih Kota </option>
+                  <option
+                    :value="value.id"
+                    v-for="(value, index) in dataSelect.kota"
+                    :key="`kota-${index}`"
+                  >
+                    {{ value.nama }}
+                  </option>
+                </select>
+              </div>
+              <message :messages="errorValidations.kota" />
+            </div>
+
             <hr />
             <h5>Data Instansi</h5>
             <div class="form-group row">
@@ -297,7 +348,7 @@
               <div class="col-sm-10">
                 <ValidationProvider
                   name="Instansi"
-                  rules="required|alpha_spaces"
+                  rules="required"
                   v-slot="{ errors }"
                 >
                   <input
@@ -356,7 +407,7 @@
             <div class="d-flex" id="action">
               <router-link
                 to="/login"
-                class="btn btn-link px-0 d-flex align-items-center"
+                class="btn primary-color-link px-0 d-flex align-items-center"
               >
                 <img width="12" src="@/assets/svgs/arrow-left.svg" />
                 <span class="ml-1">Kembali</span>
@@ -366,7 +417,7 @@
               >
               <button
                 type="submit"
-                class="btn btn-primary btn-lg"
+                class="btn primary-color btn-lg"
                 :disabled="invalid"
                 @click="handleSubmit"
               >
@@ -635,7 +686,12 @@
                         @click="getValue(item)"
                       >
                         <th scope="row">
-                          {{ index + 1 }}
+                          {{
+                            (modal.instansi.pagination.current_page - 1) *
+                              modal.instansi.pagination.per_page +
+                            index +
+                            1
+                          }}
                         </th>
                         <td>{{ item.kategori }}</td>
                         <td>{{ item.kelompok }}</td>
@@ -708,8 +764,8 @@ export default {
       forms: {
         status_register: null,
         username: null,
-        password: null,
-        password_confirmation: null,
+        // password: null,
+        // password_confirmation: null,
         name: null,
         nip: null,
         jabatan: null,
@@ -718,6 +774,8 @@ export default {
         instansi_induk: null,
         instansi_induk_text: null,
         dokumen: null,
+        propinsi: '',
+        kota: '',
       },
       forms_add_agency: {
         id: null,
@@ -749,7 +807,7 @@ export default {
       errorValidations: {
         name: [],
         username: [],
-        password: [],
+        // password: [],
         nip: [],
         jabatan: [],
         no_telepon: [],
@@ -757,6 +815,8 @@ export default {
         dokumen: [],
         no_hp: [],
         status_register: [],
+        kota: [],
+        propinsi: [],
       },
       errorValidationsAddAgency: {
         kelompok: [],
@@ -776,6 +836,7 @@ export default {
           pagination: {
             current_page: 1,
             last_page: 10,
+            per_page: null,
           },
           add: false,
         },
@@ -797,9 +858,9 @@ export default {
     clearFormOfficial() {
       this.forms.status_register = 1
       this.forms.username = ''
-      this.forms.password = ''
-      this.forms.password_confirmation = ''
-      this.forms.name = ''
+      // this.forms.password = ''
+      // this.forms.password_confirmation = ''
+      this.forms.nama = ''
       this.forms.nip = ''
       this.forms.jabatan = ''
       this.forms.no_telepon = ''
@@ -808,6 +869,8 @@ export default {
       this.forms.instansi_induk_text = ''
       this.forms.dokumen = ''
       this.filename = 'Choose File'
+      this.forms.propinsi = ''
+      this.forms.kota = ''
     },
     handleSubmit() {
       this.$refs.form.validate().then((success) => {
@@ -828,7 +891,7 @@ export default {
         })
         this.errorValidations.name = []
         this.errorValidations.username = []
-        this.errorValidations.password = []
+        // this.errorValidations.password = []
         this.errorValidations.nip = []
         this.errorValidations.jabatan = []
         this.errorValidations.no_telepon = []
@@ -836,7 +899,8 @@ export default {
         this.errorValidations.dokumen = []
         this.errorValidations.no_hp = []
         this.errorValidations.status_register = []
-
+        this.errorValidations.kota = []
+        this.errorValidations.propinsi = []
         this.$http({
           method: 'post',
           url: url,
@@ -852,6 +916,7 @@ export default {
           })
           .catch((error) => {
             if (error.response.status === 422) {
+              this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
               this.errorValidations.name =
                 typeof error.response.data.errors.name === 'undefined'
                   ? []
@@ -860,10 +925,10 @@ export default {
                 typeof error.response.data.errors.username === 'undefined'
                   ? []
                   : error.response.data.errors.username
-              this.errorValidations.password =
-                typeof error.response.data.errors.password === 'undefined'
-                  ? []
-                  : error.response.data.errors.password
+              // this.errorValidations.password =
+              //   typeof error.response.data.errors.password === 'undefined'
+              //     ? []
+              //     : error.response.data.errors.password
               this.errorValidations.nip =
                 typeof error.response.data.errors.nip === 'undefined'
                   ? []
@@ -888,6 +953,14 @@ export default {
                 typeof error.response.data.errors.no_hp === 'undefined'
                   ? []
                   : error.response.data.errors.no_hp
+              this.errorValidations.propinsi =
+                typeof error.response.data.errors.propinsi === 'undefined'
+                  ? []
+                  : error.response.data.errors.propinsi
+              this.errorValidations.kota =
+                typeof error.response.data.errors.kota === 'undefined'
+                  ? []
+                  : error.response.data.errors.kota
               this.errorValidations.status_register =
                 typeof error.response.data.errors.status_register ===
                 'undefined'
@@ -944,6 +1017,23 @@ export default {
           }
         })
     },
+    getDistrictDaftar() {
+      axios
+        .get(
+          `${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.forms.propinsi}/kota`
+        )
+        .then((response) => {
+          this.dataSelect.kota = response.data.data
+          this.forms.kota = ''
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     getAgencyGroup() {
       axios
         .get(`${process.env.VUE_APP_BASE_API_URL}public/parconfig/agency/group`)
@@ -980,7 +1070,7 @@ export default {
       this.modal.instansi.showModal = false
     },
     validateWebsite() {
-      const regex = new RegExp(/[a-z0-9]+\.go.id$/g)
+      const regex = new RegExp(/[a-z0-9.]+\.id?[\S]+/g)
       const value = this.forms_add_agency.website
         .toString()
         .replace(/[^a-zA-Z0-9.]/, '')
@@ -1039,6 +1129,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidationsAddAgency.kelompok =
               typeof error.response.data.errors.kelompok === 'undefined'
                 ? []
@@ -1106,7 +1197,7 @@ export default {
       this.search.name = null
 
       axios
-        .get('public/parinstansi/filter', {
+        .get('api/public/parinstansi/filter', {
           params: {
             page: 1,
           },
@@ -1170,12 +1261,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .has-error-file {
   display: block;
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;
   color: #dc3545;
+}
+.primary-color-link {
+  font-weight: 400;
+  color: #ff5f5f;
+  text-decoration: none;
+}
+.primary-color {
+  color: #fff;
+  background-color: #ff5f5f;
 }
 </style>

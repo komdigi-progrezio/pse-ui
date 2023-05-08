@@ -1,6 +1,7 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-lg-2">
     <router-link
+      v-if="system.is_locked !== true"
       tag="button"
       :to="`/admin/systems/${this.$route.params.id}/edit`"
       class="btn btn-link d-flex"
@@ -9,11 +10,11 @@
 
       <span class="align-self-center"> Perbaharui Profil Layanan </span>
     </router-link>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <tbody>
           <tr class="row-profile-service">
-            <td colspan="2">Profil Layanan</td>
+            <td colspan="2"><strong>Profil Layanan</strong></td>
           </tr>
           <tr>
             <td>Nama Internal</td>
@@ -39,6 +40,12 @@
             <td>Kategori Akses</td>
             <td>{{ system.kategori_akses }}</td>
           </tr>
+          <template v-if="system.kategori_akses == 'Online'">
+            <tr>
+              <td>URL Aplikasi</td>
+              <td>{{ system.url }}</td>
+            </tr>
+          </template>
           <tr>
             <td
               >Bersedia untuk dipublikasikan melalui portal layanan publik?</td
@@ -50,18 +57,22 @@
     </div>
     <h5>Fungsi Utama</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addMainFunction">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addMainFunction"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Fungsi</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Fungsi Sistem</td>
             <td>Keterangan</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -73,7 +84,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ value.fungsi_sistem }}</td>
               <td>{{ value.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -110,17 +121,21 @@
     </div>
     <h5>Ruang Lingkup</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addScope">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addScope"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Ruang Lingkup</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Ruang Lingkup</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -128,7 +143,7 @@
             <tr v-for="(value, index) in scope" :key="`scope-${index}`">
               <td>{{ index + 1 }}</td>
               <td>{{ value.relation.scope }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -165,18 +180,22 @@
     </div>
     <h5>Jenis Layanan</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addKindOfService">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addKindOfService"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Jenis Layanan</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Jenis Layanan</td>
             <td>Keterangan</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -188,7 +207,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ value.jenis_layanan }}</td>
               <td>{{ value.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -225,18 +244,22 @@
     </div>
     <h5>Sistem Pengamanan</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addSecurity">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addSecurity"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Sistem Pengamanan</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Nama Sistem</td>
             <td>Keterangan</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -245,7 +268,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ value.nama_sistem }}</td>
               <td>{{ value.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -282,18 +305,22 @@
     </div>
     <h5>Sistem Terkait</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addRelated">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addRelated"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Sistem Terkait</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Nama Sistem Terkait</td>
             <td>Keterangan</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -305,7 +332,7 @@
               <td>{{ index + 1 }}</td>
               <td>{{ value.label_sistem }}</td>
               <td>{{ value.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -342,11 +369,15 @@
     </div>
     <h5>Sertifikasi</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addCertificate">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addCertificate"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Sertifikasi</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -359,7 +390,7 @@
             <td>Tanggal Berakhir</td>
             <td>Ruang Lingkup</td>
             <td>Masa Berlaku</td>
-            <td colspan="3">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="3">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -377,7 +408,7 @@
               <td>{{ value.tgl_expire }}</td>
               <td>{{ value.ruang_lingkup }}</td>
               <td>{{ value.masa_berlaku }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -426,18 +457,22 @@
     </div>
     <h5>Pengguna Layanan</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addServiceUsers">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addServiceUsers"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Pengguna Layanan</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Jenis Pengguna</td>
             <td>Keterangan</td>
-            <td colspan="2">Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -447,9 +482,9 @@
               :key="`service-user-${index}`"
             >
               <td>{{ index + 1 }}</td>
-              <td>{{ value.jenis_pengguna }}</td>
+              <td>{{ value.nama_jenis_pengguna }}</td>
               <td>{{ value.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -485,6 +520,7 @@
       </table>
     </div>
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.delete.title"
       :color="modal.delete.color"
       :show.sync="modal.delete.showModal"
@@ -512,7 +548,11 @@
         </CButton>
       </template>
     </CModal>
-    <ValidationObserver v-slot="{ invalid }" ref="form_main_function">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_main_function"
+    >
       <CModal
         :title="modal.mainFunction.title"
         :color="modal.mainFunction.color"
@@ -586,7 +626,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_scope">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_scope"
+    >
       <CModal
         :title="modal.scope.title"
         :color="modal.scope.color"
@@ -664,7 +708,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_kind_of_service">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_kind_of_service"
+    >
       <CModal
         :title="modal.kindOfService.title"
         :color="modal.kindOfService.color"
@@ -738,7 +786,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_security">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_security"
+    >
       <CModal
         :title="modal.security.title"
         :color="modal.security.color"
@@ -809,7 +861,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_related">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_related"
+    >
       <CModal
         :title="modal.related.title"
         :color="modal.related.color"
@@ -913,7 +969,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_certificate">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_certificate"
+    >
       <CModal
         :title="modal.certificate.title"
         :color="modal.certificate.color"
@@ -1205,7 +1265,11 @@
         </template>
       </CModal>
     </ValidationObserver>
-    <ValidationObserver v-slot="{ invalid }" ref="form_service_users">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_service_users"
+    >
       <CModal
         :title="modal.serviceUsers.title"
         :color="modal.serviceUsers.color"
@@ -1656,10 +1720,13 @@ export default {
           this.$emit('update-data')
           this.closeModalMainFunction()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_main_function.reset()
+          this.$nextTick(() => {
+            this.$refs.form_main_function.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.mainFunction.fungsi_sistem =
               typeof error.response.data.errors.fungsi_sistem === 'undefined'
                 ? []
@@ -1755,10 +1822,13 @@ export default {
           }
           this.closeModalScope()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_scope.reset()
+          this.$nextTick(() => {
+            this.$refs.form_scope.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.scope.ruang_lingkup =
               typeof error.response.data.errors.ruang_lingkup === 'undefined'
                 ? []
@@ -1850,10 +1920,13 @@ export default {
           this.$emit('update-data')
           this.closeModalKindOfService()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_kind_of_service.reset()
+          this.$nextTick(() => {
+            this.$refs.form_kind_of_service.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.kindOfService.jenis_layanan =
               typeof error.response.data.errors.jenis_layanan === 'undefined'
                 ? []
@@ -1944,10 +2017,13 @@ export default {
           this.$emit('update-data')
           this.closeModalSecurity()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_security.reset()
+          this.$nextTick(() => {
+            this.$refs.form_security.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.security.nama_sistem =
               typeof error.response.data.errors.nama_sistem === 'undefined'
                 ? []
@@ -2040,10 +2116,13 @@ export default {
           this.$emit('update-data')
           this.closeModalRelated()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_related.reset()
+          this.$nextTick(() => {
+            this.$refs.form_related.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.related.nama_sistem =
               typeof error.response.data.errors.nama_sistem === 'undefined'
                 ? []
@@ -2155,10 +2234,13 @@ export default {
           this.closeModalCertificate()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.$refs.form_certificate.reset()
-          this.label.certificate.file = 'Choose File'
+          this.$nextTick(() => {
+            this.label.certificate.file = 'Choose File'
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.certificate.nama_sertifikat =
               typeof error.response.data.errors.nama_sertifikat === 'undefined'
                 ? []
@@ -2245,7 +2327,6 @@ export default {
       window.open(value)
     },
     changeMinDate() {
-      console.log(this.forms.certificate.tgl_terbit)
       this.optionTanggalHabisBerlaku.minDate = this.forms.certificate.tgl_terbit
       this.optionTanggalMulai.minDate = this.forms.certificate.tgl_terbit
     },
@@ -2308,11 +2389,13 @@ export default {
           this.$emit('update-data')
           this.closeModalServiceUsers()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_service_users.reset()
+          this.$nextTick(() => {
+            this.$refs.form_service_users.reset()
+          })
         })
         .catch((error) => {
-          console.log(error)
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.serviceUsers.jenis_pengguna =
               typeof error.response.data.errors.jenis_pengguna === 'undefined'
                 ? []
@@ -2441,6 +2524,9 @@ export default {
 <style scoped>
 .row-profile-service {
   background-color: #ebedef;
+}
+.row-profile-service td {
+  padding: 30px 0 10px 0;
 }
 .has-error-file {
   display: block;

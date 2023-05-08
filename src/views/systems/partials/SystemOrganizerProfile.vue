@@ -1,12 +1,16 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-lg-2">
     <h5>Profil Penyelenggara Sistem Elektronik </h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addOrganizer">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addOrganizer"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Perbaharui Profil Penyelenggara</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped" v-if="organizer === null">
         <tbody>
           <tr>
@@ -80,7 +84,11 @@
         </tbody>
       </table>
     </div>
-    <ValidationObserver v-slot="{ invalid }" ref="form_organizer">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_organizer"
+    >
       <CModal
         :title="modal.organizer.title"
         :color="modal.organizer.color"
@@ -140,6 +148,11 @@
 export default {
   name: 'SystemOrganizerProfile',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     treeData: {
       type: Object,
       required: true,
@@ -240,10 +253,13 @@ export default {
           this.$emit('update-data')
           this.closeModalOrganizer()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_organizer.reset()
+          this.$nextTick(() => {
+            this.$refs.form_organizer.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.organizer.par_satuan_kerja_id =
               typeof error.response.data.errors.par_satuan_kerja_id ===
               'undefined'

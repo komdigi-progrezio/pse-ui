@@ -3,11 +3,8 @@
     <div class="card">
       <div class="card-header">
         <CIcon name="cil-lock-locked" /> Ganti Password
-        <!-- <span class="badge badge-success float-right">
-                    Success
-                </span> -->
       </div>
-      <div class="card-body">
+      <div class="card-body p-3">
         <div class="form-group">
           <label for="current_password"> Password Sekarang </label>
           <input
@@ -86,7 +83,7 @@ export default {
     submitPostPut() {
       const url = '/users'
       const formData = new FormData()
-      let urlAction = `${url}/change/password`
+      const urlAction = `${url}/change/password/auth`
       formData.append('_method', 'patch')
       const forMapData = Object.entries(this.forms)
       forMapData.forEach((value) => {
@@ -109,6 +106,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.current_password =
               typeof error.response.data.errors.current_password === 'undefined'
                 ? []

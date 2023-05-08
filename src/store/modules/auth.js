@@ -1,11 +1,8 @@
-import { getToken } from '@/utils/auth'
-import { getRefreshToken } from '@/utils/auth'
 import $axiosApi from '@/utils/api'
+import Vue from 'vue'
 
 const state = {
   isLogin: false,
-  token: getToken(),
-  refresh_token: getRefreshToken(),
 }
 
 const getters = {
@@ -19,7 +16,9 @@ const actions = {
   destroyToken(context) {
     return new Promise((resolve, reject) => {
       $axiosApi
-        .post(`${process.env.VUE_APP_BASE_API_URL}users/logout`)
+        .post(`${process.env.VUE_APP_BASE_API_URL}users/logout`, {
+          refresh_token: localStorage.getItem('refresh_token'),
+        })
         .then((response) => {
           localStorage.removeItem('token')
           localStorage.removeItem('refresh_token')
@@ -28,15 +27,11 @@ const actions = {
           resolve(response)
         })
         .catch((error) => {
-          localStorage.removeItem('token')
-          localStorage.removeItem('refresh_token')
-          localStorage.removeItem('user')
-          context.commit('DESTROY_TOKEN', null)
           reject(error)
         })
     })
   },
-  retrieveToken(context, credentials) {
+  retrieveToken({ commit }, credentials) {
     return new Promise((resolve, reject) => {
       $axiosApi
         .post(`${process.env.VUE_APP_BASE_API_URL}users/login`, {
@@ -48,24 +43,43 @@ const actions = {
           const token = response.data.access_token
           const refreshToken = response.data.refresh_token
 
-          localStorage.setItem('token', token)
-          localStorage.setItem('refresh_token', refreshToken)
-          context.commit('RETRIEVE_TOKEN', response.data)
-
-          $axiosApi
-            .get(`${process.env.VUE_APP_BASE_API_URL}users/get/authenticated`)
-            .then((response) => {
-              const user = response.data.data
-
-              localStorage.setItem('user', JSON.stringify(user))
-              resolve(response)
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+          window.localStorage.setItem('token', token)
+          window.localStorage.setItem('refresh_token', refreshToken)
+          commit('RETRIEVE_TOKEN', response.data)
+          resolve(response)
         })
         .catch((error) => {
           reject(error)
+        })
+    })
+  },
+  fetchAuth(context) {
+    return new Promise((resolve, reject) => {
+      $axiosApi
+        .get(`${process.env.VUE_APP_BASE_API_URL}users/get/authenticated`)
+        .then((response) => {
+          const user = response.data.data
+
+          window.localStorage.setItem('user', JSON.stringify(user))
+          resolve(response)
+        })
+        .catch((error) => {
+          reject(error)
+          $axiosApi
+            .post(`${process.env.VUE_APP_BASE_API_URL}users/logout`, {
+              refresh_token: localStorage.getItem('refresh_token'),
+            })
+            .then(() => {
+              localStorage.removeItem('token')
+              localStorage.removeItem('refresh_token')
+              localStorage.removeItem('user')
+              context.commit('DESTROY_TOKEN', null)
+              Vue.swal('Perhatian!', 'Akun Anda Belum Diaktifkan', 'warning')
+              location.replace('/login')
+            })
+            .catch(() => {
+              location.replace('/login')
+            })
         })
     })
   },

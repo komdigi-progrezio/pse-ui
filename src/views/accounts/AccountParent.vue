@@ -82,87 +82,152 @@
         </template>
       </CCardBody>
     </CCard>
-    <CRow>
-      <CCol lg="12">
-        <CCard>
-          <CCardHeader>
-            <CIcon name="cil-user" /> Pengguna
-            <div class="card-header-actions">
-              <CButton
-                color="success"
-                shape="pill"
-                size="sm"
-                variant="outline"
-                v-c-tooltip="{
-                  content: 'Tambah Pengguna',
-                  placement: 'bottom',
-                }"
-                @click="post"
-              >
-                <CIcon name="cil-plus" />
-              </CButton>
+    <CCard>
+      <CCardHeader>
+        <CIcon name="cil-user" /> Pengguna
+        <template v-if="isNotAdmin">
+          <div class="card-header-actions">
+            <CButton
+              color="success"
+              shape="pill"
+              size="sm"
+              variant="outline"
+              v-c-tooltip="{
+                content: 'Tambah Pengguna',
+                placement: 'bottom',
+              }"
+              @click="post"
+            >
+              <CIcon name="cil-plus" />
+            </CButton>
+          </div>
+        </template>
+      </CCardHeader>
+      <CCardBody>
+        <div class="mt-lg-4">
+          <div v-if="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-          </CCardHeader>
-          <CCardBody>
-            <div class="mt-4">
-              <div v-if="spinner" class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table v-if="!spinner" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama Lengkap</th>
-                      <th colspan="2">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="data.length > 0">
-                      <tr v-for="(item, index) in data" :key="index">
-                        <th scope="row">
-                          {{ index + 1 }}
-                        </th>
-                        <td>{{ item.nama }}</td>
-                        <td>
+          </div>
+          <div class="table-responsive">
+            <table v-if="!spinner" class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Lengkap</th>
+                  <th>Status</th>
+                  <th colspan="2">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="data.length > 0">
+                  <tr v-for="(item, index) in data" :key="index">
+                    <th scope="row">
+                      {{
+                        (pagination.current_page - 1) * pagination.per_page +
+                        index +
+                        1
+                      }}
+                    </th>
+                    <td>{{ item.nama }}</td>
+                    <td>{{ item.nama_status }}</td>
+                    <td>
+                      <template v-if="isAdmin">
+                        <template v-if="item.status">
                           <CButton
-                            color="danger"
+                            class="mr-2 mt-1"
+                            color="dark"
                             size="sm"
-                            class="mr-2"
                             v-c-tooltip="{
-                              content: 'Hapus Pengguna',
+                              content: 'Non-aktifkan User',
                               placement: 'bottom',
                             }"
-                            @click="destroy(item)"
+                            @click="confirmDisable(item)"
                           >
-                            <CIcon name="cil-trash" />
+                            <CIcon name="cil-x-circle" />
+                            <span class="mobile-only ml-1"
+                              >Non-aktifkan User</span
+                            >
                           </CButton>
-                        </td>
-                      </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
-                        <td colspan="4" class="text-center"> Data Kosong </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </CCardBody>
-        </CCard>
-        <CPagination
-          :activePage.sync="pagination.current_page"
-          :pages="pagination.last_page"
-          size="sm"
-          align="center"
-          @update:activePage="getData"
-          v-if="data.length > 0"
-        />
-      </CCol>
-    </CRow>
+                        </template>
+
+                        <template v-else>
+                          <CButton
+                            color="dark"
+                            class="mr-2 mt-1"
+                            size="sm"
+                            v-c-tooltip="{
+                              content: 'Aktifkan User',
+                              placement: 'bottom',
+                            }"
+                            @click="confirmEnable(item)"
+                          >
+                            <CIcon name="cil-check-circle" />
+                            <span class="mobile-only ml-1">Aktifkan User</span>
+                          </CButton>
+                        </template>
+                      </template>
+
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Hapus Pengguna',
+                          placement: 'bottom',
+                        }"
+                        @click="destroy(item)"
+                      >
+                        <CIcon name="cil-trash" />
+                      </CButton>
+                      <CButton
+                        class="mr-2"
+                        color="success"
+                        size="sm"
+                        v-c-tooltip="{
+                          content: 'Edit User',
+                          placement: 'bottom',
+                        }"
+                        @click="editUser(item.id)"
+                      >
+                        <CIcon name="cil-pencil" />
+                      </CButton>
+                      <CButton
+                        color="primary"
+                        size="sm"
+                        v-c-tooltip="{
+                          content: 'Lihat Detail User',
+                          placement: 'bottom',
+                        }"
+                        :to="{
+                          path: `/admin/account/${item.id}/official`,
+                        }"
+                      >
+                        <CIcon name="cil-description" />
+                      </CButton>
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="4" class="text-center"> Data Kosong </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
+    <CPagination
+      :activePage.sync="pagination.current_page"
+      :pages="pagination.last_page"
+      size="sm"
+      align="center"
+      @update:activePage="getData"
+      v-if="data.length > 0"
+    />
     <CModal
       :title="modal.delete.title"
       :color="modal.delete.color"
@@ -191,6 +256,52 @@
         </CButton>
       </template>
     </CModal>
+    <CModal
+      :title="modal.disable.title"
+      :color="modal.disable.color"
+      :show.sync="modal.disable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.disable.message }}
+            <strong>{{ modal.disable.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="disable">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.enable.title"
+      :color="modal.enable.color"
+      :show.sync="modal.enable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.enable.message }}
+            <strong>{{ modal.enable.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="enable">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
     <ValidationObserver v-slot="{ invalid }" ref="form_parent">
       <CModal
         :title="modal.post.title"
@@ -210,7 +321,6 @@
                     :rules="{
                       required: true,
                       email: true,
-                      regex: /[a-z0-9]+@[a-z0-9]+\.go.id$/,
                     }"
                     v-slot="{ errors }"
                   >
@@ -218,7 +328,7 @@
                       v-model="forms.username"
                       type="text"
                       name="username"
-                      placeholder="Masukan Password"
+                      placeholder="Masukan Username"
                       class="form-control"
                       :class="{
                         'is-invalid':
@@ -231,10 +341,10 @@
                       {{ errors[0] }}
                     </div>
                   </ValidationProvider>
-                  <message :messages="errorValidations.password" />
+                  <message :messages="errorValidations.username" />
                 </div>
               </CCol>
-              <CCol sm="12">
+              <!-- <CCol sm="12">
                 <div class="form-group">
                   <label for="password">Password</label>
                   <ValidationProvider
@@ -278,7 +388,7 @@
                   </ValidationProvider>
                   <message :messages="errorValidations.password_confirmation" />
                 </div>
-              </CCol>
+              </CCol> -->
               <CCol sm="12">
                 <hr />
                 <h5>Data Diri</h5>
@@ -313,7 +423,7 @@
                   <label for="nip">NIP</label>
                   <ValidationProvider
                     name="NIP"
-                    rules="required|digits:18"
+                    rules="required"
                     v-slot="{ errors }"
                   >
                     <input
@@ -419,7 +529,7 @@
                   <message :messages="errorValidations.no_hp" />
                 </div>
               </CCol>
-              <CCol sm="12">
+              <CCol sm="12" v-if="isNotAdmin">
                 <hr />
                 <h5>Satuan Kerja</h5>
                 <div class="form-group">
@@ -465,8 +575,8 @@ export default {
       data: [],
       forms: {
         username: null,
-        password: null,
-        password_confirmation: null,
+        // password: null,
+        // password_confirmation: null,
         nama: null,
         nip: null,
         jabatan: null,
@@ -494,15 +604,34 @@ export default {
           labelButton: null,
           method: null,
         },
+        disable: {
+          showModal: false,
+          title: 'Konfirmasi Penontifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Menonaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
+        enable: {
+          showModal: false,
+          title: 'Konfirmasi Aktifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Mengaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
       },
       pagination: {
         current_page: 1,
         last_page: 10,
+        per_page: null,
       },
       errorValidations: {
         username: [],
-        password: [],
-        password_confirmation: [],
+        // password: [],
+        // password_confirmation: [],
         nama: [],
         nip: [],
         jabatan: [],
@@ -525,12 +654,43 @@ export default {
 
       return 'cil-filter'
     },
+    isNotAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return false
+      }
+
+      return true
+    },
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
   created() {
     this.getData()
     this.fetchTreeViewWorkUnit()
   },
   methods: {
+    editUser(id) {
+      this.$router.push(`/admin/account/${id}/edit`)
+    },
+    closeModal() {
+      this.modal.disable.showModal = false
+      this.modal.enable.showModal = false
+    },
+    confirmDisable(value) {
+      this.modal.disable.showModal = true
+      this.modal.disable.uniqueId = value.id
+      this.modal.disable.data = value.nama
+    },
+    confirmEnable(value) {
+      this.modal.enable.showModal = true
+      this.modal.enable.uniqueId = value.id
+      this.modal.enable.data = value.nama
+    },
     //  Fetch Tree View
     fetchTreeViewWorkUnit() {
       this.$http
@@ -606,8 +766,8 @@ export default {
     },
     clearForm() {
       this.forms.username = null
-      this.forms.password = null
-      this.forms.password_confirmation = null
+      // this.forms.password = null
+      // this.forms.password_confirmation = null
       this.forms.nama = null
       this.forms.nip = null
       this.forms.jabatan = null
@@ -632,12 +792,14 @@ export default {
         .get('/users/parent/account', {
           params: {
             page: 1,
+            parent_id: this.$route.params.parent_id,
           },
         })
         .then((response) => {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -657,12 +819,14 @@ export default {
             page: 1,
             filter: 'nama',
             q: this.search.nama,
+            parent_id: this.$route.params.parent_id,
           },
         })
         .then((response) => {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -682,12 +846,14 @@ export default {
             page: this.pagination.current_page,
             filter: 'nama',
             q: this.search.nama,
+            parent_id: this.$route.params.parent_id,
           },
         })
         .then((response) => {
           this.spinner = false
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
           this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
@@ -724,8 +890,8 @@ export default {
       })
 
       this.errorValidations.username = []
-      this.errorValidations.password = []
-      this.errorValidations.password_confirmation = []
+      // this.errorValidations.password = []
+      // this.errorValidations.password_confirmation = []
       this.errorValidations.nama = []
       this.errorValidations.nip = []
       this.errorValidations.jabatan = []
@@ -742,23 +908,26 @@ export default {
           this.filterData()
           this.closeModalPostPut()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_parent.reset()
+          this.$nextTick(() => {
+            this.$refs.form_parent.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.username =
               typeof error.response.data.errors.username === 'undefined'
                 ? []
                 : error.response.data.errors.username
-            this.errorValidations.password =
-              typeof error.response.data.errors.password === 'undefined'
-                ? []
-                : error.response.data.errors.password
-            this.errorValidations.password_confirmation =
-              typeof error.response.data.errors.password_confirmation ===
-              'undefined'
-                ? []
-                : error.response.data.errors.password_confirmation
+            // this.errorValidations.password =
+            //   typeof error.response.data.errors.password === 'undefined'
+            //     ? []
+            //     : error.response.data.errors.password
+            // this.errorValidations.password_confirmation =
+            //   typeof error.response.data.errors.password_confirmation ===
+            //   'undefined'
+            //     ? []
+            //     : error.response.data.errors.password_confirmation
             this.errorValidations.nama =
               typeof error.response.data.errors.nama === 'undefined'
                 ? []
@@ -784,6 +953,46 @@ export default {
                 ? []
                 : error.response.data.errors.satuan_kerja
           } else if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    enable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/enable/${this.modal.enable.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.enable.showModal = false
+          this.spinner = false
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.modal.disable.showModal = false
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    disable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/disable/${this.modal.disable.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.disable.showModal = false
+          this.spinner = false
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.modal.disable.showModal = false
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')

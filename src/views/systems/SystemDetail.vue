@@ -1,11 +1,53 @@
 <template>
   <div>
+    <div
+      v-if="data.system.approved === 1 && data.system.publish === 0"
+      class="alert alert-warning"
+      role="alert"
+    >
+      Status Halaman ini adalah <strong>READ ONLY</strong>, Jika Anda Ingin
+      Melakukan Perubahan Data,
+      <router-link to="/admin/dashboard">Silahkan Isi Form Disini</router-link>
+    </div>
+
+    <CCard>
+      <CCardBody class="p-3">
+        <div class="d-flex justify-content-between">
+          <div>
+            <img
+              v-if="data.system.approved === 1 && data.system.img_badge"
+              :src="data.system.img_badge"
+            />
+            <p ref="logo_img" style="display: none">
+              {{ data.system.img_badge }}</p
+            >
+
+            <button
+              v-if="data.system.approved === 1 && data.system.img_badge"
+              class="btn btn-info align-self-center m-2"
+              @click="showCopyModal()"
+            >
+              Salin Logo
+            </button>
+          </div>
+
+          <router-link
+            to="/admin/repository"
+            class="btn btn-primary h-50 align-self-center"
+          >
+            Kembali <CIcon name="cil-arrow-right" />
+          </router-link>
+        </div>
+      </CCardBody>
+    </CCard>
+
     <CCard>
       <CCardHeader>
         <CIcon name="cil-description" /> Detail Sistem Elektronik
       </CCardHeader>
+
       <CCardBody>
-        <CTabs justified>
+        <CTabs justified class="nav-column-mobile">
           <CTab title="Data Umum">
             <system-general-data
               :kind-of-service="data.kindOfService"
@@ -22,6 +64,7 @@
           </CTab>
           <CTab title="Profil Penyelenggara">
             <system-organizer-profile
+              :system="data.system"
               :organizer="data.organizer"
               :tree-data="treeData"
               @update-data="getData"
@@ -29,6 +72,7 @@
           </CTab>
           <CTab title="Perangkat Keras">
             <system-hardware
+              :system="data.system"
               :system-id="data.system.id"
               :hardware="data.hardware"
               :network="data.network"
@@ -38,6 +82,7 @@
           </CTab>
           <CTab title="Perangkat Lunak">
             <system-software
+              :system="data.system"
               :software="data.software"
               :software-tool="data.softwareTool"
               :system-id="data.system.id"
@@ -46,6 +91,7 @@
           </CTab>
           <CTab title="Tenaga Ahli">
             <system-experts
+              :system="data.system"
               :availability-of-experts="data.availabilityOfExperts"
               :experts-required="data.expertsRequired"
               @update-data="getData"
@@ -53,6 +99,7 @@
           </CTab>
           <CTab title="Tata Kelola">
             <system-governance
+              :system="data.system"
               :system-id="data.system.id"
               :legal-basis="data.legalBasis"
               :sop="data.sop"
@@ -61,6 +108,7 @@
           </CTab>
           <CTab title="Penanggung Jawab">
             <system-responsible-person
+              :system="data.system"
               :responsible="data.responsible_person"
               :tree-data="treeData"
               @update-data="getData"
@@ -68,6 +116,7 @@
           </CTab>
           <CTab title="Help Desk">
             <system-help-desk
+              :system="data.system"
               :system-id="data.system.id"
               :help-desk="data.helpDesk"
               @update-data="getData"
@@ -75,6 +124,7 @@
           </CTab>
           <CTab title="Dokumen">
             <system-document
+              :system="data.system"
               :system-id="data.system.id"
               :documents="data.document"
               @update-data="getData"
@@ -83,6 +133,29 @@
         </CTabs>
       </CCardBody>
     </CCard>
+
+    <CModal
+      title="Salin kode dibawah"
+      :show.sync="modal.copy.show"
+      color="success"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <div class="form-group">
+                <textarea
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  v-model="modal.copy.value"
+                ></textarea>
+              </div>
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -176,6 +249,12 @@ export default {
         id: null,
         children: [],
       },
+      modal: {
+        copy: {
+          show: false,
+          value: '',
+        },
+      },
     }
   },
   mounted() {
@@ -183,7 +262,6 @@ export default {
     this.fetchTreeViewWorkUnit()
   },
   methods: {
-    //  Fetch Tree View
     fetchTreeViewWorkUnit() {
       this.$http
         .get('parsatuankerja/list/tree-view')
@@ -198,7 +276,7 @@ export default {
           }
         })
     },
-    // editSystem() {},
+
     getData() {
       this.$http
         .get(`systems/${this.$route.params.id}`)
@@ -221,6 +299,10 @@ export default {
           this.data.network = response.data.data.relation.network
           this.data.software = response.data.data.relation.software
           this.data.softwareTool = response.data.data.relation.software_tool
+          this.data.expertsRequired =
+            response.data.data.relation.expert_required
+          this.data.availabilityOfExperts =
+            response.data.data.relation.availability_of_expert
           this.data.security = response.data.data.relation.security
           this.data.certificate = response.data.data.relation.certificate
           this.data.serviceUser = response.data.data.relation.service_user
@@ -276,6 +358,14 @@ export default {
           }
         })
     },
+
+    showCopyModal() {
+      this.modal.copy = {
+        //ini dirubah
+        value: this.$refs.logo_img.innerHTML,
+        show: true,
+      }
+    },
   },
 }
 </script>
@@ -283,5 +373,8 @@ export default {
 <style scoped>
 .row-profile-service {
   background-color: #dfdfdf;
+}
+.row-profile-service td {
+  padding: 30px 0 10px 0;
 }
 </style>

@@ -1,124 +1,222 @@
 <template>
   <div>
-    <CRow>
-      <CCol lg="12">
-        <CCard>
-          <CCardHeader>
-            <CIcon name="cil-people" /> Akun
-            <div class="card-header-actions">
-              <CButton
-                color="success"
-                shape="pill"
-                size="sm"
-                variant="outline"
-                v-c-tooltip="{
-                  content: 'Tambah User',
-                  placement: 'bottom',
-                }"
-                @click="post"
-              >
-                <CIcon name="cil-plus" />
-              </CButton>
-            </div>
-          </CCardHeader>
-          <CCardBody>
-            <div class="mt-4">
-              <div v-if="spinner" class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="sr-only">Loading...</span>
-                </div>
+    <CCard>
+      <CCardHeader> Filter </CCardHeader>
+      <CCardBody>
+        <div class="d-flex p-3 p-lg-0">
+          <CButton
+            color="dark"
+            variant="outline"
+            size="sm"
+            class="mr-2"
+            :class="{ 'mr-auto': search.nama === null }"
+            v-c-tooltip="{
+              content: 'Filter',
+              placement: 'bottom',
+            }"
+            @click="filter"
+          >
+            Filter
+            <CIcon :name="setIconFilter" />
+          </CButton>
+          <CButton
+            v-show="search.nama !== null"
+            color="info"
+            variant="outline"
+            size="sm"
+            class="mr-auto"
+            v-c-tooltip="{
+              content: 'Bersihkan',
+              placement: 'bottom',
+            }"
+            @click="clearFilter"
+          >
+            Clear All
+            <CIcon name="cil-clear-all" />
+          </CButton>
+          <template v-if="listFilter">
+            <CButton
+              color="primary"
+              variant="outline"
+              size="sm"
+              class="mr-2"
+              v-c-tooltip="{
+                content: 'Cari',
+                placement: 'bottom',
+              }"
+              @click="filterData"
+            >
+              Search
+              <CIcon name="cil-search" />
+            </CButton>
+            <CButton
+              color="danger"
+              variant="outline"
+              size="sm"
+              v-c-tooltip="{
+                content: 'Reset',
+                placement: 'bottom',
+              }"
+              @click="resetFilter"
+            >
+              Reset
+              <CIcon name="cil-reload" />
+            </CButton>
+          </template>
+        </div>
+        <template v-if="listFilter">
+          <CRow class="px-3 p-lg-0 my-3">
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input
+                  v-model="search.nama"
+                  type="text"
+                  name="name"
+                  placeholder="Masukan Nama Lengkap"
+                  class="form-control"
+                />
               </div>
-              <div class="table-responsive">
-                <table v-if="!spinner" class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Nama</th>
-                      <th>Status</th>
-                      <th>Last Login</th>
-                      <th colspan="3">Aksi</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="data.length > 0">
-                      <tr v-for="(item, index) in data" :key="index">
-                        <th scope="row">
-                          {{ index + 1 }}
-                        </th>
-                        <td>{{ item.nama }}</td>
-                        <td>{{ item.status }}</td>
-                        <td>{{ item.last_login }}</td>
-                        <td>
-                          <CButton
-                            color="danger"
-                            size="sm"
-                            class="mr-1"
-                            v-c-tooltip="{
-                              content: 'Hapus User',
-                              placement: 'bottom',
-                            }"
-                            @click="destroy(item)"
-                          >
-                            <CIcon name="cil-trash" />
-                          </CButton>
-                          <CButton
-                            color="success"
-                            size="sm"
-                            class="mr-1"
-                            v-c-tooltip="{
-                              content: 'Edit User',
-                              placement: 'bottom',
-                            }"
-                            @click="edit(item)"
-                          >
-                            <CIcon name="cil-pencil" />
-                          </CButton>
-                          <template v-if="item.is_active">
-                            <CButton
-                              color="dark"
-                              size="sm"
-                              v-c-tooltip="{
-                                content: 'Non Aktifkan User',
-                                placement: 'bottom',
-                              }"
-                              @click="active(item)"
-                            >
-                              <CIcon name="cil-x-circle" />
-                            </CButton>
-                          </template>
-                          <template v-else>
-                            <CButton
-                              color="dark"
-                              size="sm"
-                              v-c-tooltip="{
-                                content: 'Aktifkan User',
-                                placement: 'bottom',
-                              }"
-                              @click="active(item)"
-                            >
-                              <CIcon name="cil-check-circle" />
-                            </CButton>
-                          </template>
-                        </td>
-                      </tr>
-                    </template>
-                    <template v-else>
-                      <tr>
-                        <td colspan="5" class="text-center"> Data Kosong </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
+            </CCol>
+          </CRow>
+        </template>
+      </CCardBody>
+    </CCard>
+    <CCard>
+      <CCardHeader>
+        <CIcon name="cil-people" /> Akun
+        <div class="card-header-actions">
+          <CButton
+            color="success"
+            shape="pill"
+            size="sm"
+            variant="outline"
+            v-c-tooltip="{
+              content: 'Tambah User',
+              placement: 'bottom',
+            }"
+            @click="post"
+          >
+            <CIcon name="cil-plus" />
+          </CButton>
+        </div>
+      </CCardHeader>
+      <CCardBody>
+        <div class="mt-lg-4">
+          <div v-if="spinner" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-            <!-- <CPagination
-                            :activePage.sync="currentPage"
-                            :pages="5"
-                        /> -->
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+          </div>
+          <div class="table-responsive">
+            <table v-if="!spinner" class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama</th>
+                  <th>Status</th>
+                  <th>Last Login</th>
+                  <th colspan="3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="data.length > 0">
+                  <tr v-for="(item, index) in data" :key="index">
+                    <th scope="row">
+                      {{
+                        (pagination.current_page - 1) * pagination.per_page +
+                        index +
+                        1
+                      }}
+                    </th>
+                    <td>{{ item.nama }}</td>
+                    <td
+                      ><span class="mobile-only mr-1">Status: </span>
+                      {{ item.nama_status }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Last login: </span>
+                      {{ item.last_login }}</td
+                    >
+                    <td>
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        class="mr-1"
+                        v-c-tooltip="{
+                          content: 'Hapus User',
+                          placement: 'bottom',
+                        }"
+                        @click="destroy(item)"
+                      >
+                        <CIcon name="cil-trash" />
+                        <span class="mobile-only ml-1">Hapus User</span>
+                      </CButton>
+                      <CButton
+                        color="success"
+                        size="sm"
+                        class="mr-1"
+                        v-c-tooltip="{
+                          content: 'Edit User',
+                          placement: 'bottom',
+                        }"
+                        @click="edit(item)"
+                      >
+                        <CIcon name="cil-pencil" />
+                        <span class="mobile-only ml-1">Edit User</span>
+                      </CButton>
+                      <template v-if="item.status">
+                        <CButton
+                          color="dark"
+                          size="sm"
+                          v-c-tooltip="{
+                            content: 'Non Aktifkan User',
+                            placement: 'bottom',
+                          }"
+                          @click="confirmDisable(item)"
+                        >
+                          <CIcon name="cil-x-circle" />
+                          <span class="mobile-only ml-1"
+                            >Non-aktifkan User</span
+                          >
+                        </CButton>
+                      </template>
+                      <template v-else>
+                        <CButton
+                          color="dark"
+                          size="sm"
+                          v-c-tooltip="{
+                            content: 'Aktifkan User',
+                            placement: 'bottom',
+                          }"
+                          @click="confirmEnable(item)"
+                        >
+                          <CIcon name="cil-check-circle" />
+                          <span class="mobile-only ml-1">Aktifkan User</span>
+                        </CButton>
+                      </template>
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td colspan="5" class="text-center"> Data Kosong </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </CCardBody>
+    </CCard>
+    <CPagination
+      :activePage.sync="pagination.current_page"
+      :pages="pagination.last_page"
+      size="sm"
+      align="center"
+      @update:activePage="getData"
+      v-if="data.length > 0"
+    />
     <CModal
       :title="modal.delete.title"
       :color="modal.delete.color"
@@ -142,59 +240,72 @@
         </CButton>
       </template>
     </CModal>
-    <CModal
-      :title="modal.post_put.title"
-      :color="modal.post_put.color"
-      :show.sync="modal.post_put.showModal"
-    >
-      <template v-slot:body-wrapper>
-        <div class="modal-body">
-          <CRow>
-            <CCol sm="12">
-              <label for="name">Nama Lengkap</label>
-              <input
-                v-model="forms.name"
-                type="text"
-                name="name"
-                placeholder="Masukan Nama Lengkap"
-                class="form-control"
-                @blur="errorValidations.name = []"
-              />
-              <message :messages="errorValidations.name" />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm="12">
-              <label for="username">Username</label>
-              <input
-                v-model="forms.username"
-                type="text"
-                name="username"
-                placeholder="Masukan Username"
-                class="form-control"
-                @input="validateUsername"
-                @blur="errorValidations.username = []"
-              />
-              <message :messages="errorValidations.username" />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol sm="12">
-              <label for="email">Email</label>
-              <input
-                v-model="forms.email"
-                type="text"
-                name="email"
-                placeholder="Masukan Email Yang Aktif"
-                class="form-control"
-                @input="validateEmail"
-                @blur="errorValidations.email = []"
-              />
-              <message :messages="errorValidations.email" />
-            </CCol>
-          </CRow>
-          <template v-if="modal.post_put.method == 'post'">
+    <ValidationObserver v-slot="{ invalid }" ref="form_admin">
+      <CModal
+        :title="modal.post_put.title"
+        :color="modal.post_put.color"
+        :show.sync="modal.post_put.showModal"
+      >
+        <template v-slot:body-wrapper>
+          <div class="modal-body">
             <CRow>
+              <CCol sm="12">
+                <label for="name">Nama Lengkap</label>
+                <ValidationProvider
+                  name="Nama Lengkap"
+                  :rules="{
+                    required: true,
+                  }"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    v-model="forms.name"
+                    type="text"
+                    name="name"
+                    placeholder="Masukan Nama Lengkap"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 || errorValidations.name.length > 0,
+                    }"
+                    @blur="errorValidations.name = []"
+                  />
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.name" />
+              </CCol>
+              <CCol sm="12">
+                <label for="username">Username</label>
+                <ValidationProvider
+                  name="username"
+                  :rules="{
+                    required: true,
+                  }"
+                  v-slot="{ errors }"
+                >
+                  <input
+                    v-model="forms.username"
+                    type="text"
+                    name="username"
+                    placeholder="Masukan Username"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.username.length > 0,
+                    }"
+                    @input="validateUsername"
+                    @blur="errorValidations.username = []"
+                  />
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.username" />
+              </CCol>
+              <!-- <template v-if="modal.post_put.method == 'post'">
               <CCol sm="12">
                 <label for="password">Password</label>
                 <input
@@ -207,8 +318,6 @@
                 />
                 <message :messages="errorValidations.password" />
               </CCol>
-            </CRow>
-            <CRow>
               <CCol sm="12">
                 <label for="password_confirmation">Konfirmasi Password</label>
                 <input
@@ -219,9 +328,42 @@
                   class="form-control"
                 />
               </CCol>
+            </template> -->
+              <CCol sm="12">
+                <div class="form-group">
+                  <label for="name">Status</label>
+                  <div class="d-flex">
+                    <div class="form-check form-check-inline mr-1">
+                      <input
+                        v-model="forms.status"
+                        class="form-check-input"
+                        id="inline-radio1"
+                        type="radio"
+                        value="0"
+                        name="inline-radios"
+                      />
+                      <label class="form-check-label" for="inline-radio1"
+                        >Tidak</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline mr-1">
+                      <input
+                        v-model="forms.status"
+                        class="form-check-input"
+                        id="inline-radio1"
+                        type="radio"
+                        value="1"
+                        name="inline-radios"
+                      />
+                      <label class="form-check-label" for="inline-radio1"
+                        >Ya</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </CCol>
             </CRow>
-          </template>
-          <CRow>
+            <!-- <CRow>
             <CCol sm="12">
               <label class="form-label">Roles</label>
               <label
@@ -241,15 +383,73 @@
                 }}</span>
               </label>
             </CCol>
-          </CRow>
+          </CRow> -->
+          </div>
+        </template>
+        <template v-slot:footer>
+          <CButton
+            color="dark"
+            size="sm"
+            class="m-2"
+            @click="closeModalPostPut"
+          >
+            Cancel
+          </CButton>
+          <CButton
+            color="primary"
+            size="sm"
+            class="m-2"
+            @click="submitPostPut"
+            :disabled="invalid"
+          >
+            {{ modal.post_put.labelButton }}
+          </CButton>
+        </template>
+      </CModal>
+    </ValidationObserver>
+    <CModal
+      :title="modal.disable.title"
+      :color="modal.disable.color"
+      :show.sync="modal.disable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.disable.message }}
+            <strong>{{ modal.disable.data }}</strong
+            >?
+          </p>
         </div>
       </template>
       <template v-slot:footer>
-        <CButton color="dark" size="sm" class="m-2" @click="closeModalPostPut">
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
           Cancel
         </CButton>
-        <CButton color="primary" size="sm" class="m-2" @click="submitPostPut">
-          {{ modal.post_put.labelButton }}
+        <CButton color="primary" size="sm" class="m-2" @click="disable">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.enable.title"
+      :color="modal.enable.color"
+      :show.sync="modal.enable.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.enable.message }}
+            <strong>{{ modal.enable.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="enable">
+          Submit
         </CButton>
       </template>
     </CModal>
@@ -261,8 +461,35 @@ export default {
   name: 'AccountListAdmin',
   data() {
     return {
+      search: {
+        nama: null,
+      },
+      listFilter: false,
+      pagination: {
+        current_page: 1,
+        last_page: 10,
+        per_page: null,
+      },
       spinner: true,
       modal: {
+        disable: {
+          showModal: false,
+          title: 'Konfirmasi Penontifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Menonaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
+        enable: {
+          showModal: false,
+          title: 'Konfirmasi Aktifkan User',
+          color: 'dark',
+          message: 'Apakah Anda Yakin Ingin Mengaktifkan Akun Ini',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+        },
         delete: {
           showModal: false,
           title: null,
@@ -280,38 +507,142 @@ export default {
         },
       },
       data: [],
-      roles: [],
+      // roles: [],
       forms: {
         id: null,
         name: null,
         username: null,
-        email: null,
-        password: null,
-        password_confirmation: null,
-        roles: [],
+        status: null,
+        // password: null,
+        // password_confirmation: null,
+        // roles: [],
       },
       errorValidations: {
         name: [],
         username: [],
-        email: [],
-        password: [],
+        // password: [],
       },
     }
   },
+  computed: {
+    setIconFilter() {
+      if (this.listFilter) {
+        return 'cil-filter-x'
+      }
+
+      return 'cil-filter'
+    },
+  },
   created() {
     this.getData()
-    this.getRole()
+    // this.getRole()
   },
   methods: {
-    active(item) {
+    closeModal() {
+      this.modal.disable.showModal = false
+      this.modal.enable.showModal = false
+    },
+    confirmDisable(value) {
+      this.modal.disable.showModal = true
+      this.modal.disable.uniqueId = value.id
+      this.modal.disable.data = value.nama
+    },
+    confirmEnable(value) {
+      this.modal.enable.showModal = true
+      this.modal.enable.uniqueId = value.id
+      this.modal.enable.data = value.nama
+    },
+    resetFilter() {
+      this.spinner = true
+      this.clearFilter()
+
       this.$http
-        .patch(`/users/active/${item.id}`)
+        .get('/users/filter', {
+          params: {
+            page: 1,
+          },
+        })
         .then((response) => {
           this.spinner = false
-          this.getData()
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    clearFilter() {
+      this.search.nama = null
+    },
+    filter() {
+      this.listFilter = !this.listFilter
+      this.clearFilter()
+    },
+    filterData() {
+      this.spinner = true
+
+      this.$http
+        .get('/users/filter', {
+          params: {
+            page: 1,
+            filter: 'nama',
+            q: this.search.nama,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    enable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/enable/${this.modal.enable.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.enable.showModal = false
+          this.spinner = false
+          this.filterData()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
+          this.modal.enable.showModal = false
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    disable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/disable/${this.modal.disable.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.disable.showModal = false
+          this.spinner = false
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.modal.disable.showModal = false
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
@@ -332,23 +663,22 @@ export default {
         this.forms.username = value
       }
     },
-    validateEmail() {
-      const regex = new RegExp(/^\S*$/)
-      const value = this.forms.email.toString().replace(/ /g, '').toLowerCase()
-      if (regex.test(this.forms.email)) {
-        this.errorValidations.email = []
-      } else {
-        this.errorValidations.email = ['Tidak Boleh ada Spasi']
-        this.forms.email = value
-      }
-    },
     getData() {
       this.spinner = true
       this.$http
-        .get('/users/filter')
+        .get('/users/filter', {
+          params: {
+            page: this.pagination.current_page,
+            filter: 'nama',
+            q: this.search.nama,
+          },
+        })
         .then((response) => {
           this.spinner = false
           this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
         })
         .catch((error) => {
           if (error.response.status === 500) {
@@ -358,27 +688,27 @@ export default {
           }
         })
     },
-    getRole() {
-      this.spinner = true
-      this.$http
-        .get('/roles')
-        .then((response) => {
-          this.spinner = false
-          this.roles = response.data.data
-        })
-        .catch((error) => {
-          if (error.response.status === 500) {
-            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
-          } else {
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
-          }
-        })
-    },
+    // getRole() {
+    //   this.spinner = true
+    //   this.$http
+    //     .get('/roles')
+    //     .then((response) => {
+    //       this.spinner = false
+    //       this.roles = response.data.data
+    //     })
+    //     .catch((error) => {
+    //       if (error.response.status === 500) {
+    //         this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+    //       } else {
+    //         this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+    //       }
+    //     })
+    // },
     destroy(item) {
       this.modal.delete.showModal = true
       this.modal.delete.title = 'Hapus Data'
       this.modal.delete.color = 'danger'
-      this.modal.delete.data = item.name
+      this.modal.delete.data = item.nama
       this.modal.delete.uniqueId = item.id
       this.modal.delete.message = 'Ingin Menghapus Data'
       this.modal.delete.labelButton = 'Hapus'
@@ -387,10 +717,10 @@ export default {
       this.forms.id = null
       this.forms.name = null
       this.forms.username = null
-      this.forms.email = null
-      this.forms.password = null
-      this.forms.password_confirmation = null
-      this.forms.roles = []
+      this.forms.status = '1'
+      // this.forms.password = null
+      // this.forms.password_confirmation = null
+      // this.forms.roles = []
     },
     post() {
       this.clearForm()
@@ -436,7 +766,7 @@ export default {
       this.$http
         .delete(`users/${this.modal.delete.uniqueId}`)
         .then((response) => {
-          this.getData()
+          this.filterData()
           this.closeModalDelete()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
@@ -472,8 +802,7 @@ export default {
       })
       this.errorValidations.name = []
       this.errorValidations.username = []
-      this.errorValidations.email = []
-      this.errorValidations.password = []
+      // this.errorValidations.password = []
 
       this.$http({
         method: 'post',
@@ -481,12 +810,16 @@ export default {
         data: formData,
       })
         .then((response) => {
-          this.getData()
+          this.$nextTick(() => {
+            this.$refs.form_admin.reset()
+          })
+          this.filterData()
           this.closeModalPostPut()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.name =
               typeof error.response.data.errors.name === 'undefined'
                 ? []
@@ -495,14 +828,10 @@ export default {
               typeof error.response.data.errors.username === 'undefined'
                 ? []
                 : error.response.data.errors.username
-            this.errorValidations.email =
-              typeof error.response.data.errors.email === 'undefined'
-                ? []
-                : error.response.data.errors.email
-            this.errorValidations.password =
-              typeof error.response.data.errors.password === 'undefined'
-                ? []
-                : error.response.data.errors.password
+            // this.errorValidations.password =
+            //   typeof error.response.data.errors.password === 'undefined'
+            //     ? []
+            //     : error.response.data.errors.password
           } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
@@ -512,10 +841,10 @@ export default {
     },
     edit(item) {
       this.forms.id = item.id
-      this.forms.name = item.name
+      this.forms.name = item.nama
       this.forms.username = item.username
-      this.forms.email = item.email
-      this.forms.roles = item.roles
+      this.forms.status = item.status
+      // this.forms.roles = item.roles
       this.put()
     },
   },

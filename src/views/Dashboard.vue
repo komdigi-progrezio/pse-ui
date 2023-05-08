@@ -1,562 +1,500 @@
 <template>
   <div>
-    <!-- <WidgetsDropdown/>
-    <CCard>
-      <CCardBody>
-        <CRow>
-          <CCol sm="5">
-            <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-            <div class="small text-muted">November 2017</div>
-          </CCol>
-          <CCol sm="7" class="d-none d-md-block">
-            <CButton color="primary" class="float-right">
-              <CIcon name="cil-cloud-download"/>
-            </CButton>
-            <CButtonGroup class="float-right mr-3">
-              <CButton
-                color="outline-secondary"
-                v-for="(value, key) in ['Day', 'Month', 'Year']"
-                :key="key"
-                class="mx-0"
-                :pressed="value === selected ? true : false"
-                @click="selected = value"
-              >
-                {{value}}
-              </CButton>
-            </CButtonGroup>
-          </CCol>
-        </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
-      </CCardBody>
-      <CCardFooter>
-        <CRow class="text-center">
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Visits</div>
-            <strong>29.703 Users (40%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="success"
-              :value="40"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Unique</div>
-            <strong>24.093 Users (20%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="info"
-              :value="20"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Pageviews</div>
-            <strong>78.706 Views (60%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="warning"
-              :value="60"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">New Users</div>
-            <strong>22.123 Users (80%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="danger"
-              :value="80"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Bounce Rate</div>
-            <strong>Average Rate (40.15%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              :value="40"
-            />
-          </CCol>
-        </CRow>
-      </CCardFooter>
-    </CCard>
-    <WidgetsBrand/>
-    <CRow>
-      <CCol md="12">
-        <CCard>
-          <CCardHeader>
-            Traffic &amp; Sales
-          </CCardHeader>
-          <CCardBody>
-            <CRow>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                    <CCallout color="info">
-                      <small class="text-muted">New Clients</small><br>
-                      <strong class="h4">9,123</strong>
-                    </CCallout>
-                  </CCol>
-                  <CCol sm="6">
-                    <CCallout color="danger">
-                      <small class="text-muted">Recurring Clients</small><br>
-                      <strong class="h4">22,643</strong>
-                    </CCallout>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0">
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Monday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      color="info"
-                      :value="34"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      color="danger"
-                      :value="78"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Tuesday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="56"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="94"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Wednesday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="12"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="67"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Thursday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="43"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="91"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Friday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="22"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="73"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Saturday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="53"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="82"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Sunday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="9"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="69"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="legend text-center">
-                  <small>
-                    <sup><CBadge shape="pill" color="info">&nbsp;</CBadge></sup>
-                    New clients
-                    &nbsp;&nbsp;
-                    <sup><CBadge shape="pill" color="danger">&nbsp;</CBadge></sup>
-                    Recurring clients
-                  </small>
-                </div>
-              </CCol>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                    <CCallout color="warning">
-                      <small class="text-muted">Pageviews</small><br>
-                      <strong class="h4">78,623</strong>
-                    </CCallout>
-                  </CCol>
-                  <CCol sm="6">
-                    <CCallout color="success">
-                      <small class="text-muted">Organic</small><br>
-                      <strong class="h4">49,123</strong>
-                    </CCallout>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0">
-                <ul class="horizontal-bars type-2">
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-user" class="progress-group-icon"/>
-                      <span class="title">Male</span>
-                      <span class="ml-auto font-weight-bold">43%</span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="43"
-                        color="warning"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group mb-5">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-user-female" class="progress-group-icon"/>
-                      <span class="title">Female</span>
-                      <span class="ml-auto font-weight-bold">37%</span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="37"
-                        color="warning"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-globe-alt" class="progress-group-icon"/>
-                      <span class="title">Organic Search</span>
-                      <span class="ml-auto font-weight-bold">
-                        191,235 <span class="text-muted small">(56%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="56"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-facebook"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">Facebook</span>
-                      <span class="ml-auto font-weight-bold">
-                        51,223 <span class="text-muted small">(15%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="15"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-twitter"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">Twitter</span>
-                      <span class="ml-auto font-weight-bold">
-                        37,564 <span class="text-muted small">(11%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="11"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-linkedin"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">LinkedIn</span>
-                      <span class="ml-auto font-weight-bold">
-                        27,319 <span class="text-muted small">&nbsp;(8%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="8"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="divider text-center">
-                    <CButton color="link" size="sm" class="text-muted">
-                      <CIcon name="cil-options"/>
-                    </CButton>
-                  </div>
-                </ul>
-              </CCol>
-            </CRow>
-            <br/>
-            <CDataTable
-              class="mb-0 table-outline"
-              hover
-              :items="tableItems"
-              :fields="tableFields"
-              head-color="light"
-              no-sorting
+    <template v-if="isAdmin">
+      <div class="row">
+        <div class="col-6 col-lg-3">
+          <div class="card text-white bg-blue">
+            <div
+              class="card-body p-3 d-flex justify-content-between align-items-start"
             >
-              <td slot="avatar" class="text-center" slot-scope="{item}">
-                <div class="c-avatar">
-                  <img :src="item.avatar.url" class="c-avatar-img" alt="">
-                  <span
-                    class="c-avatar-status"
-                    :class="`bg-${item.avatar.status || 'secondary'}`"
-                  ></span>
-                </div>
-              </td>
-              <td slot="user" slot-scope="{item}">
-                <div>{{item.user.name}}</div>
-                <div class="small text-muted">
-                  <span>
-                    <template v-if="item.user.new">New</template>
-                    <template v-else>Recurring</template>
-                  </span> | Registered: {{item.user.registered}}
-                </div>
-              </td>
-              <td
-                slot="country"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.country.flag"
-                  height="25"
-                />
-              </td>
-              <td slot="usage" slot-scope="{item}">
-                <div class="clearfix">
-                  <div class="float-left">
-                    <strong>{{item.usage.value}}%</strong>
-                  </div>
-                  <div class="float-right">
-                    <small class="text-muted">{{item.usage.period}}</small>
-                  </div>
-                </div>
-                <CProgress
-                  class="progress-xs"
-                  v-model="item.usage.value"
-                  :color="color(item.usage.value)"
-                />
-              </td>
-              <td
-                slot="payment"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.payment.icon"
-                  height="25"
-                />
-              </td>
-              <td slot="activity" slot-scope="{item}">
-                <div class="small text-muted">Last login</div>
-                <strong>{{item.activity}}</strong>
-              </td>
-            </CDataTable>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow> -->
+              <div class="mx-auto text-center">
+                <i class="fas fa-users fa-2x"></i>
+                <div class="text-value-lg my-1">{{ widget.pejabat }}</div>
+                <div>Total Pejabat</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="card text-white bg-blue">
+            <div
+              class="card-body p-3 d-flex justify-content-between align-items-start"
+            >
+              <div class="mx-auto text-center">
+                <i class="fas fa-users-cog fa-2x"></i>
+                <div class="text-value-lg my-1">{{ widget.admin }}</div>
+                <div>Total Admin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="card text-white bg-blue">
+            <div
+              class="card-body p-3 d-flex justify-content-between align-items-start"
+            >
+              <div class="mx-auto text-center">
+                <i class="fas fa-cloud fa-2x"></i>
+                <div class="text-value-lg my-1">{{ widget.sis_profil }}</div>
+                <div>Total Sistem Elektronik</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="card text-white bg-blue">
+            <div
+              class="card-body p-3 d-flex justify-content-between align-items-start"
+            >
+              <div class="mx-auto text-center">
+                <i class="far fa-file-alt fa-2x"></i>
+                <div class="text-value-lg my-1">{{
+                  widget.request_update
+                }}</div>
+                <div>Total Perubahan Data</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <CCard>
+        <CCardHeader>
+          <strong>Sistem Elektronik</strong>
+          <div class="card-header-actions">
+            <CButton
+              color="danger"
+              shape="pill"
+              variant="outline"
+              v-c-tooltip="{
+                content: 'Reset Filter',
+                placement: 'bottom',
+              }"
+              @click="resetChartSystemElectronic"
+            >
+              <CIcon name="cil-reload" />
+            </CButton>
+          </div>
+          <div class="row w-100 mt-2 mb-2">
+            <div class="col-4 col-lg-2">
+              <div class="form-group mb-0">
+                <label for="name">Bulan</label>
+                <select class="form-control" v-model="search.chartSystem.month">
+                  <option value="">Pilih Bulan</option>
+                  <option
+                    v-for="(value, index) in dataSelect.month"
+                    :value="value.id"
+                    :key="index"
+                    >{{ value.name }}</option
+                  >
+                </select>
+              </div>
+            </div>
+            <div class="col-4 col-lg-2">
+              <div class="form-group mb-0">
+                <label for="name">Tahun</label>
+                <select class="form-control" v-model="search.chartSystem.year">
+                  <option
+                    v-for="(value, index) in dataSelect.year"
+                    :value="value"
+                    :key="index"
+                    >{{ value }}</option
+                  >
+                </select>
+              </div>
+            </div>
+            <div class="d-flex align-items-end">
+              <div>
+                <CButton
+                  color="success"
+                  variant="outline"
+                  v-c-tooltip="{
+                    content: 'Filter',
+                    placement: 'bottom',
+                  }"
+                  @click="fetchChartSystemElectronic"
+                >
+                  Filter
+                </CButton>
+              </div>
+            </div>
+            <div class="col-2 d-flex align-items-end">
+              <div>
+                <CButton
+                  color="success"
+                  variant="outline"
+                  v-c-tooltip="{
+                    content: 'Download Data',
+                    placement: 'bottom',
+                  }"
+                  @click="downloadChartSystemElectronic"
+                >
+                  Download
+                </CButton>
+              </div>
+            </div>
+          </div>
+        </CCardHeader>
+
+        <CCardBody class="p-3">
+          <CChartBar
+            class="mt-4"
+            style="height: 300px"
+            :datasets="[
+              {
+                data: chart.systemElectronic.approved,
+                backgroundColor: '#321FDB',
+                label: 'Sudah Disetujui',
+              },
+              {
+                data: chart.systemElectronic.not_approved,
+                backgroundColor: '#3399FF',
+                label: 'Belum Disetujui',
+              },
+              {
+                data: chart.systemElectronic.publish,
+                backgroundColor: '#F9B115',
+                label: 'Sudah Dipublish',
+              },
+              {
+                data: chart.systemElectronic.not_publish,
+                backgroundColor: '#E55353',
+                label: 'Tidak Dipublish',
+              },
+            ]"
+            :labels="chart.systemElectronic.label"
+            :options="{
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  },
+                ],
+              },
+            }"
+          />
+        </CCardBody>
+      </CCard>
+
+      <!-- Start Chart Change Data Submission Section -->
+      <CCard>
+        <CCardHeader>
+          <strong>Pengajuan Perubahan Data</strong>
+          <div class="card-header-actions">
+            <CButton
+              color="danger"
+              shape="pill"
+              variant="outline"
+              v-c-tooltip="{
+                content: 'Reset Filter',
+                placement: 'bottom',
+              }"
+              @click="resetChartChangeDataSubmission"
+            >
+              <CIcon name="cil-reload" />
+            </CButton>
+          </div>
+
+          <!-- Filter Section -->
+          <div class="row w-100 mt-2 mb-2">
+            <div class="col-5 col-lg-2">
+              <div class="form-group mb-0">
+                <label for="name">Bulan</label>
+                <select
+                  class="form-control"
+                  v-model="search.chartChangeDataSubmission.month"
+                >
+                  <option value="">Pilih Bulan</option>
+                  <option
+                    v-for="(value, index) in dataSelect.month"
+                    :value="value.id"
+                    :key="index"
+                    >{{ value.name }}</option
+                  >
+                </select>
+              </div>
+            </div>
+            <div class="col-5 col-lg-2">
+              <div class="form-group mb-0">
+                <label for="name">Tahun</label>
+                <select
+                  class="form-control"
+                  v-model="search.chartChangeDataSubmission.year"
+                >
+                  <option
+                    v-for="(value, index) in dataSelect.year"
+                    :value="value"
+                    :key="index"
+                  >
+                    {{ value }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-2 d-flex align-items-end">
+              <div>
+                <CButton
+                  color="success"
+                  variant="outline"
+                  v-c-tooltip="{
+                    content: 'Filter',
+                    placement: 'bottom',
+                  }"
+                  @click="fetchChartChangeDataSubmission"
+                >
+                  Filter
+                </CButton>
+              </div>
+            </div>
+          </div>
+          <!-- Filter Section -->
+        </CCardHeader>
+
+        <CCardBody class="p-3">
+          <!-- Chart Section -->
+          <CChartLine
+            class="mt-4"
+            style="height: 300px"
+            :datasets="[
+              {
+                data: chart.changeDataSubmission.approved,
+                borderColor: '#321FDB',
+                fill: false,
+                label: 'Sudah Disetujui',
+              },
+              {
+                data: chart.changeDataSubmission.finished,
+                borderColor: '#3399FF',
+                fill: false,
+                label: 'Sudah Selesai',
+              },
+              {
+                data: chart.changeDataSubmission.not_approved,
+                borderColor: '#F9B115',
+                fill: false,
+                label: 'Tidak Disetujui',
+              },
+              {
+                data: chart.changeDataSubmission.not_finished,
+                borderColor: '#E55353',
+                fill: false,
+                label: 'Tidak Selesai',
+              },
+            ]"
+            :labels="chart.changeDataSubmission.label"
+            :options="{
+              maintainAspectRatio: false,
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true,
+                    },
+                  },
+                ],
+              },
+            }"
+          />
+          <!-- Chard Section -->
+        </CCardBody>
+      </CCard>
+      <!-- End Chart Change Data Submission Section -->
+    </template>
   </div>
 </template>
 
 <script>
-// import MainChartExample from './charts/MainChartExample'
-// import WidgetsDropdown from './widgets/WidgetsDropdown'
-// import WidgetsBrand from './widgets/WidgetsBrand'
-
 export default {
   name: 'Dashboard',
-  // components: {
-  //   MainChartExample,
-  //   WidgetsDropdown,
-  //   WidgetsBrand,
-  // },
   data() {
     return {
-      selected: 'Month',
-      tableItems: [
-        {
-          avatar: { url: 'img/avatars/1.jpg', status: 'success' },
-          user: {
-            name: 'Yiorgos Avraamu',
-            new: true,
-            registered: 'Jan 1, 2015',
-          },
-          country: { name: 'USA', flag: 'cif-us' },
-          usage: { value: 50, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Mastercard', icon: 'cib-cc-mastercard' },
-          activity: '10 sec ago',
+      search: {
+        chartSystem: {
+          month: '',
+          year: new Date(Date.now()).getFullYear(),
         },
-        {
-          avatar: { url: 'img/avatars/2.jpg', status: 'danger' },
-          user: {
-            name: 'Avram Tarasios',
-            new: false,
-            registered: 'Jan 1, 2015',
-          },
-          country: { name: 'Brazil', flag: 'cif-br' },
-          usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Visa', icon: 'cib-cc-visa' },
-          activity: '5 minutes ago',
+
+        chartChangeDataSubmission: {
+          month: '',
+          year: new Date(Date.now()).getFullYear(),
         },
-        {
-          avatar: { url: 'img/avatars/3.jpg', status: 'warning' },
-          user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'India', flag: 'cif-in' },
-          usage: { value: 74, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Stripe', icon: 'cib-stripe' },
-          activity: '1 hour ago',
+      },
+
+      widget: {
+        pejabat: null,
+        admin: null,
+        sis_profil: null,
+        request_update: null,
+      },
+
+      chart: {
+        systemElectronic: {
+          approved: [],
+          not_approved: [],
+          publish: [],
+          not_publish: [],
+          label: [],
         },
-        {
-          avatar: { url: 'img/avatars/4.jpg', status: '' },
-          user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'France', flag: 'cif-fr' },
-          usage: { value: 98, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'PayPal', icon: 'cib-paypal' },
-          activity: 'Last month',
+
+        changeDataSubmission: {
+          approved: [],
+          finished: [],
+          not_approved: [],
+          not_finished: [],
+          label: [],
         },
-        {
-          avatar: { url: 'img/avatars/5.jpg', status: 'success' },
-          user: {
-            name: 'Agapetus Tadeáš',
-            new: true,
-            registered: 'Jan 1, 2015',
-          },
-          country: { name: 'Spain', flag: 'cif-es' },
-          usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Google Wallet', icon: 'cib-google-pay' },
-          activity: 'Last week',
-        },
-        {
-          avatar: { url: 'img/avatars/6.jpg', status: 'danger' },
-          user: {
-            name: 'Friderik Dávid',
-            new: true,
-            registered: 'Jan 1, 2015',
-          },
-          country: { name: 'Poland', flag: 'cif-pl' },
-          usage: { value: 43, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Amex', icon: 'cib-cc-amex' },
-          activity: 'Last week',
-        },
-      ],
-      tableFields: [
-        { key: 'avatar', label: '', _classes: 'text-center' },
-        { key: 'user' },
-        { key: 'country', _classes: 'text-center' },
-        { key: 'usage' },
-        { key: 'payment', label: 'Payment method', _classes: 'text-center' },
-        { key: 'activity' },
-      ],
+      },
+      dataSelect: {
+        month: [],
+      },
     }
   },
-  methods: {
-    color(value) {
-      let $color
-      if (value <= 25) {
-        $color = 'info'
-      } else if (value > 25 && value <= 50) {
-        $color = 'success'
-      } else if (value > 50 && value <= 75) {
-        $color = 'warning'
-      } else if (value > 75 && value <= 100) {
-        $color = 'danger'
+
+  computed: {
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
       }
-      return $color
+
+      return false
+    },
+  },
+  created() {
+    this.fetchWidget()
+    this.fetchChartSystemElectronic()
+    this.fetchChartChangeDataSubmission()
+  },
+
+  methods: {
+    resetChartSystemElectronic() {
+      this.search.chartSystem.month = ''
+      this.search.chartSystem.year = new Date(Date.now()).getFullYear()
+
+      this.fetchChartSystemElectronic()
+      this.downloadChartSystemElectronic()
+    },
+
+    fetchWidget() {
+      this.$http
+        .get('/dashboard/widget')
+        .then((response) => {
+          this.widget.pejabat = response.data.pejabat
+          this.widget.admin = response.data.admin
+          this.widget.sis_profil = response.data.sis_profil
+          this.widget.request_update = response.data.request_update
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+
+    fetchChartSystemElectronic() {
+      this.$http
+        .get('/dashboard/chart/system/electronic', {
+          params: {
+            month: this.search.chartSystem.month,
+            year: this.search.chartSystem.year,
+          },
+        })
+        .then((response) => {
+          this.chart.systemElectronic.approved = response.data.data.approved
+          this.chart.systemElectronic.not_approved =
+            response.data.data.not_approved
+          this.chart.systemElectronic.publish = response.data.data.publish
+          this.chart.systemElectronic.not_publish =
+            response.data.data.not_publish
+          this.chart.systemElectronic.label = response.data.label
+          this.dataSelect.month = response.data.month
+          this.dataSelect.year = response.data.year
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+
+    downloadChartSystemElectronic() {
+      this.$http
+        .get('/dashboard/chart/system/downloadelectronic', {
+          params: {
+            month: this.search.chartSystem.month,
+            year: this.search.chartSystem.year,
+          },
+        })
+        .then((response) => {
+          console.log(response)
+          window.location.href = response.data.path
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+
+    /**
+     * Filter Section
+     */
+    resetChartChangeDataSubmission() {
+      Object.assign(this.search.chartChangeDataSubmission, {
+        month: '',
+        year: new Date(Date.now()).getFullYear(),
+      })
+
+      this.fetchChartChangeDataSubmission()
+    },
+
+    /**
+     * Fetch data pengajuan perubahan data
+     */
+    fetchChartChangeDataSubmission() {
+      this.$http
+        .get('dashboard/chart/request/update', {
+          params: {
+            ...this.search.chartChangeDataSubmission,
+          },
+        })
+        .then((response) => {
+          Object.assign(this.chart.changeDataSubmission, {
+            approved: response.data.data.approved,
+            finished: response.data.data.finished,
+            not_approved: response.data.data.not_approved,
+            not_finished: response.data.data.not_finished,
+            label: response.data.label,
+          })
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.showToast('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.showToast(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+
+    /**
+     * Show toast
+     *
+     * @param {string} message
+     * @param {string} title
+     */
+    showToast(message, title) {
+      this.$toastr.e(message, title)
     },
   },
 }

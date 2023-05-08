@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader> Detail Akun </CCardHeader>
-      <CCardBody>
+      <CCardBody class="p-3 label-strong">
         <div v-if="spinner" class="d-flex justify-content-center">
           <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
@@ -15,55 +15,79 @@
           <h6>{{ data.jabatan }}</h6>
           <CTabs variant="tabs" :active-tab="0" :fill="true" :justified="true">
             <CTab title="Tentang">
-              <CRow>
+              <CRow class="mt-3">
+                <CCol sm="12" md="6" lg="6">
+                  <label>Alamat Email : </label>
+                </CCol>
+                <CCol sm="12" md="6" lg="6">
+                  {{ data.username }}
+                </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label>NIP : </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.nip }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> No Telepon : </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.no_telepon }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label>No Handphone: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.no_hp }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Satuan Kerja : </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.satuan_kerja }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Alamat : </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.alamat }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Provinsi: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.propinsi }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Kota / Kabupaten: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.kota }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Kode POS: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.kode_pos }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Instansi: </label>
                 </CCol>
@@ -73,19 +97,25 @@
               </CRow>
             </CTab>
             <CTab title="Lain - Lain">
-              <CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Download Dokumen: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
-                  {{ data.dokumen }}
+                  <a href="" @click.prevent="showFile(data.url_dokumen)">{{
+                    data.dokumen
+                  }}</a>
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Dibuat: </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
                   {{ data.created_at }}
                 </CCol>
+              </CRow>
+              <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
                   <label> Diperbaharui: </label>
                 </CCol>
@@ -120,6 +150,7 @@ export default {
         propinsi: null,
         kode_pos: null,
         instansi_induk: null,
+        url_dokumen: null,
         dokumen: null,
         no_telepon: null,
         no_hp: null,
@@ -162,6 +193,7 @@ export default {
           vm.data.kode_pos = response.data.data.kode_pos
           vm.data.instansi_induk = response.data.data.instansi_induk
           vm.data.dokumen = response.data.data.dokumen
+          vm.data.url_dokumen = response.data.data.url_dokumen
           vm.data.last_login = response.data.data.last_login
           vm.data.instansi_induk_text = response.data.data.instansi_induk_text
           vm.data.is_admin = response.data.data.is_admin
@@ -187,6 +219,9 @@ export default {
     })
   },
   methods: {
+    showFile(value) {
+      window.open(value)
+    },
     getData() {
       return this.$http.get(`users/${this.$route.params.id}`)
     },

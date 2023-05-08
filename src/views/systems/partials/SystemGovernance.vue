@@ -3,14 +3,15 @@
     <h5>Dasar Hukum</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click.prevent="openModalLegalBasis('simpan', 'Tambah Data')"
+      @click.prevent="openModalLegalBasis('Simpan', 'Tambah Data')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Dasar Hukum</a>
     </button>
 
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -19,7 +20,7 @@
             <td>No</td>
             <td>Tahun</td>
             <td>Tentang</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +35,7 @@
                   {{ currentLegalbasis.keterangan }}
                 </p>
               </td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -80,21 +81,22 @@
     <h5>SOP</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click.prevent="openModalSop('simpan', 'Tambah Data')"
+      @click.prevent="openModalSop('Simpan', 'Tambah Data')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah SOP</a>
     </button>
 
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Nama SOP</td>
             <td>Keterangan</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -105,7 +107,7 @@
               <td>{{
                 currentSop.keterangan !== 'null' ? currentSop.keterangan : '-'
               }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -142,7 +144,11 @@
       </table>
     </div>
     <!-- Modal Legal Basis -->
-    <ValidationObserver v-slot="{ invalid }" :ref="legalBasisForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="legalBasisForm"
+    >
       <CModal
         :title="modal.legalBasis.title"
         :show.sync="modal.legalBasis.show"
@@ -283,6 +289,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.legalBasisDelete.title"
       color="danger"
       :show.sync="modal.legalBasisDelete.show"
@@ -323,7 +330,11 @@
     <!-- Modal Legal Basis -->
 
     <!-- Modal SOP -->
-    <ValidationObserver v-slot="{ invalid }" :ref="sopForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="sopForm"
+    >
       <CModal
         :title="modal.sop.title"
         :show.sync="modal.sop.show"
@@ -397,6 +408,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.sopDelete.title"
       color="danger"
       :show.sync="modal.sopDelete.show"
@@ -435,6 +447,11 @@
 export default {
   name: 'SystemGovernance',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     legalBasis: {
       type: Array,
       default: () => [],
@@ -571,11 +588,11 @@ export default {
     saveLegalbasis() {
       this.form.legalBasis.sis_profil_id = this.systemId
 
-      if (this.modal.legalBasis.type === 'simpan') {
+      if (this.modal.legalBasis.type === 'Simpan') {
         this.addLegalBasis()
       }
 
-      if (this.modal.legalBasis.type === 'update') {
+      if (this.modal.legalBasis.type === 'Update') {
         this.updateLegalBasis()
       }
     },
@@ -689,11 +706,11 @@ export default {
     saveSop() {
       this.form.sop.sis_profil_id = this.systemId
 
-      if (this.modal.sop.type === 'simpan') {
+      if (this.modal.sop.type === 'Simpan') {
         this.addSop()
       }
 
-      if (this.modal.sop.type === 'update') {
+      if (this.modal.sop.type === 'Update') {
         this.updateSop()
       }
     },

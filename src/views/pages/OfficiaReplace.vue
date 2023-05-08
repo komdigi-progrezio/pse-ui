@@ -4,7 +4,7 @@
       <div class="card-header">
         Pendaftaran Penggantian Pejabat Pendaftar Sistem Elektronik
       </div>
-      <div class="card-body">
+      <div class="card-body p-3">
         <ValidationObserver v-slot="{ invalid }" ref="form">
           <h5>Data Akun</h5>
           <div class="form-group row">
@@ -117,7 +117,7 @@
             <div class="col-sm-10">
               <ValidationProvider
                 name="NIP"
-                rules="required|digits:18"
+                rules="required"
                 v-slot="{ errors }"
               >
                 <input
@@ -548,7 +548,11 @@
                       @click="getValue(item)"
                     >
                       <th scope="row">
-                        {{ index + 1 }}
+                        {{
+                          (pagination.current_page - 1) * pagination.per_page +
+                          index +
+                          1
+                        }}
                       </th>
                       <td>{{ item.kategori }}</td>
                       <td>{{ item.kelompok }}</td>
@@ -688,6 +692,7 @@ export default {
           pagination: {
             current_page: 1,
             last_page: 10,
+            per_page: null,
           },
           add: false,
         },
@@ -764,6 +769,7 @@ export default {
           })
           .catch((error) => {
             if (error.response.status === 422) {
+              this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
               this.errorValidations.name =
                 typeof error.response.data.errors.name === 'undefined'
                   ? []
@@ -892,7 +898,7 @@ export default {
       this.modal.instansi.showModal = false
     },
     validateWebsite() {
-      const regex = new RegExp(/[a-z0-9]+\.go.id$/g)
+      const regex = new RegExp(/[a-z0-9.]+\.id?[\S]+/g)
       const value = this.forms_add_agency.website
         .toString()
         .replace(/[^a-zA-Z0-9.]/, '')
@@ -951,6 +957,7 @@ export default {
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidationsAddAgency.kelompok =
               typeof error.response.data.errors.kelompok === 'undefined'
                 ? []

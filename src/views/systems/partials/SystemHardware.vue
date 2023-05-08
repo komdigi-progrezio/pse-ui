@@ -3,14 +3,15 @@
     <h5>Perangkat Keras Utama</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click="openModalHardware('simpan', 'Tambah Perangkat Keras Utama')"
+      @click="openModalHardware('Simpan', 'Tambah Perangkat Keras Utama')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a class="align-self-center">Tambah Perangkat Keras Utama</a>
     </button>
 
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -21,20 +22,20 @@
             <td>Processor</td>
             <td>Memory</td>
             <td>Digunakan Bersama - Sama ?</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
           <template v-if="hardware.length > 0">
             <tr v-for="(item, index) in hardware" :key="index">
               <td>{{ index + 1 }}</td>
-              <td>{{ getTypeById(item.jenis, 'hardware') }}</td>
-              <td>{{ getOwnerById(item.pemilik) }}</td>
+              <td>{{ item.nama_jenis }}</td>
+              <td>{{ item.nama_pemilik }}</td>
               <td>{{ item.bandwidth }}</td>
               <td>{{ item.processor }}</td>
               <td>{{ item.memory }}</td>
               <td>{{ item.shared ? 'Ya' : 'Tidak' }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -56,7 +57,7 @@
                   }"
                   @click="
                     openModalHardware(
-                      'update',
+                      'Update',
                       'Ubah Perangkat Keras Utama',
                       item
                     )
@@ -80,13 +81,14 @@
     <h5>Perangkat Jaringan</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click="openModalNetwork('simpan', 'Tambah Perangkat Jaringan')"
+      @click="openModalNetwork('Simpan', 'Tambah Perangkat Jaringan')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a class="align-self-center">Tambah Perangkat Jaringan</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -94,17 +96,17 @@
             <td>Jenis</td>
             <td>Tipe</td>
             <td>Keterangan</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
           <template v-if="network.length > 0">
             <tr v-for="(item, index) in network" :key="index">
               <td>{{ index + 1 }}</td>
-              <td>{{ getTypeById(item.jenis, 'network') }}</td>
+              <td>{{ item.nama_jenis }}</td>
               <td>{{ item.type }}</td>
               <td>{{ item.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -125,7 +127,7 @@
                     placement: 'bottom',
                   }"
                   @click="
-                    openModalNetwork('update', 'Ubah Perangkat Jaringan', item)
+                    openModalNetwork('Update', 'Ubah Perangkat Jaringan', item)
                   "
                 >
                   <CIcon name="cil-pencil" />
@@ -146,13 +148,14 @@
     <h5>Perangkat Khusus</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click="openModalPeripheral('simpan', 'Tambah Perangkat Khusus')"
+      @click="openModalPeripheral('Simpan', 'Tambah Perangkat Khusus')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a class="align-self-center">Tambah Perangkat Khusus</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -160,17 +163,17 @@
             <td>Jenis</td>
             <td>Tipe</td>
             <td>Keterangan</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
           <template v-if="peripheral.length > 0">
             <tr v-for="(item, index) in peripheral" :key="index">
               <td>{{ index + 1 }}</td>
-              <td>{{ getTypeById(item.jenis, 'peripheral') }}</td>
+              <td>{{ item.nama_jenis }}</td>
               <td>{{ item.type }}</td>
               <td>{{ item.keterangan }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -191,7 +194,7 @@
                     placement: 'bottom',
                   }"
                   @click="
-                    openModalPeripheral('update', 'Ubah Perangkat Khusus', item)
+                    openModalPeripheral('Update', 'Ubah Perangkat Khusus', item)
                   "
                 >
                   <CIcon name="cil-pencil" />
@@ -209,7 +212,11 @@
       </table>
     </div>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="hardwareForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="hardwareForm"
+    >
       <CModal
         :title="modal.hardware.title"
         :show.sync="modal.hardware.show"
@@ -637,6 +644,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.primaryHardwareDelete.title"
       color="danger"
       :show.sync="modal.primaryHardwareDelete.show"
@@ -667,7 +675,11 @@
       </template>
     </CModal>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="networkForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="networkForm"
+    >
       <CModal
         :title="modal.network.title"
         :show.sync="modal.network.show"
@@ -771,6 +783,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.networkDelete.title"
       color="danger"
       :show.sync="modal.networkDelete.show"
@@ -796,7 +809,11 @@
       </template>
     </CModal>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="peripheralForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="peripheralForm"
+    >
       <CModal
         :title="modal.peripheral.title"
         :show.sync="modal.peripheral.show"
@@ -900,6 +917,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.peripheralDelete.title"
       color="danger"
       :show.sync="modal.peripheralDelete.show"
@@ -936,6 +954,11 @@
 export default {
   name: 'SystemHardware',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     systemId: {
       type: Number,
       default: null,
@@ -1250,22 +1273,6 @@ export default {
         })
     },
 
-    getTypeById(id, type) {
-      const options = this.options[type].types.filter(
-        (type) => type.id === parseInt(id)
-      )
-
-      return options.length > 0 ? options[0].param_value : null
-    },
-
-    getOwnerById(id) {
-      const options = this.options.hardware.owners.filter(
-        (owner) => owner.id === parseInt(id)
-      )
-
-      return options.length > 0 ? options[0].param_value : null
-    },
-
     closeModalHardware() {
       Object.assign(this.modal.hardware, {
         type: null,
@@ -1337,7 +1344,6 @@ export default {
 
       if (data) {
         data.jenis = parseInt(data.jenis)
-        console.log(data)
         Object.assign(this.form.network, data)
       }
 
@@ -1431,11 +1437,11 @@ export default {
     saveHardware() {
       this.form.primaryHardware.sis_profil_id = this.systemId
 
-      if (this.modal.hardware.type === 'simpan') {
+      if (this.modal.hardware.type === 'Simpan') {
         this.addHardware()
       }
 
-      if (this.modal.hardware.type === 'update') {
+      if (this.modal.hardware.type === 'Update') {
         this.updateHardware()
       }
     },
@@ -1443,11 +1449,11 @@ export default {
     saveNetwork() {
       this.form.network.sis_profil_id = this.systemId
 
-      if (this.modal.network.type === 'simpan') {
+      if (this.modal.network.type === 'Simpan') {
         this.addNetwork()
       }
 
-      if (this.modal.network.type === 'update') {
+      if (this.modal.network.type === 'Update') {
         this.updateNetwork()
       }
     },
@@ -1455,11 +1461,11 @@ export default {
     savePeripheral() {
       this.form.peripheral.sis_profil_id = this.systemId
 
-      if (this.modal.peripheral.type === 'simpan') {
+      if (this.modal.peripheral.type === 'Simpan') {
         this.addPeripheral()
       }
 
-      if (this.modal.peripheral.type === 'update') {
+      if (this.modal.peripheral.type === 'Update') {
         this.updatePeripheral()
       }
     },

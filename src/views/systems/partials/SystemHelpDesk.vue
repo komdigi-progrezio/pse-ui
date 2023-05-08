@@ -4,14 +4,15 @@
     <hr />
 
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click.prevent="openModalHelpDesk('simpan', 'Tambah Data')"
+      @click.prevent="openModalHelpDesk('Simpan', 'Tambah Data')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Tambah Help Desk</a>
     </button>
 
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -20,7 +21,7 @@
             <td>Telepon</td>
             <td>Fax</td>
             <td>Email</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
 
@@ -32,7 +33,7 @@
               <td>{{ currentHelpDesk.telepon }}</td>
               <td>{{ currentHelpDesk.fax }}</td>
               <td>{{ currentHelpDesk.email }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -72,7 +73,11 @@
     </div>
 
     <!-- Help Desk Modal -->
-    <ValidationObserver v-slot="{ invalid }" :ref="helpDeskForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="helpDeskForm"
+    >
       <CModal
         :title="modal.helpDesk.title"
         :show.sync="modal.helpDesk.show"
@@ -213,6 +218,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.helpDeskDelete.title"
       color="danger"
       :show.sync="modal.helpDeskDelete.show"
@@ -255,6 +261,11 @@
 export default {
   name: 'SystemHelpDesk',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     systemId: {
       type: Number,
       default: null,
@@ -345,11 +356,11 @@ export default {
     saveHelpDesk() {
       this.form.helpDesk.sis_profil_id = this.systemId
 
-      if (this.modal.helpDesk.type === 'simpan') {
+      if (this.modal.helpDesk.type === 'Simpan') {
         this.addHelpDesk()
       }
 
-      if (this.modal.helpDesk.type === 'update') {
+      if (this.modal.helpDesk.type === 'Update') {
         this.updateHelpDesk()
       }
     },

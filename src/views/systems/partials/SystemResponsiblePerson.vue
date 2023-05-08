@@ -2,11 +2,15 @@
   <div class="mt-2">
     <h5>Penanggung Jawab</h5>
     <hr />
-    <button class="btn btn-link d-flex" @click.prevent="addResponsible">
+    <button
+      v-if="system.is_locked !== true"
+      class="btn btn-link d-flex"
+      @click.prevent="addResponsible"
+    >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a href="" class="align-self-center">Perbaharui Data Penanggung Jawab</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped" v-if="responsible === null">
         <tbody>
           <tr>
@@ -96,7 +100,11 @@
         </tbody>
       </table>
     </div>
-    <ValidationObserver v-slot="{ invalid }" ref="form_responsible_person">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      ref="form_responsible_person"
+    >
       <CModal
         :title="modal.responsible.title"
         :color="modal.responsible.color"
@@ -138,7 +146,7 @@
                   <label for="nip">NIP</label>
                   <ValidationProvider
                     name="NIP"
-                    rules="required|digits:18"
+                    rules="required"
                     v-slot="{ errors }"
                   >
                     <input
@@ -297,6 +305,11 @@
 export default {
   name: 'SystemResponsible',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     treeData: {
       type: Object,
       required: true,
@@ -433,10 +446,13 @@ export default {
           this.$emit('update-data')
           this.closeModalResponsible()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_responsible.reset()
+          this.$nextTick(() => {
+            this.$refs.form_responsible.reset()
+          })
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.responsible.nama =
               typeof error.response.data.errors.nama === 'undefined'
                 ? []
@@ -475,8 +491,10 @@ export default {
     },
     //  Get Data Tree View
     onSelect: function () {
-      this.forms.responsible.par_satuan_kerja_id = this.$store.state.treeView.workUnit.id
-      this.forms.responsible.satuan_kerja = this.$store.state.treeView.workUnit.name
+      this.forms.responsible.par_satuan_kerja_id =
+        this.$store.state.treeView.workUnit.id
+      this.forms.responsible.satuan_kerja =
+        this.$store.state.treeView.workUnit.name
     },
   },
 }

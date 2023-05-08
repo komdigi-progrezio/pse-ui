@@ -9,7 +9,7 @@
               <label for="name">Nama Internal</label>
               <ValidationProvider
                 name="Nama Internal"
-                rules="required|alpha_spaces"
+                rules="required"
                 v-slot="{ errors }"
               >
                 <input
@@ -36,7 +36,7 @@
               <label for="name">Nama Eksternal</label>
               <ValidationProvider
                 name="Nama Eksternal"
-                rules="required|alpha_spaces"
+                rules="required"
                 v-slot="{ errors }"
               >
                 <input
@@ -216,7 +216,9 @@
         </CRow>
       </CCardBody>
       <CCardFooter>
-        <CButton color="secondary" size="sm" class="mr-2"> Cancel </CButton>
+        <CButton color="secondary" size="sm" class="mr-2" @click="back">
+          Cancel
+        </CButton>
         <CButton color="primary" size="sm" :disabled="invalid" @click="submit">
           Simpan
         </CButton>
@@ -281,6 +283,9 @@ export default {
     this.initialEdit()
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     fetchCategorySpecialFeatures() {
       return this.$http.get('parconfig/category', {
         params: {
@@ -325,7 +330,8 @@ export default {
         })
     },
     openFilePKSE() {
-      console.log(1)
+      window.open(`${window.location.origin}/DOK.PKSE.pdf`, '_blank')
+      // window.open(`${process.env.VUE_APP_URL}DOK.PKSE.pdf`, '_blank')
     },
     accessCategory() {
       if (this.forms.kategori_akses !== 'Online') {
@@ -372,11 +378,14 @@ export default {
         .then((response) => {
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
-          this.$refs.form.reset()
+          this.$nextTick(() => {
+            this.$refs.form.reset()
+          })
           this.$router.push(`/admin/systems/${this.$route.params.id}`)
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.nama_internal =
               typeof error.response.data.errors.nama_internal === 'undefined'
                 ? []

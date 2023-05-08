@@ -3,14 +3,14 @@
     <CCard>
       <ValidationObserver v-slot="{ invalid }" ref="form">
         <CCardHeader> Tambah Data Sistem </CCardHeader>
-        <CCardBody>
+        <CCardBody class="p-3">
           <CRow>
             <CCol sm="12">
               <div class="form-group">
                 <label for="name">Nama Internal</label>
                 <ValidationProvider
                   name="Nama Internal"
-                  rules="required|alpha_spaces"
+                  rules="required"
                   v-slot="{ errors }"
                 >
                   <input
@@ -37,7 +37,7 @@
                 <label for="name">Nama Eksternal</label>
                 <ValidationProvider
                   name="Nama Eksternal"
-                  rules="required|alpha_spaces"
+                  rules="required"
                   v-slot="{ errors }"
                 >
                   <input
@@ -219,15 +219,17 @@
           </CRow>
         </CCardBody>
         <CCardFooter>
-          <CButton color="secondary" size="sm" class="mr-2"> Cancel </CButton>
           <CButton
             color="primary"
             size="sm"
-            :disabled="invalid"
+            class="mr-2"
+            :disabled="isSubmit || invalid"
             @click="submit"
           >
             Simpan
+            <CSpinner size="sm" color="info" v-if="isSubmit" />
           </CButton>
+          <CButton color="secondary" size="sm" @click="back"> Cancel </CButton>
         </CCardFooter>
       </ValidationObserver>
     </CCard>
@@ -239,6 +241,7 @@ export default {
   name: 'SystemRegister',
   data() {
     return {
+      isSubmit: false,
       forms: {
         nama_internal: null,
         nama_eksternal: null,
@@ -290,6 +293,9 @@ export default {
     this.fetchCategorySpecialFeatures()
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     fetchCategorySpecialFeatures() {
       this.$http
         .get('parconfig/category', {
@@ -310,7 +316,8 @@ export default {
         })
     },
     openFilePKSE() {
-      console.log(1)
+      window.open(`${window.location.origin}/DOK.PKSE.pdf`, '_blank')
+      // window.open(`${process.env.VUE_APP_URL}DOK.PKSE.pdf`, '_blank')
     },
     accessCategory() {
       if (this.forms.kategori_akses !== 'Online') {
@@ -328,6 +335,7 @@ export default {
       this.forms.publish = null
     },
     submit() {
+      this.isSubmit = true
       const url = '/systems'
       const formData = new FormData()
       formData.append('_method', 'POST')
@@ -355,12 +363,18 @@ export default {
         data: formData,
       })
         .then((response) => {
+          this.isSubmit = false
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
-          this.$refs.form.reset()
+          this.$nextTick(() => {
+            this.$refs.form.reset()
+          })
+          this.$router.go(-1)
         })
         .catch((error) => {
+          this.isSubmit = false
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.nama_internal =
               typeof error.response.data.errors.nama_internal === 'undefined'
                 ? []

@@ -3,13 +3,14 @@
     <h5>Perangkat Lunak Utama</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
-      @click="openSoftwareModal('simpan', 'Tambah Perangkat Lunak Utama')"
+      @click="openSoftwareModal('Simpan', 'Tambah Perangkat Lunak Utama')"
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a class="align-self-center">Tambah Perangkat Lunak Utama</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
@@ -17,7 +18,7 @@
             <td>Nama</td>
             <td>Jenis</td>
             <td>Penyedia Perangkat Lunak</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
@@ -25,9 +26,9 @@
             <tr v-for="(item, index) in software" :key="index">
               <td>{{ index + 1 }}</td>
               <td>{{ item.nama }}</td>
-              <td>{{ getTypeById(item.jenis, 'software') }}</td>
-              <td>{{ getVendorById(item.vendor) }}</td>
-              <td>
+              <td>{{ item.nama_jenis }}</td>
+              <td>{{ item.nama_vendor }}</td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -49,7 +50,7 @@
                   }"
                   @click="
                     openSoftwareModal(
-                      'update',
+                      'Update',
                       'Ubah Perangkat Lunak Utama',
                       item
                     )
@@ -73,31 +74,32 @@
     <h5>Perangkat Lunak Pendukung</h5>
     <hr />
     <button
+      v-if="system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="
-        openSoftwareToolModal('simpan', 'Tambah Perangkat Lunak Pendukung')
+        openSoftwareToolModal('Simpan', 'Tambah Perangkat Lunak Pendukung')
       "
     >
       <CIcon name="cil-plus" class="align-self-center mr-2" />
       <a class="align-self-center">Tambah Perangkat Lunak Pendukung</a>
     </button>
-    <div class="table-responsive">
+    <div class="table-responsive classic">
       <table class="table table-stripped">
         <thead>
           <tr>
             <td>No</td>
             <td>Jenis Perangkat Lunak</td>
             <td>Deskripsi</td>
-            <td>Aksi</td>
+            <td v-if="system.is_locked !== true" colspan="2">Aksi</td>
           </tr>
         </thead>
         <tbody>
           <template v-if="softwareTool.length > 0">
             <tr v-for="(item, index) in softwareTool" :key="index">
               <td>{{ index + 1 }}</td>
-              <td>{{ getTypeById(item.jenis, 'softwareTool') }}</td>
+              <td>{{ item.nama_jenis }}</td>
               <td>{{ item.deskripsi }}</td>
-              <td>
+              <td v-if="system.is_locked !== true">
                 <CButton
                   color="danger"
                   size="sm"
@@ -119,7 +121,7 @@
                   }"
                   @click="
                     openSoftwareToolModal(
-                      'update',
+                      'Update',
                       'Ubah Perangkat Lunak Pendukung',
                       item
                     )
@@ -140,7 +142,11 @@
       </table>
     </div>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="softwareForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="softwareForm"
+    >
       <CModal
         :title="modal.software.title"
         :show.sync="modal.software.show"
@@ -264,7 +270,11 @@
       </CModal>
     </ValidationObserver>
 
-    <ValidationObserver v-slot="{ invalid }" :ref="softwareToolForm">
+    <ValidationObserver
+      v-if="system.is_locked !== true"
+      v-slot="{ invalid }"
+      :ref="softwareToolForm"
+    >
       <CModal
         :title="modal.softwareTool.title"
         :show.sync="modal.softwareTool.show"
@@ -342,6 +352,7 @@
     </ValidationObserver>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.softwareDelete.title"
       color="danger"
       :show.sync="modal.softwareDelete.show"
@@ -374,6 +385,7 @@
     </CModal>
 
     <CModal
+      v-if="system.is_locked !== true"
       :title="modal.softwareToolDelete.title"
       color="danger"
       :show.sync="modal.softwareToolDelete.show"
@@ -410,6 +422,11 @@
 export default {
   name: 'SystemSoftware',
   props: {
+    system: {
+      type: Object,
+      required: true,
+      default: () => {},
+    },
     software: {
       type: Array,
       default: () => [],
@@ -577,22 +594,6 @@ export default {
         })
     },
 
-    getTypeById(id, type) {
-      const options = this.options[type].type.filter(
-        (type) => type.id === parseInt(id)
-      )
-
-      return options.length > 0 ? options[0].param_value : null
-    },
-
-    getVendorById(id) {
-      const options = this.options.software.vendor.filter(
-        (vendor) => vendor.id === parseInt(id)
-      )
-
-      return options.length > 0 ? options[0].param_value : null
-    },
-
     /** Modal Section */
     openSoftwareModal(type, title, data = null) {
       this.resetSoftwareForm()
@@ -696,11 +697,11 @@ export default {
     saveSoftware() {
       this.form.software.sis_profil_id = this.systemId
 
-      if (this.modal.software.type === 'simpan') {
+      if (this.modal.software.type === 'Simpan') {
         this.addSoftware()
       }
 
-      if (this.modal.software.type === 'update') {
+      if (this.modal.software.type === 'Update') {
         this.updateSoftware()
       }
     },
@@ -708,11 +709,11 @@ export default {
     saveSoftwareTool() {
       this.form.softwareTool.sis_profil_id = this.systemId
 
-      if (this.modal.softwareTool.type === 'simpan') {
+      if (this.modal.softwareTool.type === 'Simpan') {
         this.addSoftwareTool()
       }
 
-      if (this.modal.softwareTool.type === 'update') {
+      if (this.modal.softwareTool.type === 'Update') {
         this.updateSoftwareTool()
       }
     },

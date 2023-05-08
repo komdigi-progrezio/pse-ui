@@ -4,19 +4,21 @@
       <CCardHeader>
         <CIcon name="cil-user" /> Profil
         <div class="card-header-actions">
-          <CButton
-            color="success"
-            shape="pill"
-            size="sm"
-            variant="outline"
-            v-c-tooltip="{
-              content: 'Edit Profil',
-              placement: 'bottom',
-            }"
-            @click="editProfile"
-          >
-            <CIcon name="cil-pencil" />
-          </CButton>
+          <template v-if="isAdmin">
+            <CButton
+              color="success"
+              shape="pill"
+              size="sm"
+              variant="outline"
+              v-c-tooltip="{
+                content: 'Edit Profil',
+                placement: 'bottom',
+              }"
+              @click="editProfile"
+            >
+              <CIcon name="cil-pencil" />
+            </CButton>
+          </template>
         </div>
       </CCardHeader>
       <CCardBody>
@@ -25,47 +27,100 @@
             <tbody>
               <tr>
                 <td>Nama Lengkap</td>
-                <td>{{ profile.nama }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Nama</p
+                  >
+                  {{ profile.nama }}
+                </td>
               </tr>
               <tr>
                 <td>NIP</td>
-                <td>{{ profile.nip }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >NIP</p
+                  >
+                  {{ profile.nip }}
+                </td>
               </tr>
               <tr>
                 <td>Jabatan</td>
-                <td>{{ profile.jabatan }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Jabatan</p
+                  >
+                  {{ profile.jabatan }}
+                </td>
               </tr>
               <tr>
                 <td>No Telepon</td>
-                <td>{{ profile.no_telepon }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >No Telepon</p
+                  >
+                  {{ profile.no_telepon }}
+                </td>
               </tr>
               <tr>
                 <td>Instansi Induk</td>
-                <td>{{ profile.instansi_induk_text }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Instansi Induk</p
+                  >
+                  {{ profile.instansi_induk_text }}
+                </td>
               </tr>
               <tr>
                 <td>Satuan Kerja Induk</td>
-                <td>{{ profile.satuan_kerja }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Satuan Kerja Induk</p
+                  >
+                  {{ profile.satuan_kerja }}
+                </td>
               </tr>
               <tr>
                 <td>Alamat</td>
-                <td>{{ profile.alamat }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Alamat</p
+                  >
+                  {{ profile.alamat }}
+                </td>
               </tr>
               <tr>
                 <td>Nama Provinsi</td>
-                <td>{{ profile.nama_provinsi }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Nama Provinsi</p
+                  >
+                  {{ profile.nama_provinsi }}
+                </td>
               </tr>
               <tr>
                 <td>Nama Kota</td>
-                <td>{{ profile.nama_kota }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Nama Kota</p
+                  >
+                  {{ profile.nama_kota }}
+                </td>
               </tr>
               <tr>
                 <td>Kode POS</td>
-                <td>{{ profile.kode_pos }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Kode POS</p
+                  >
+                  {{ profile.kode_pos }}
+                </td>
               </tr>
               <tr>
                 <td>Dokumen</td>
                 <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Dokumen</p
+                  >
                   <a href="" @click.prevent="showFile(profile.url)"
                     >Lihat File</a
                   >
@@ -73,22 +128,37 @@
               </tr>
               <tr>
                 <td>Tanggal Pendaftaran</td>
-                <td>{{ profile.created_at }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Tanggal Pendaftaran</p
+                  >
+                  {{ profile.created_at }}
+                </td>
               </tr>
               <tr>
                 <td>Pemutakhiran Data</td>
-                <td>{{ profile.modified_at }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Pemutakhiran Data</p
+                  >
+                  {{ profile.modified_at }}
+                </td>
               </tr>
               <tr>
                 <td>Status Data</td>
-                <td>{{ profile.status === 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
+                <td>
+                  <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
+                    >Status Data</p
+                  >
+                  {{ profile.status === 1 ? 'Aktif' : 'Tidak Aktif' }}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </CCardBody>
     </CCard>
-    <ValidationObserver v-slot="{ invalid }" ref="form_profile">
+    <ValidationObserver ref="form_profile">
       <CModal
         :title="modal.title"
         :color="modal.color"
@@ -128,7 +198,7 @@
                   <label for="nip">NIP</label>
                   <ValidationProvider
                     name="NIP"
-                    rules="required|digits:18"
+                    rules="required"
                     v-slot="{ errors }"
                   >
                     <input
@@ -147,33 +217,6 @@
                     </div>
                   </ValidationProvider>
                   <message :messages="errorValidations.nip" />
-                </div>
-              </CCol>
-              <CCol sm="12">
-                <div class="form-group">
-                  <label for="jabatan">Jabatan</label>
-                  <ValidationProvider
-                    name="Jabatan"
-                    rules="required|alpha_spaces"
-                    v-slot="{ errors }"
-                  >
-                    <input
-                      v-model="forms.jabatan"
-                      type="text"
-                      class="form-control"
-                      placeholder="Masukan Jabatan"
-                      :class="{
-                        'is-invalid':
-                          errors.length > 0 ||
-                          errorValidations.jabatan.length > 0,
-                      }"
-                      @blur="errorValidations.jabatan = []"
-                    />
-                    <div v-if="errors.length > 0" class="invalid-feedback">
-                      {{ errors[0] }}
-                    </div>
-                  </ValidationProvider>
-                  <message :messages="errorValidations.jabatan" />
                 </div>
               </CCol>
               <CCol sm="12">
@@ -320,13 +363,7 @@
           >
             Cancel
           </CButton>
-          <CButton
-            color="primary"
-            size="sm"
-            class="m-2"
-            :disabled="invalid"
-            @click="submitProfile"
-          >
+          <CButton color="primary" size="sm" class="m-2" @click="submitProfile">
             {{ modal.labelButton }}
           </CButton>
         </template>
@@ -392,6 +429,15 @@ export default {
         dokumen: [],
       },
     }
+  },
+  computed: {
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
   created() {
     this.getProfile()
@@ -476,12 +522,15 @@ export default {
       })
         .then((response) => {
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$refs.form_profile.reset()
+          this.$nextTick(() => {
+            this.$refs.form_profile.reset()
+          })
           this.closeModalPostPut()
           this.getProfile()
         })
         .catch((error) => {
           if (error.response.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.nama =
               typeof error.response.data.errors.nama === 'undefined'
                 ? []
@@ -522,7 +571,9 @@ export default {
       this.modal.labelButton = null
     },
     editProfile() {
-      this.$refs.form_profile.reset()
+      this.$nextTick(() => {
+        this.$refs.form_profile.reset()
+      })
       this.modal.showModal = true
       this.modal.title = 'Update Data'
       this.modal.color = 'success'
