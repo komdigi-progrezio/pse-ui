@@ -25,6 +25,7 @@ pre-build:
   tags:
     - docker
   script:
+    - npm install -g node-gyp
     - npm install
     - npm run build
     - mv dist app-dist
