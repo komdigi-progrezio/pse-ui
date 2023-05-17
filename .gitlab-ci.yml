@@ -15,15 +15,23 @@ variables:
   GROUP_NAME: "pse-repo"       ##########
   APP_NAMESPACE: "dev-pse"        ##########
 
-#cache:
-#  paths:
-#    - node_modules/
+cache:
+  paths:
+    - node_modules/
 
 pre-build:
   stage: pre
-  image: registry.dev.layanan.go.id/pse-repo/node-py:lts-alpine
+  image: node:12-alpine
   tags:
     - docker
+  variables:
+    PYTHONUNBUFFERED: 1
+  before_script:
+    - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+    - python3 -m ensurepip
+    - pip3 install --no-cache --upgrade pip setuptools
+    - python --version
+    - npm info node-gyp version
   script:
     - npm install
     - npm run build
