@@ -1,43 +1,92 @@
-image: docker:latest
-
-services:
-  - docker:dind
+stages:          # List of stages for jobs, and their order of execution
+  - pre
+  - build
+  - deploy
+  
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_VERSION: stable
+  DOCKER_DIND_VERSION: 18.09-dind
+  DOCKER_CONFIG_FILE: "--config .docker"
+  DOCKER_REGCRED: "nexus-regcred"
+  CI_IMAGE_NAME: "${REGISTRY}/${GROUP_NAME}/${APP_NAME}"
+  #APP_NAME: ${CI_PROJECT_NAME}
+  APP_NAME: "front-end-live-prod"
+  GROUP_NAME: "pse-repo"       ##########
+  APP_NAMESPACE: "dev-pse"        ##########
 
 cache:
-  key: '$CI_BUILD_STAGE'
   paths:
-    - node_modules
+    - node_modules/
 
-stages:
-  - build
-  - package
-  - deploy
-
-variables:
-  DOCKER_DRIVER: overlay
-
-npm-build:
+pre-build:
+  stage: pre
   image: node:lts-alpine
-  stage: build
+  tags:
+    - docker
   script:
-    - 'echo $VUE_APP_BASE_API_URL'
-    - 'npm install'
-    - 'npm run build'
+    - npm install
+    - npm run build
+    - mv dist app-dist
   artifacts:
+    name: "NPM artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
     paths:
-      - dist
-  only:
-    - tags
-    - master
-    - dev
+      - app-dist
 
-docker-build:
-  stage: package
+build:       # This job runs in the build and publish stage, which runs first.
+  stage: build
+  image: private.nexus-regs.docker:8086/docker:${DOCKER_VERSION}
+  services:
+    - name: private.nexus-regs.docker:8086/docker:${DOCKER_DIND_VERSION}
+      entrypoint:
+        - dockerd-entrypoint.sh
+      command:
+        - "--insecure-registry=private.nexus-regs.docker:8087"
+        - "--insecure-registry=private.nexus-regs.docker:8086"
+      alias: dockerd
+  variables:
+    DOCKER_HOST: tcp://dockerd:2375
+    DOCKER_DRIVER: overlay2
+  dependencies:
+    - pre-build
+  before_script:
+    - mkdir -p .docker/ && cat $DOCKER_CONF_JSON > .docker/config.json
   script:
-    - docker build -t registry.gitlab.com/deerand/pse-ui .
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push registry.gitlab.com/deerand/pse-ui
+    - docker build --tag ${CI_IMAGE_NAME}:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_IID} .
+    - docker $DOCKER_CONFIG_FILE push ${CI_IMAGE_NAME}:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_IID}
+  tags:
+    - docker
   only:
-    - tags
+    - live-prod
+
+deploy-dev:      # This job runs in the deploy stage.
+  image:
+    name: "private.nexus-regs.docker:8086/runner/kubectl-run:3.3.1"
+  stage: deploy
+  tags:
+    - docker
+  variables:
+    CLUSTER_CONFIG: ${CLUSTER_DEV}
+    PROJECT_ID: "c-7j2fq:p-hf9z4"       ########## url project di rancher
+  script:
+    - envsubst < deployment-${CI_COMMIT_REF_NAME}.yaml > deployment.yaml
+    - cat deployment.yaml
+  #  - kubectl apply -f deployment.yaml
+  only:
+    - live-prod
+
+deploy-prd:      # This job runs in the deploy stage.
+  image:
+    name: "private.nexus-regs.docker:8086/runner/kubectl-run:3.3.1"
+  stage: deploy
+  tags:
+    - docker
+  variables:
+    CLUSTER_CONFIG: ${CLUSTER_PRD}
+    PROJECT_ID: "c-blkmc:p-tzt88"       ########## url project di rancher
+  script:
+    - envsubst < deployment-${CI_COMMIT_REF_NAME}.yaml > deployment.yaml
+    - cat deployment.yaml
+  #  - kubectl apply -f deployment.yaml
+  only:
     - master
-    - dev
