@@ -78,7 +78,8 @@ const actions = {
               location.replace('/login')
             })
             .catch(() => {
-              location.replace('/login')
+              // location.replace('/login')
+              console.log(error)
             })
         })
     })

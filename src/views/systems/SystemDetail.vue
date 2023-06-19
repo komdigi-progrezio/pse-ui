@@ -27,7 +27,7 @@
               class="btn btn-info align-self-center m-2"
               @click="showCopyModal()"
             >
-              Salin Logo
+              Salin Sertifikat
             </button>
           </div>
 
@@ -149,6 +149,12 @@
                   id="exampleFormControlTextarea1"
                   rows="3"
                   v-model="modal.copy.value"
+                ></textarea>
+                <textarea
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="3"
+                  v-model="modal.copy.link"
                 ></textarea>
               </div>
             </CCol>
@@ -363,6 +369,7 @@ export default {
       this.modal.copy = {
         //ini dirubah
         value: this.$refs.logo_img.innerHTML,
+        link: `http://localhost:8080/sealid/${this.$route.params.id}`,
         show: true,
       }
     },

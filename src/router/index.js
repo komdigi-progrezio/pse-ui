@@ -27,6 +27,7 @@ const Userlog = () => import('@/views/users/Userlog')
 const AddReport = () => import('@/views/report/AddReport')
 const EditReport = () => import('@/views/report/EditReport')
 const Statistic = () => import('@/views/statistic/Statistic')
+const CertificatePage = () => import('@/views/pages/CertificatePage')
 
 Vue.use(Router)
 
@@ -55,6 +56,12 @@ function configRoutes() {
           meta: { requiresAuth: false },
         },
       ],
+    },
+    {
+      path: '/sealid/:id',
+      name: 'sealid',
+      component: CertificatePage,
+      meta: { requiresAuth: false },
     },
     {
       path: '/forbidden',
