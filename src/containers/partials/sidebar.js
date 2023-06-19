@@ -45,24 +45,24 @@ const data = [
         permissionName: 'Daftar Struktur Organisasi',
         items: [],
       },
-      {
-        _name: 'CSidebarNavDropdown',
-        name: 'Profil Pejabat Pendaftar',
-        icon: 'cil-user',
-        items: [
-          {
-            name: 'Profil',
-            to: '/admin/account/profile',
-            permissionName: 'Daftar Pengguna Pejabat Pendaftar',
-          },
-          {
-            name: 'Pengguna',
-            to: '/admin/account/parent',
-            permissionName: 'Daftar Pengguna Pejabat Pendaftar',
-          },
-        ],
-        permissionName: 'Daftar Pengguna Pejabat Pendaftar',
-      },
+      // {
+      //   _name: 'CSidebarNavDropdown',
+      //   name: 'Profil Pejabat Pendaftar',
+      //   icon: 'cil-user',
+      //   items: [
+      //     {
+      //       name: 'Profil',
+      //       to: '/admin/account/profile',
+      //       permissionName: 'Daftar Pengguna Pejabat Pendaftar',
+      //     },
+      //     {
+      //       name: 'Pengguna',
+      //       to: '/admin/account/parent',
+      //       permissionName: 'Daftar Pengguna Pejabat Pendaftar',
+      //     },
+      //   ],
+      //   permissionName: 'Daftar Pengguna Pejabat Pendaftar',
+      // },
       {
         _name: 'CSidebarNavDropdown',
         name: 'Pelaporan',
