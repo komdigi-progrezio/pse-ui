@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pse-fe
+    container_name: pse-fe-container
+    restart: unless-stopped
+    ports:
+      - '4403:80'
