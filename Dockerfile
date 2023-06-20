@@ -12,6 +12,7 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
+RUN yarn upgrade
 RUN yarn install
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
