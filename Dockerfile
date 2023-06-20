@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
-RUN npm install
+RUN yarn install
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
@@ -20,7 +20,7 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 #COPY . .
 
 # build app for production with minification
-RUN npm run build
+RUN yarn build
 
 # Set the base image to nginx
 FROM nginx:alpine
