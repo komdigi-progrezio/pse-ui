@@ -9,7 +9,7 @@ RUN npm install -g http-server
 WORKDIR /app
 
 # copy both 'package.json' and 'package-lock.json' (if available)
-COPY package*.json ./
+COPY . .
 
 # install project dependencies
 RUN npm install
@@ -17,7 +17,7 @@ RUN npm install
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY . .
+#COPY . .
 
 # build app for production with minification
 RUN npm run build
