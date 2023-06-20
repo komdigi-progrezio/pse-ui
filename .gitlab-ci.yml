@@ -21,17 +21,20 @@ cache:
 
 pre-build:
   stage: pre
-  image: node:12-alpine
+  #image: node:12-alpine
+  image: node:lts-alpine
   tags:
     - docker
   variables:
     PYTHONUNBUFFERED: 1
+    NODE_OPTIONS: "--openssl-legacy-provider"
   before_script:
-    - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+    - apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
     - python3 -m ensurepip
     - pip3 install --no-cache --upgrade pip setuptools
     - python --version
     - npm info node-gyp version
+    - npm install -g http-server
   script:
     - npm install
     - npm run build
