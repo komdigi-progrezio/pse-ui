@@ -1,6 +1,10 @@
-FROM node:lts-alpine
+FROM node:12-alpine
 
-RUN apk add --no-cache python3 g++ make
+RUN apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
+RUN python --version
+RUN npm info node-gyp version
 
 # install simple http server for serving static content
 RUN npm install -g http-server
@@ -12,8 +16,7 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
-RUN yarn upgrade
-RUN yarn install
+RUN npm install
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
@@ -21,7 +24,7 @@ ENV NODE_OPTIONS=--openssl-legacy-provider
 #COPY . .
 
 # build app for production with minification
-RUN yarn build
+RUN npm run build
 
 # Set the base image to nginx
 FROM nginx:alpine
