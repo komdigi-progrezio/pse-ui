@@ -18,7 +18,7 @@ COPY . .
 # install project dependencies
 RUN npm install
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
+#ENV NODE_OPTIONS=--openssl-legacy-provider
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 #COPY . .
