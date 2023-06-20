@@ -1,5 +1,4 @@
 stages:          # List of stages for jobs, and their order of execution
-  - pre
   - build
   - deploy
   
@@ -15,35 +14,6 @@ variables:
   GROUP_NAME: "pse-repo"       ##########
   APP_NAMESPACE: "dev-pse"        ##########
 
-cache:
-  paths:
-    - node_modules/
-
-pre-build:
-  stage: pre
-  #image: node:12-alpine
-  image: node:lts-alpine
-  tags:
-    - docker
-  variables:
-    PYTHONUNBUFFERED: 1
-    NODE_OPTIONS: "--openssl-legacy-provider"
-  before_script:
-    - apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
-    - python3 -m ensurepip
-    - pip3 install --no-cache --upgrade pip setuptools
-    - python --version
-    - npm info node-gyp version
-    - npm install -g http-server
-  script:
-    - npm install
-    - npm run build
-    - mv dist app-dist
-  artifacts:
-    name: "NPM artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
-    paths:
-      - app-dist
-
 build:       # This job runs in the build and publish stage, which runs first.
   stage: build
   image: private.nexus-regs.docker:8086/docker:${DOCKER_VERSION}
@@ -58,8 +28,6 @@ build:       # This job runs in the build and publish stage, which runs first.
   variables:
     DOCKER_HOST: tcp://dockerd:2375
     DOCKER_DRIVER: overlay2
-  dependencies:
-    - pre-build
   before_script:
     - mkdir -p .docker/ && cat $DOCKER_CONF_JSON > .docker/config.json
   script:
