@@ -49,7 +49,7 @@ export default {
   methods: {
     getData() {
       this.$http
-        .get(`systems/${this.$route.params.id}`)
+        .get(`public/certificate/${this.$route.params.id}`)
         .then((response) => {
           this.data.certificate.nama_internal = response.data.data.nama_internal
           this.data.certificate.nama_eksternal =

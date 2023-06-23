@@ -369,7 +369,7 @@ export default {
       this.modal.copy = {
         //ini dirubah
         value: this.$refs.logo_img.innerHTML,
-        link: `http://localhost:8080/sealid/${this.$route.params.id}`,
+        link: `${location.origin}/sealid/${this.data.system.no_reg}`,
         show: true,
       }
     },

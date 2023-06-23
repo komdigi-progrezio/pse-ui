@@ -84,7 +84,7 @@
     </CCard>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-user" /> Pengguna
+        <CIcon name="cil-user" /> Sub-Pejabat
         <template v-if="isNotAdmin">
           <div class="card-header-actions">
             <CButton
