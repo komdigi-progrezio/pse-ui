@@ -21,16 +21,16 @@ const data = [
       },
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Sistem Elektronik',
+        name: 'Daftar Sistem Elektronik',
         icon: 'cil-cloud',
         items: [
           {
-            name: 'Disetujui',
+            name: 'Sistem Elektronik Disetujui',
             to: '/admin/systems/approved',
             permissionName: 'Sistem Elektronik Sudah Disetujui',
           },
           {
-            name: 'Belum Disetujui',
+            name: 'Sistem Elektronik Belum Disetujui',
             to: '/admin/systems/disapproved',
             permissionName: 'Sistem Elektronik Belum Disetujui',
           },

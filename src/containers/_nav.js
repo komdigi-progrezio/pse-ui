@@ -14,7 +14,7 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Sistem Elektronik',
+        name: 'Daftar Sistem Elektronik',
         to: '/admin/systems',
         icon: 'cil-cloud',
       },
