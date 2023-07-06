@@ -311,6 +311,8 @@ createRouter.beforeEach((to, from, next) => {
       } else {
         next()
       }
+    } else if (to.path === '/sealid/:id') {
+      next()
     } else {
       keycloak
         .init({

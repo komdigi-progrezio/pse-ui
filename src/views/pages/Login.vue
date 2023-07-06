@@ -1,10 +1,15 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
-    <div style="position: absolute; font-size: 40px; top: 50px; color: #245c9c">
+    <div style="position: absolute; font-size: 40px; top: 50px; color: #ff5f5f">
       <marquee
         ><b
           >Petunjuk pendaftaran sistem elektronik bisa di download
-          <a style="color: #245c9c" href="google.com"><u>disini</u></a></b
+          <a
+            style="color: #ff5f5f"
+            href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
+            target="”_blank”"
+            ><u>disini</u></a
+          ></b
         ></marquee
       >
     </div>
