@@ -230,6 +230,7 @@
                   <th>Keterangan</th>
                   <th>No Tanda Daftar</th>
                   <th>Progress</th>
+                  <th>Bersedia Dipublish</th>
                   <th>Status</th>
                   <th>Aksi</th>
                 </tr>
@@ -267,8 +268,12 @@
                       {{ value.progress }}%
                     </td>
                     <td>
+                      <span class="mobile-only mr-1">Bersedia Dipublish: </span>
+                      {{  value.publish === 1 ? 'Ya' : 'Tidak' }}
+                    </td>
+                    <td>
                       <span class="mobile-only mr-1">Status: </span>
-                      {{ value.status }}
+                      {{ value.approved === 1 ? 'Terdaftar' : 'Belum Terdaftar' }}
                     </td>
                     <td>
                       <CButton
@@ -611,6 +616,7 @@ export default {
       this.modal.method = 'PATCH'
     },
     approve(value) {
+      console.log(value);
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'
