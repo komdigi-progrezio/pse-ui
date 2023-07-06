@@ -1,5 +1,13 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
+    <div style="position: absolute; font-size: 40px; top: 50px; color: #245c9c">
+      <marquee
+        ><b
+          >Petunjuk pendaftaran sistem elektronik bisa di download
+          <a style="color: #245c9c" href="google.com"><u>disini</u></a></b
+        ></marquee
+      >
+    </div>
     <div class="align-items-center d-none d-lg-flex" id="left-side">
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
