@@ -31,12 +31,30 @@
             </button>
           </div>
 
+          <div>
+            <CButton
+            v-if="data.system.approved !== 1"
+            class="mr-1"
+            color="success"
+            v-c-tooltip="{
+              content: 'Setujui Sistem Elektronik',
+              placement: 'bottom',
+            }"
+            @click="approve(data.system)"
+          >
+            <CIcon name="cil-check" />
+            &nbsp;
+            <span class=""
+              >Setujui Sistem Elektronik</span
+            >
+          </CButton>
           <router-link
             to="/admin/repository"
-            class="btn btn-primary h-50 align-self-center"
+            class="btn btn-primary align-self-center"
           >
             Kembali <CIcon name="cil-arrow-right" />
           </router-link>
+          </div>
         </div>
       </CCardBody>
     </CCard>
@@ -162,10 +180,42 @@
         </div>
       </template>
     </CModal>
+    <CModal
+      :title="modal.title"
+      :color="modal.color"
+      :show.sync="modal.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.message }}
+            <strong>{{ modal.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton
+          color="primary"
+          size="sm"
+          class="m-2"
+          @click="submit"
+          :disabled="isSubmit"
+        >
+          {{ modal.labelButton }}
+          <CSpinner size="sm" color="info" v-if="isSubmit" />
+        </CButton>
+      </template>
+    </CModal>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import _ from 'lodash'
 import SystemGeneralData from './partials/SystemGeneralData'
 import SystemOrganizerProfile from './partials/SystemOrganizerProfile'
 import SystemDocument from './partials/SystemDocument'
@@ -191,6 +241,8 @@ export default {
   },
   data() {
     return {
+      isSubmit: false,
+      spinner: false,
       data: {
         system: {
           id: null,
@@ -250,16 +302,24 @@ export default {
         softwareTool: [],
         responsible_person: null,
       },
-      treeData: {
-        name: 'Satuan Kerja',
-        id: null,
-        children: [],
-      },
       modal: {
+        showModal: false,
+        title: null,
+        color: null,
+        message: null,
+        labelButton: null,
+        url: null,
+        uniqueId: null,
+        method: null,
         copy: {
           show: false,
           value: '',
         },
+      },
+      treeData: {
+        name: 'Satuan Kerja',
+        id: null,
+        children: [],
       },
     }
   },
@@ -268,6 +328,53 @@ export default {
     this.fetchTreeViewWorkUnit()
   },
   methods: {
+    clearModal() {
+      this.modal.title = null
+      this.modal.color = null
+      this.modal.data = null
+      this.modal.message = null
+      this.modal.url = null
+      this.modal.labelButton = null
+      this.modal.uniqueId = null
+      this.modal.method = null
+    },
+    closeModal() {
+      this.modal.showModal = false
+      this.clearModal()
+    },
+    approve(value) {
+      console.log(value);
+      this.modal.showModal = true
+      this.modal.title = 'Setujui Data'
+      this.modal.color = 'success'
+      this.modal.data = value.nama_internal
+      this.modal.uniqueId = value.id
+      this.modal.message = 'Ingin Mensetujui Data'
+      this.modal.labelButton = 'Setujui'
+      this.modal.url = 'systems/approved'
+      this.modal.method = 'patch'
+    },
+    submit() {
+      this.isSubmit = true
+      this.$http({
+        method: this.modal.method,
+        url: `/${this.modal.url}/${this.modal.uniqueId}`,
+      })
+        .then((response) => {
+          //this.filterData()
+          this.closeModal()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+          this.isSubmit = false
+        })
+        .catch((error) => {
+          this.isSubmit = false
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     fetchTreeViewWorkUnit() {
       this.$http
         .get('parsatuankerja/list/tree-view')
