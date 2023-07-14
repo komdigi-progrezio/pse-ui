@@ -1,33 +1,103 @@
 <template>
   <center style="margin-top: 40px">
-    <div style="width: 500px; border-style: solid; padding: 5px">
-      <div>
-        <img :src="data.certificate.img_badge" />
+    <div class="certificate-page">
+      <div class="header-certificate">
+        <div class="certificate-title">{{ data.certificate.nama_eksternal }}</div>
       </div>
-      <div>
-        <p
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec nibh
-          eu magna pulvinar ornare. Nunc nibh mi, lobortis a iaculis ut, dictum
-          quis arcu. Duis velit augue, feugiat id metus pretium, suscipit
-          fringilla sem. Integer nec felis in risus rhoncus pulvinar non sit
-          amet metus. Proin sed sagittis ipsum. Etiam eu risus ut dui imperdiet
-          pellentesque. Donec vestibulum velit sed turpis viverra, quis euismod
-          metus dapibus. Nam vulputate nisl blandit, dignissim ante vitae,
-          placerat sapien. Suspendisse consequat turpis et dolor elementum, eget
-          congue magna aliquam. Nulla a orci id ex scelerisque fringilla.
-          Vivamus dapibus vel nunc in mattis. Sed porttitor quam quis sem
-          commodo dapibus non vitae neque.</p
-        >
-        <h5>{{ data.certificate.nama_internal }}</h5>
-        <h5>{{ data.certificate.nama_eksternal }}</h5>
-        <h5>{{ data.certificate.no_reg }}</h5>
+      <div class="body-certificate">
+        <div class="certificate-point">
+          <div class="point-title">Sistem Elektronik</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.nama_internal }}</div>
+        </div>
+        <div class="certificate-point">
+          <div class="point-title">Keterangan SE</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.deskripsi }}</div>
+        </div>
+        <div class="certificate-point">
+          <div class="point-title">Nomor Tanda Daftar PSE</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.no_reg }}</div>
+        </div>
+        <div class="certificate-point">
+          <div class="point-title">Terdaftar Pada</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.created_at }}</div>
+        </div>
+        <div class="certificate-point">
+          <div class="point-title">Kategori Akses</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.kategori_akses }}</div>
+        </div>
+        <div class="certificate-point">
+          <div class="point-title">Alamat Website</div>
+          <div class="point-divider"> : </div>
+          <div class="point-value"> {{ data.certificate.nama_internal }}</div>
+        </div>
+        <img :src="data.certificate.img_badge" class="certificate-image" />
       </div>
-      <div>
-        <footer> PSE - Kominfo </footer>
+      <div class="footer-certitficate">
+        Pendaftaran Sistem Elektronik merupakan amanat dari Pasal 6 Peraturan Pemerintah no. 71 Tahun 2019 tentang Penyelenggaraan Sistem dan Transaksi Elektronik. Dimana untuk Tata Cara Pendaftaran Sistem Elektronik Instansi Penyelenggara Negara sudah diatur dalam PermenKominfo no. 10 Tahun 2015
       </div>
     </div>
   </center>
 </template>
+<style>
+
+  .certificate-page {
+    width: 500px; border-style: solid; padding: 5px;
+  }
+
+  .certificate-title {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .body-certificate .certificate-point {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .body-certificate .certificate-point .point-title{
+    color: black;
+    font-size: 16px;
+    width: 176px;
+  }
+
+  .body-certificate .certificate-point .point-divider{
+    color: black;
+    font-size: 16px;
+    padding-right: 15px;
+    padding-left: 5px;
+  }
+  
+  .body-certificate .certificate-point .point-value{
+    color: black;
+    font-size: 16px;
+  }
+
+  .certificate-image {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .footer-certitficate { 
+    color: black;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  @media (max-width: 480px) {
+    .certificate-page {
+      width: 380px;
+      border-style: solid;
+      margin-right: auto;
+      margin-left: auto;
+    }  
+  }
+</style>
 <script>
 export default {
   name: 'CertificatePage',
@@ -52,9 +122,12 @@ export default {
         .get(`public/certificate/${this.$route.params.id}`)
         .then((response) => {
           this.data.certificate.nama_internal = response.data.data.nama_internal
-          this.data.certificate.nama_eksternal =
-            response.data.data.nama_eksternal
+          this.data.certificate.nama_eksternal = response.data.data.nama_eksternal
+          this.data.certificate.deskripsi = response.data.data.deskripsi
           this.data.certificate.no_reg = response.data.data.no_reg
+          this.data.certificate.url = response.data.data.url
+          this.data.certificate.kategori_akses = response.data.data.kategori_akses
+          this.data.certificate.created_at = response.data.data.created_at
           this.data.certificate.img_badge = response.data.data.img_badge
         })
         .catch((error) => {

@@ -1,17 +1,21 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
-    <div style="position: absolute; font-size: 40px; top: 50px; color: #245c9c">
-      <marquee
-        ><b
-          >Petunjuk pendaftaran sistem elektronik bisa di download
+    <div class="marquee-text">
+      <marquee>
+        <b>Petunjuk pendaftaran sistem elektronik bisa di download
           <a
             style="color: #ff0909"
             href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
             target="”_blank”"
-            ><u>disini</u></a
-          ></b
-        ></marquee
-      >
+            ><u>disini</u>
+          </a>
+        </b>
+      </marquee>
+    </div>
+    <div class="badge-dummy">
+      <a href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing" target="_blank">
+        <img id="illustration" src="@/assets/images/badge-polos.png" alt="PSE" />
+      </a>
     </div>
     <div class="align-items-center d-none d-lg-flex" id="left-side">
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
@@ -205,5 +209,18 @@ export default {
   line-height: 1.2;
   margin-bottom: 70px;
   margin-top: 10px;
+}
+.marquee-text {
+  position: absolute; font-size: 30px; top: 50px; color: #000
+}
+
+.badge-dummy {
+  position: absolute; bottom: 30px; left: 20px;
+}
+
+@media (max-width: 480px) {
+  .marquee-text {
+  position: absolute; font-size: 25px; top: 35px; color: #000
+  }
 }
 </style>
