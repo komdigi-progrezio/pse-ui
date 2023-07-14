@@ -1,17 +1,5 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
-    <div class="marquee-text">
-      <marquee>
-        <b>Petunjuk pendaftaran sistem elektronik bisa di download
-          <a
-            style="color: #ff0909"
-            href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
-            target="”_blank”"
-            ><u>disini</u>
-          </a>
-        </b>
-      </marquee>
-    </div>
     <div class="badge-dummy">
       <a href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing" target="_blank">
         <img id="illustration" src="@/assets/images/badge-polos.png" alt="PSE" />
@@ -21,9 +9,18 @@
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
     <div
-      class="d-flex align-items-center justify-content-center"
+      class="d-flex flex-column align-items-center justify-content-center"
       id="right-side"
     >
+      <div class="message-text">
+        Petunjuk pendaftaran sistem elektronik bisa di download
+          <a
+            style="color: #ff0909"
+            href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
+            target="”_blank”"
+            ><u>disini</u>
+          </a>
+      </div>
       <div class="w-50">
         <div id="identity">
           <img
@@ -210,8 +207,8 @@ export default {
   margin-bottom: 70px;
   margin-top: 10px;
 }
-.marquee-text {
-  position: absolute; font-size: 30px; top: 50px; color: #000
+.message-text {
+  text-align:center; font-weight: bold;font-size: 30px; background: #44546b; color: #fff; margin-top: -50px; margin-bottom: 50px;
 }
 
 .badge-dummy {
@@ -219,8 +216,12 @@ export default {
 }
 
 @media (max-width: 480px) {
-  .marquee-text {
-  position: absolute; font-size: 25px; top: 35px; color: #000
+  .message-text {
+    position: absolute; font-weight: normal; font-size: 13px; top: 105px; background: #44546b; color: #fff; width: 100%; padding: 10px 0;
+  }
+
+  .badge-dummy {
+    position: absolute; bottom: 30px; left: auto; right: auto;
   }
 }
 </style>
