@@ -33,7 +33,7 @@
         <div class="certificate-point">
           <div class="point-title">Alamat Website</div>
           <div class="point-divider"> : </div>
-          <div class="point-value"> {{ data.certificate.nama_internal }}</div>
+          <div class="point-value"> {{ data.certificate.url }}</div>
         </div>
         <img :src="data.certificate.img_badge" class="certificate-image" />
       </div>
@@ -57,25 +57,28 @@
   .body-certificate .certificate-point {
     display: flex;
     flex-direction: row;
-    align-items: center;
   }
 
   .body-certificate .certificate-point .point-title{
     color: black;
-    font-size: 16px;
-    width: 176px;
+    font-size: 14px;
+    width: 153px;
+    display: flex;
+    justify-content: left;
   }
 
   .body-certificate .certificate-point .point-divider{
     color: black;
-    font-size: 16px;
-    padding-right: 15px;
+    font-size: 14px;
+    padding-right: 5px;
     padding-left: 5px;
   }
   
   .body-certificate .certificate-point .point-value{
     color: black;
-    font-size: 16px;
+    font-size: 14px;
+    display: flex;
+    justify-content: right;
   }
 
   .certificate-image {
@@ -89,13 +92,46 @@
     margin-left: auto;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 400px) {
+    .certificate-title {
+      font-size: 16px;
+      font-weight: bold;
+    }
     .certificate-page {
       width: 380px;
       border-style: solid;
       margin-right: auto;
       margin-left: auto;
-    }  
+      padding-left: auto;
+      padding-right: auto;
+    } 
+    
+    .body-certificate .certificate-point .point-title{
+      color: black;
+      font-size: 11px;
+      width: 153px;
+      display: flex;
+      justify-content: left;
+    }
+
+    .body-certificate .certificate-point .point-divider{
+      color: black;
+      font-size: 11px;
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+    
+    .body-certificate .certificate-point .point-value{
+      color: black;
+      font-size: 11px;
+    }
+
+    .footer-certitficate { 
+      color: black;
+      font-size: 11px;
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
 </style>
 <script>
