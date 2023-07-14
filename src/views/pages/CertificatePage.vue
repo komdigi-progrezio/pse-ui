@@ -109,7 +109,7 @@
     .body-certificate .certificate-point .point-title{
       color: black;
       font-size: 11px;
-      width: 153px;
+      width: 156px;
       display: flex;
       justify-content: left;
     }
