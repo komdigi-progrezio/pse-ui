@@ -8,19 +8,15 @@
     "
   >
     <CSidebarBrand class="d-md-down-none" to="/">
-      <img
-        src="@/assets/images/logo.svg"
-        alt="PSE"
-        height="35"
-        class="c-sidebar-brand-full"
-      />
-      <!-- <img
-                src="@/assets/images/logo.svg"
-                alt="PSE"
-                height="35"
-                class="c-sidebar-brand-minimized"
-            /> -->
-      <p class="c-sidebar-brand-minimized">PSE</p>
+      <div>
+        <img
+          src="@/assets/images/logo.svg"
+          alt="PSE"
+          height="35"
+          class="c-sidebar-brand-full"
+        />
+        <div class="c-sidebar-brand-text">{{ data.status_register }} | {{ data.nama_instansi }}</div>
+      </div>
     </CSidebarBrand>
     <CRenderFunction flat :content-to-render="$options.Sidebar" />
     <CSidebarMinimizer
@@ -31,6 +27,14 @@
     />
   </CSidebar>
 </template>
+
+<style>
+.c-sidebar-brand-text {
+  font-size: 11px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+</style>
 
 <script>
 import Sidebar from './partials/sidebar.js'
@@ -44,6 +48,30 @@ export default {
     },
     minimize() {
       return this.$store.state.dashboard.sidebarMinimize
+    },
+  },
+  data() {
+    return {
+      data: [],
+    }
+  },
+  created() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      this.$http
+        .get('/users/get/authenticated', {})
+        .then((response) => {
+          this.data = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
     },
   },
 }
