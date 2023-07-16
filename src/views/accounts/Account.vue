@@ -180,6 +180,7 @@
                   <th>No</th>
                   <th>Nama</th>
                   <th>NIP</th>
+                  <th>Role</th>
                   <th>Jabatan</th>
                   <th>Instansi</th>
                   <th>Tanggal Daftar</th>
@@ -202,6 +203,10 @@
                     <td
                       ><span class="mobile-only mr-1">NIP: </span>
                       {{ value.nip }}</td
+                    >
+                    <td
+                      ><span class="mobile-only mr-1">Role: </span>
+                      {{ value.roles[0] }}</td
                     >
                     <td
                       ><span class="mobile-only mr-1">Jabatan: </span>
