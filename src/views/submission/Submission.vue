@@ -140,7 +140,7 @@
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Nama Sistem</th>
+                      <th>Nama Sistem Elektronik</th>
                       <th>Alasan</th>
                       <th>Status</th>
                       <th>Aksi</th>
