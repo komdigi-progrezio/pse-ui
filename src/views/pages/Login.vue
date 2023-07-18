@@ -1,10 +1,5 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
-    <div class="badge-dummy">
-      <a href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing" target="_blank">
-        <img id="illustration" src="@/assets/images/badge-polos.png" alt="PSE" />
-      </a>
-    </div>
     <div class="align-items-center d-none d-lg-flex" id="left-side">
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
