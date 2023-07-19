@@ -141,6 +141,7 @@
                     <tr>
                       <th>No</th>
                       <th>Nama Sistem Elektronik</th>
+                      <th>Instansi Penyelenggara</th>
                       <th>Alasan</th>
                       <th>Status</th>
                       <th>Aksi</th>
@@ -163,6 +164,8 @@
                         </th>
 
                         <td>{{ item.nama_sistem }}</td>
+
+                        <td>{{ item.sis_profil.account.instansi_induk_text }}</td>
 
                         <td>
                           <span class="mobile-only mr-1"
