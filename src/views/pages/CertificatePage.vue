@@ -78,7 +78,9 @@
     color: black;
     font-size: 14px;
     display: flex;
-    justify-content: right;
+    width: 321px;
+    justify-content: left;
+    text-align: left;
   }
 
   .certificate-image {
