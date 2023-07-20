@@ -1,5 +1,10 @@
 <template>
   <div class="c-app flex-row justify-content-center" id="login">
+    <div class="badge-dummy">
+      <a href="https://pse-dev.layanan.go.id/sealid/641" target="_blank">
+        <img id="illustration" src="https://api.dev.layanan.go.id/pse-api/storage/badge/badge_641.png" alt="PSE" />
+      </a>
+    </div>
     <div class="align-items-center d-none d-lg-flex" id="left-side">
       <img id="illustration" src="@/assets/images/login.svg" alt="PSE" />
     </div>
@@ -217,6 +222,18 @@ export default {
 
   .badge-dummy {
     position: absolute; bottom: 30px; left: auto; right: auto;
+  }
+}
+
+@media (max-height: 740px) {
+  .line-margin {
+    margin-bottom: 40px;
+  }
+  .message-text {
+    top: 60px;
+  }
+  .badge-dummy {
+    z-index: 1; bottom: 10px;
   }
 }
 </style>
