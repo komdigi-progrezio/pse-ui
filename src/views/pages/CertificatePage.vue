@@ -114,6 +114,7 @@
       width: 156px;
       display: flex;
       justify-content: left;
+      text-align: left;
     }
 
     .body-certificate .certificate-point .point-divider{

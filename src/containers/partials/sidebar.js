@@ -47,7 +47,7 @@ const data = [
       },
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Profil Pejabat Pendaftar',
+        name: 'Pejabat Pendaftar',
         icon: 'cil-user',
         items: [
           {
@@ -56,7 +56,7 @@ const data = [
             permissionName: 'Daftar Pengguna Pejabat Pendaftar',
           },
           {
-            name: 'Pengguna',
+            name: 'Sub-Pejabat',
             to: '/admin/account/parent',
             permissionName: 'Daftar Pengguna Pejabat Pendaftar',
           },
