@@ -52,6 +52,8 @@
   .certificate-title {
     font-size: 28px;
     font-weight: bold;
+    line-height: 135%;
+    padding-bottom: 15px;
   }
   
   .body-certificate .certificate-point {
