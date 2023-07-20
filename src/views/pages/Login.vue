@@ -203,7 +203,7 @@ export default {
   margin-top: 10px;
 }
 .message-text {
-  text-align:center; font-weight: bold;font-size: 30px; background: #44546b; color: #fff; margin-top: -50px; margin-bottom: 50px;
+  text-align:center; font-weight: bold;font-size: 30px; background: #44546b; color: #fff; width: 100%; margin-top: -50px; margin-bottom: 50px; padding: 10px 0;
 }
 
 .badge-dummy {
