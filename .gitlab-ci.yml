@@ -36,6 +36,7 @@ build:       # This job runs in the build and publish stage, which runs first.
   tags:
     - docker
   only:
+    - live-dev
     - live-prod
 
 deploy-dev:      # This job runs in the deploy stage.
@@ -52,7 +53,7 @@ deploy-dev:      # This job runs in the deploy stage.
     - cat deployment.yaml
     - kubectl apply -f deployment.yaml
   only:
-    - live-prod
+    - live-dev
 
 deploy-prd:      # This job runs in the deploy stage.
   image:
@@ -68,4 +69,4 @@ deploy-prd:      # This job runs in the deploy stage.
     - cat deployment.yaml
   #  - kubectl apply -f deployment.yaml
   only:
-    - master
+    - master # TODO: move to live-prod
