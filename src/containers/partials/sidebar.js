@@ -25,6 +25,11 @@ const data = [
         icon: 'cil-cloud',
         items: [
           {
+            name: 'Daftar Sistem Elektronik',
+            to: '/admin/repository',
+            permissionName: 'Daftar Sistem Elektronik',
+          },
+          {
             name: 'Sistem Elektronik Disetujui',
             to: '/admin/systems/approved',
             permissionName: 'Sistem Elektronik Sudah Disetujui',
@@ -68,11 +73,6 @@ const data = [
         name: 'Pelaporan',
         icon: 'cil-file',
         items: [
-          {
-            name: 'Daftar Sistem Elektronik',
-            to: '/admin/repository',
-            permissionName: 'Daftar Sistem Elektronik',
-          },
           {
             name: 'Statistik',
             to: '/admin/statistic',
