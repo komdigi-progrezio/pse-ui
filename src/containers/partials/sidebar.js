@@ -21,7 +21,7 @@ const data = [
       },
       {
         _name: 'CSidebarNavDropdown',
-        name: 'Daftar Sistem Elektronik',
+        name: 'Sistem Elektronik',
         icon: 'cil-cloud',
         items: [
           {
