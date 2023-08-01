@@ -160,7 +160,7 @@
                       hidden
                       ref="document"
                       @change="setDocumentToForm"
-                      accept="pdf/*"
+                      accept="application/pdf"
                     />
 
                     <ValidationProvider
