@@ -44,6 +44,7 @@
     "@morioh/v-quill-editor": "^1.0.2",
     "axios": "^0.20.0",
     "dayjs": "^1.9.6",
+    "dompurify": "^3.0.5",
     "firebase": "^8.2.1",
     "keycloak-js": "^11.0.3",
     "lodash": "^4.17.20",

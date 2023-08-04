@@ -294,6 +294,8 @@
 </template>
 
 <script>
+import DOMPurify from 'dompurify'
+
 export default {
   name: 'SystemDocument',
   props: {
@@ -381,6 +383,13 @@ export default {
       this.$emit('update-data')
     },
 
+    handleInput() {
+      const inputValue = event.target.value
+      // Use DOMPurify to sanitize the input
+      const sanitizedValue = DOMPurify.sanitize(inputValue)
+      this.input = sanitizedValue
+    },
+
     fetchOptions() {
       this.$http
         .get('parconfig/category', {
@@ -436,6 +445,10 @@ export default {
       return isValid
     },
 
+    isSanitize(document) {
+      return DOMPurify.sanitize(document, { ALLOWED_TAGS: [] })
+    },
+
     /**
      * Document
      */
@@ -453,27 +466,36 @@ export default {
 
     addDocument() {
       const method = 'post'
+      const beforeName = this.form.document.name
+      //Sanitize
+      this.form.document.name = this.isSanitize(this.form.document.name)
+      const afterName = this.form.document.name
 
-      const documentForm = this.parseToFormData(method, this.form.document)
+      if (beforeName == afterName) {
+        const documentForm = this.parseToFormData(method, this.form.document)
 
-      this.$http({
-        method: method,
-        url: 'document',
-        data: documentForm,
-      })
-        .then((response) => {
-          this.refreshData()
-          this.closeModalDocument()
-          this.successNotif(response.data.message)
+        this.$http({
+          method: method,
+          url: 'document',
+          data: documentForm,
         })
-        .catch((error) => {
-          this.errorNotif(error)
-        })
+          .then((response) => {
+            this.refreshData()
+            this.closeModalDocument()
+            this.successNotif(response.data.message)
+          })
+          .catch((error) => {
+            this.errorNotif(error)
+          })
+      } else {
+        this.errorNotif('404')
+      }
     },
 
     updateDocument() {
       const method = 'patch'
 
+      this.form.document.name = this.isSanitize(this.form.document.name)
       const documentForm = this.parseToFormData(method, this.form.document)
 
       this.$http({
