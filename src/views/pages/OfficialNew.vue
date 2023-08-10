@@ -34,7 +34,7 @@
                   :rules="{
                     required: true,
                     email: true,
-                    regex: /[^\s@]+@[^\s@]+\.go.id$/,
+                    // regex: /[^\s@]+@[^\s@]+\.go.id$/,
                   }"
                   v-slot="{ errors }"
                 >
