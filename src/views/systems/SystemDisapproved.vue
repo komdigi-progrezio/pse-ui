@@ -98,6 +98,7 @@
                   <th>No</th>
                   <th>Penyelenggara</th>
                   <th>Nama Sistem</th>
+                  <th>Tanggal Update</th>
                   <th>Progress</th>
                   <template v-if="isAdmin">
                     <th>Aksi</th>
@@ -118,6 +119,10 @@
                     <td>
                       <span class="mobile-only mr-1">Nama Sistem: </span>
                       {{ item.nama_eksternal }}
+                    </td>
+                    <td>
+                      <span class="mobile-only mr-1">Tanggal Update: </span>
+                      {{ formatDate(item.date_updated) }}
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Progress: </span>
@@ -214,6 +219,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'SystemDisapproved',
   data() {
@@ -263,6 +269,9 @@ export default {
     this.getData()
   },
   methods: {
+    formatDate: function (date) {
+      return moment(date).format('DD-MM-YYYY HH:mm:ss')
+    },
     clearModal() {
       this.modal.title = null
       this.modal.color = null

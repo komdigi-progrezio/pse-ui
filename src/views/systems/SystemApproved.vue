@@ -118,6 +118,7 @@
                   <th>No</th>
                   <th>Penyelenggara</th>
                   <th>Nama Sistem</th>
+                  <th>Tanggal Update</th>
                   <th>Progress</th>
                   <th>Aksi</th>
                 </tr>
@@ -136,6 +137,7 @@
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
                     >
+                    <td>{{ formatDate(item.date_updated) }}</td>
                     <td
                       ><span class="mobile-only mr-1">Progress: </span>
                       {{ item.progress }}%</td
@@ -223,6 +225,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'SystemApproved',
   data() {
@@ -261,6 +264,9 @@ export default {
     this.getData()
   },
   methods: {
+    formatDate: function (date) {
+      return moment(date).format('DD-MM-YYYY HH:mm:ss')
+    },
     closeModal() {
       this.modal.showModal = false
       this.clearModal()
