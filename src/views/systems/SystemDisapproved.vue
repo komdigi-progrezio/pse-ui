@@ -96,8 +96,8 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Penyelenggara</th>
-                  <th>Nama Sistem</th>
+                  <th>Nama Penyelenggara</th>
+                  <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
                   <template v-if="isAdmin">
@@ -117,7 +117,9 @@
                     </th>
                     <td>{{ item.organizer_profile }}</td>
                     <td>
-                      <span class="mobile-only mr-1">Nama Sistem: </span>
+                      <span class="mobile-only mr-1"
+                        >Nama Sistem Elektronik:
+                      </span>
                       {{ item.nama_eksternal }}
                     </td>
                     <td>

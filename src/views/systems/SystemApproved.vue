@@ -116,8 +116,8 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Penyelenggara</th>
-                  <th>Nama Sistem</th>
+                  <th>Nama Penyelenggara</th>
+                  <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
                   <th>Aksi</th>
