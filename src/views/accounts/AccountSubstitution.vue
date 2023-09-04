@@ -77,6 +77,18 @@
                 />
               </div>
             </CCol>
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Nama Instansi</label>
+                <input
+                  v-model="search.nama_instansi"
+                  type="text"
+                  name="nama_instansi"
+                  placeholder="Masukan Nama Instansi"
+                  class="form-control"
+                />
+              </div>
+            </CCol>
           </CRow>
         </template>
       </CCardBody>
@@ -99,10 +111,11 @@
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Nama Lengkap</th>
-                      <th>NIP</th>
-                      <th>Jabatan</th>
-                      <th>Instansi</th>
+                      <th>Nama Instansi Penyelenggara</th>
+                      <th>Pejabat Pendaftar Lama</th>
+                      <th>Pejabat Pengganti</th>
+                      <!-- <th>NIP</th>
+                      <th>Jabatan</th> -->
                       <th>Status</th>
                       <th>Tanggal Daftar</th>
                       <th>Aksi</th>
@@ -119,19 +132,22 @@
                             1
                           }}
                         </th>
-                        <td>{{ item.nama }}</td>
                         <td
+                          ><span class="mobile-only mr-1">Instansi: </span>
+                          {{ item.nama_instansi }}</td
+                        >
+                        <td>{{
+                          item.old_name != null ? item.old_name.nama : '-'
+                        }}</td>
+                        <td>{{ item.nama }}</td>
+                        <!-- <td
                           ><span class="mobile-only mr-1">NIP: </span>
                           {{ item.nip }}</td
                         >
                         <td
                           ><span class="mobile-only mr-1">Jabatan: </span>
                           {{ item.jabatan }}</td
-                        >
-                        <td
-                          ><span class="mobile-only mr-1">Instansi: </span>
-                          {{ item.nama_instansi }}</td
-                        >
+                        > -->
                         <td
                           ><span class="mobile-only mr-1">Status: </span>
                           {{ item.nama_status }}</td
@@ -197,6 +213,7 @@ export default {
       permissions: [],
       search: {
         nama: null,
+        nama_instansi: null,
       },
       pagination: {
         current_page: 1,
@@ -249,6 +266,7 @@ export default {
     },
     clearFilter() {
       this.search.nama = null
+      this.search.nama_instansi = null
     },
     filterData() {
       this.spinner = true
@@ -259,6 +277,7 @@ export default {
             page: 1,
             filter: 'nama',
             q: this.search.nama,
+            agency: this.search.nama_instansi,
           },
         })
         .then((response) => {
@@ -285,6 +304,7 @@ export default {
             page: this.pagination.current_page,
             filter: 'nama',
             q: this.search.nama,
+            agency: this.search.nama_instansi,
           },
         })
         .then((response) => {

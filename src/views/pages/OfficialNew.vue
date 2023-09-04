@@ -34,7 +34,7 @@
                   :rules="{
                     required: true,
                     email: true,
-                    // regex: /[^\s@]+@[^\s@]+\.go.id$/,
+                    regex: /[^\s@]+@[^\s@]+\.go.id$|[^\s@]+@mkri.id$/,
                   }"
                   v-slot="{ errors }"
                 >
@@ -370,8 +370,24 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="document" class="col-sm-2 col-form-label"
-                >Unggah Dokumen Penunjukan</label
+              <label
+                for="document"
+                class="col-sm-2 col-form-label"
+                v-if="
+                  forms.status_register == 2 || forms.status_register == null
+                "
+                :style="{ display: none }"
+              >
+                Unggah Dokumen Surat Permohonan dan Surat Tugas (dalam 1 file
+                PDF)</label
+              >
+              <label
+                for="document"
+                class="col-sm-2 col-form-label"
+                v-if="forms.status_register == 1"
+                :style="{ display: none }"
+              >
+                Unggah Dokumen Surat Tugas (PDF)</label
               >
               <div class="col-sm-10">
                 <ValidationProvider
