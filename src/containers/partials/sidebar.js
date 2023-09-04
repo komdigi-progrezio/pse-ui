@@ -107,7 +107,7 @@ const data = [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Daftar Pergantian Akun',
+        name: 'Daftar Pergantian Pejabat',
         to: '/admin/account/substitution',
         icon: 'cil-user',
         items: [],

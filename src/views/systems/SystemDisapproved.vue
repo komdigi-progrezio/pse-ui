@@ -78,6 +78,18 @@
                 />
               </div>
             </CCol>
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Nama Instansi</label>
+                <input
+                  v-model="search.nama_instansi"
+                  type="text"
+                  name="nama_instansi"
+                  placeholder="Masukan Nama Instansi"
+                  class="form-control"
+                />
+              </div>
+            </CCol>
           </CRow>
         </template>
       </CCardBody>
@@ -232,6 +244,7 @@ export default {
       data: [],
       search: {
         nama_eksternal: null,
+        nama_instansi: null,
       },
       modal: {
         showModal: false,
@@ -305,6 +318,7 @@ export default {
     },
     clearFilter() {
       this.search.nama_eksternal = null
+      this.search.nama_instansi = null
     },
     getData() {
       this.spinner = true
@@ -312,8 +326,11 @@ export default {
         .get('/systems/filter/disapproved', {
           params: {
             page: this.pagination.current_page,
+            // nama_eksternal: this.search.nama_eksternal,
+            // nama_instansi: this.search.nama_instansi,
             filter: 'nama_eksternal',
             q: this.search.nama_eksternal,
+            agency: this.search.nama_instansi,
           },
         })
         .then((response) => {
@@ -338,8 +355,11 @@ export default {
         .get('/systems/filter/disapproved', {
           params: {
             page: 1,
+            // nama_eksternal: this.search.nama_eksternal,
+            // nama_instansi: this.search.nama_instansi,
             filter: 'nama_eksternal',
             q: this.search.nama_eksternal,
+            agency: this.search.nama_instansi,
           },
         })
         .then((response) => {
