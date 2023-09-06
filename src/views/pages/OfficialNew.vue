@@ -373,7 +373,9 @@
               <label
                 for="document"
                 class="col-sm-2 col-form-label"
-                v-if="forms.status_register == 2"
+                v-if="
+                  forms.status_register == 1 || forms.status_register == null
+                "
                 :style="{ display: none }"
               >
                 Unggah Dokumen Surat Permohonan dan Surat Tugas (dalam 1 file
@@ -382,9 +384,7 @@
               <label
                 for="document"
                 class="col-sm-2 col-form-label"
-                v-if="
-                  forms.status_register == 1 || forms.status_register == null
-                "
+                v-if="forms.status_register == 2"
                 :style="{ display: none }"
               >
                 Unggah Dokumen Surat Tugas (PDF)</label
