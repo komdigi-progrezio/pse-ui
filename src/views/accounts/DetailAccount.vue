@@ -95,6 +95,20 @@
                   {{ data.instansi_induk_text }}
                 </CCol>
               </CRow>
+              <div class="text-center my-3" v-if="data.status == 0 || NULL">
+                <CButton
+                  color="primary"
+                  size="sm"
+                  v-c-tooltip="{
+                    content: 'Aktifkan User',
+                    placement: 'bottom',
+                  }"
+                  :disabled="isSubmit"
+                  @click="enable"
+                >
+                  Aktifkan User <CIcon name="cil-check-circle" />
+                </CButton>
+              </div>
             </CTab>
             <CTab title="Lain - Lain">
               <CRow class="mt-3">
@@ -224,6 +238,23 @@ export default {
     },
     getData() {
       return this.$http.get(`users/${this.$route.params.id}`)
+    },
+    enable() {
+      this.$http({
+        method: 'patch',
+        url: `/users/enable/${this.$route.params.id}`,
+      })
+        .then((response) => {
+          this.getData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
     },
   },
 }

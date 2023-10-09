@@ -302,6 +302,7 @@
                   }"
                   @change="getDistrictDaftar"
                   @blur="errorValidations.propinsi = []"
+                  required
                 >
                   <option value="" selected="selected"> Pilih Provinsi </option>
                   <option
@@ -325,6 +326,7 @@
                     'is-invalid': errorValidations.kota.length > 0,
                   }"
                   @blur="errorValidations.kota = []"
+                  required
                 >
                   <option value="" selected="selected"> Pilih Kota </option>
                   <option
