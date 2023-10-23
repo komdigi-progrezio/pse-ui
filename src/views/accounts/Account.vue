@@ -183,7 +183,7 @@
                   <th>Role</th>
                   <th>Jabatan</th>
                   <th>Instansi</th>
-                  <th>Tanggal Daftar</th>
+                  <th @click="filterOrderData()">Tanggal Daftar</th>
                   <th>Tanggal Update</th>
                   <th>Status</th>
                   <th colspan="2">Aksi</th>
@@ -480,6 +480,7 @@ export default {
   data() {
     return {
       spinner: false,
+      orderBy: 'ASC',
       listFilter: false,
       data: [],
       // formChangePassword: {
@@ -774,6 +775,33 @@ export default {
         })
         .then((response) => {
           this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    filterOrderData() {
+      this.spinner = true
+      this.$http
+        .get('/users/filter/official', {
+          params: {
+            page: 1,
+            orderData: this.orderBy,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.orderBy == 'ASC'
+            ? (this.orderBy = 'DESC')
+            : (this.orderBy = 'ASC')
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
           this.pagination.per_page = response.data.meta.per_page
