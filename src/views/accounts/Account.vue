@@ -183,7 +183,9 @@
                   <th>Role</th>
                   <th>Jabatan</th>
                   <th>Instansi</th>
-                  <th @click="filterOrderData()">Tanggal Daftar</th>
+                  <th @click="filterOrderData()" class="pointer"
+                    >Tanggal Daftar</th
+                  >
                   <th>Tanggal Update</th>
                   <th>Status</th>
                   <th colspan="2">Aksi</th>
@@ -849,4 +851,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.pointer {
+  cursor: pointer;
+}
+</style>
