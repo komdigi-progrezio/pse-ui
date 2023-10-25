@@ -228,6 +228,9 @@
                   >
                   <th>Sistem Elektronik / Satuan Kerja / Penanggung Jawab</th>
                   <th>Keterangan</th>
+                  <th @click="filterOrderData()" class="pointer"
+                    >Tanggal Daftar</th
+                  >
                   <th>No Tanda Daftar</th>
                   <th>Progress</th>
                   <th>Bersedia Dipublish</th>
@@ -260,6 +263,9 @@
                       {{ value.deskripsi }}
                     </td>
                     <td>
+                      {{ value.tgl_daftar }}
+                    </td>
+                    <td>
                       <span class="mobile-only mr-1">Nomor registrasi: </span>
                       {{ value.no_reg }}
                     </td>
@@ -269,11 +275,13 @@
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Bersedia Dipublish: </span>
-                      {{  value.publish === 1 ? 'Ya' : 'Tidak' }}
+                      {{ value.publish === 1 ? 'Ya' : 'Tidak' }}
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Status: </span>
-                      {{ value.approved === 1 ? 'Terdaftar' : 'Belum Terdaftar' }}
+                      {{
+                        value.approved === 1 ? 'Terdaftar' : 'Belum Terdaftar'
+                      }}
                     </td>
                     <td>
                       <CButton
@@ -616,7 +624,7 @@ export default {
       this.modal.method = 'PATCH'
     },
     approve(value) {
-      console.log(value);
+      console.log(value)
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'
@@ -695,6 +703,34 @@ export default {
         })
         .then((response) => {
           this.spinner = false
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    filterOrderData() {
+      this.spinner = true
+
+      this.$http
+        .get('/systems/repository', {
+          params: {
+            page: this.pagination.current_page,
+            orderData: this.orderBy,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.orderBy == 'ASC'
+            ? (this.orderBy = 'DESC')
+            : (this.orderBy = 'ASC')
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
           this.pagination.per_page = response.data.meta.per_page
@@ -797,4 +833,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.pointer {
+  cursor: pointer;
+}
+</style>
