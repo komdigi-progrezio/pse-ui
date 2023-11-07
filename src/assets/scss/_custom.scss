@@ -1,22 +1,82 @@
 // Here you can add other styles
 @import 'vue-select/src/scss/vue-select.scss';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,400;0,500;0,600;0,700;1,100;1,200&display=swap');
+body {
+  font-family: 'Poppins', sans-serif;
+}
 .font-montserrat {
   font-family: 'Montserrat';
   font-weight: 500;
 }
 #login {
+  background-size: cover;
   #left-side,
   #right-side {
     width: 100%;
   }
   #left-side {
-    background-color: #ff5f5f;
+    border-radius: 0 28px 28px 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: #025FC4;
     justify-content: center;
     align-items: center;
+    position: relative;
 
+    #footer {
+      color: #fff;
+      bottom: 20px;
+      position: absolute;
+      text-align: center;
+      display: block;
+      width: 100%;
+      left: 0;
+    }
+
+    #infotext {
+      margin: 50px 0;
+      display: inline-table;
+      border: 2px solid #fff;
+      border-radius: 40px;
+      padding: 40px;
+      height: 80%;
+      width: 80%;
+      h5 {
+        padding: 20px 30px;
+      }
+      .info-header {
+        display: block;
+        text-align: center;
+        h2 {
+          color: #FFD93C;
+          font-weight: 700;
+          margin: 10px 0 20px;
+        }
+        h5 {
+          color: #fff;
+          font-weight: 400;
+        }
+      }
+      .info-body {
+        color: #fff;
+        ul {
+          margin-bottom: 0;
+        }
+        li {
+          margin-top: 15px;
+          font-size: 16px;
+        }
+      }
+    }
+    #joinlogo {
+      width: 200px;
+      margin: -82px auto 0;
+      display: table;
+    }
     #illustration {
-      width: 60%;
-      margin-top: 150px;
+      width: 250px;
+      margin: -90px auto 0;
+      display: table;
     }
     #identity {
       position: absolute;
@@ -26,6 +86,7 @@
       #logo {
         width: 150px;
       }
+      
       p {
         font-family: 'Montserrat';
         font-weight: 500;
@@ -37,8 +98,30 @@
     }
   }
   #right-side {
-    background-color: #fff;
+    background-color: transparent;
+    padding: 40px 40px 40px 0;
 
+    #docicon {
+      width: 45px;
+      float: left;
+      margin-right: 10px;
+    }
+    .card {
+      border-width: 0;
+      border-radius: 8px;
+    }
+    #message-wrapper {
+      border-radius: 0 28px 28px 0;
+      box-shadow: 11px 13px 10px rgba(0, 64, 133, 0.15);
+      height: 100%;
+      width: 100%;
+      background: #fff;
+      padding: 40px 25%;
+      text-align: center;
+      #pselogo {
+        max-width: 100%;
+      }
+    }
     form {
       min-width: 300px;
     }

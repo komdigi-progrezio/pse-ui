@@ -12,7 +12,7 @@ export default new Vuex.Store({
       data: {},
     },
     isLoading: false,
-    textLoading: 'Loading ...',
+    textLoading: 'Memuat ...',
     treeView: {
       workUnit: {
         id: null,
@@ -39,10 +39,10 @@ export default new Vuex.Store({
       state.isLoading = true
     },
     loadingText(state) {
-      state.textLoading = 'Loading ...'
+      state.textLoading = 'Memuat ...'
     },
     logoutText(state) {
-      state.textLoading = 'Logging Out ...'
+      state.textLoading = 'Keluar ...'
     },
     isLogin(state, data) {
       state.auth.isLogin = true

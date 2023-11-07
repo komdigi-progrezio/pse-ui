@@ -37,88 +37,11 @@ Vue.component('tree-item', TreeItem)
 Vue.component('tree-item-checkbox', TreeItemCheckbox)
 Vue.component('v-select', vSelect)
 Vue.component('vue-toastr', VueToastr)
+
 //importing single component
 Vue.component('CChartBar', CChartBar)
 Vue.component('CChartLine', CChartLine)
 
-// const initOptions = {
-//   url: process.env.VUE_APP_KEYCLOAK_URL,
-//   realm: process.env.VUE_APP_KEYCLOAK_REALM,
-//   clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
-//   onLoad: 'login-required',
-// }
-// const keycloak = Keycloak(initOptions)
-// keycloak
-//   .init({
-//     onLoad: initOptions.onLoad,
-//     checkLoginIframe: false,
-//     redirectUri: 'http://localhost:8082/check-sso',
-//   })
-//   .then(() => {
-//     if (!auth) {
-//       router.push('/login')
-//     }
-//     localStorage.setItem('token', keycloak.token)
-//     localStorage.setItem('refresh_token', keycloak.refreshToken)
-//     const firebaseConfig = {
-//       apiKey: 'AIzaSyBkuJKApUr5VNb-ZOu6cCDM1hg8Cta1IO0',
-//       authDomain: 'kominfo-pse.firebaseapp.com',
-//       databaseURL: 'https://kominfo-pse.firebaseio.com',
-//       projectId: 'kominfo-pse',
-//       storageBucket: 'kominfo-pse.appspot.com',
-//       messagingSenderId: '584858584407',
-//       appId: '1:584858584407:web:8a4b7f5fefce72b86aea12',
-//       measurementId: 'G-5QG44PVKLC',
-//     }
-//     if (!firebase.apps.length) {
-//       firebase.initializeApp(firebaseConfig)
-//     }
-//     store
-//       .dispatch('auth/fetchAuth')
-//       .then(() => {
-//         try {
-//           if (firebase.messaging.isSupported()) {
-//             const messaging = firebase.messaging()
-//             Notification.requestPermission()
-//               .then(() => {
-//                 return messaging.getToken({
-//                   vapidKey:
-//                     'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-//                 })
-//               })
-//               .then(function (token) {
-//                 $axiosApi
-//                   .post('/users/notification-token', {
-//                     token: token,
-//                     type: 'web',
-//                   })
-//                   .then(() => {
-//                     if (router.currentRoute.path !== '/admin/dashboard') {
-//                       window.location = '/admin/dashboard'
-//                     }
-//                   })
-//                   .catch(() => {
-//                     localStorage.removeItem('token')
-//                     localStorage.removeItem('refresh_token')
-//                     localStorage.removeItem('user')
-//                     store.dispatch('dispatchDisableLoading')
-//                   })
-//               })
-//           }
-//         } catch (error) {
-//           alert(error)
-//         }
-//       })
-//       .catch(() => {
-//         store.dispatch('dispatchDisableLoading')
-//         window.localStorage.removeItem('token')
-//         window.localStorage.removeItem('refresh_token')
-//         window.localStorage.removeItem('user')
-//       })
-//   })
-//   .catch((error) => {
-//     console.log(error)
-//   })
 new Vue({
   el: '#app',
   router,

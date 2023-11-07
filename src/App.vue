@@ -56,7 +56,7 @@ export default {
 #spinner {
   border: 5px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 5px solid #f26060;
+  border-top: 5px solid #028ee2;
   width: 60px;
   height: 60px;
   -webkit-animation: spin 2s linear infinite; /* Safari */
