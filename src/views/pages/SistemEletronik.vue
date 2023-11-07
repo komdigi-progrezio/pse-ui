@@ -128,7 +128,30 @@
             <CCol sm="12">
               <div class="form-group">
                 <label for="name">Instansi</label>
-                <select
+                <v-select
+                  v-model="search.agency"
+                  :reduce="(agency) => agency.id"
+                  :filterable="false"
+                  :options="agency"
+                  label="nama"
+                  @search="onSearchInstansi"
+                >
+                  <template slot="no-options">
+                    Ketik Untuk Cari Nama Instansi
+                  </template>
+                  <template slot="option" slot-scope="option">
+                    <div class="d-center">
+                      {{ option.name }}
+                    </div>
+                  </template>
+                  <template slot="selected-option" slot-scope="option">
+                    <div class="selected d-center">
+                      {{ option.name }}
+                    </div>
+                  </template>
+                </v-select>
+
+                <!-- <select
                   v-model="search.agency"
                   class="form-control"
                   @change="fetchWorkUnit"
@@ -141,7 +164,7 @@
                   >
                     {{ value.name }}
                   </option>
-                </select>
+                </select> -->
               </div>
             </CCol>
             <CCol sm="12">
@@ -798,6 +821,32 @@ export default {
         })
         .then((response) => {
           vm.users = response.data.data
+          loading(false)
+        })
+    }, 350),
+    onSearchInstansi(searchInstansi, loading) {
+      loading(true)
+      this.searchInstansi(loading, searchInstansi, this)
+    },
+    searchInstansi: _.debounce((loading, searchInstansi, vm) => {
+      const defaultOptions = {
+        baseURL: process.env.VUE_APP_BASE_API_URL,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      }
+      const instance = axios.create(defaultOptions)
+      instance
+        .get('/public/parinstansi/filter', {
+          params: {
+            filter: 'name',
+            q: escape(searchInstansi),
+          },
+        })
+        .then((response) => {
+          vm.agency = response.data.data
           loading(false)
         })
     }, 350),
