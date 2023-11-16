@@ -128,7 +128,30 @@
             <CCol sm="12">
               <div class="form-group">
                 <label for="name">Instansi</label>
-                <select
+                <v-select
+                  v-model="search.agency"
+                  :reduce="(agency) => agency.id"
+                  :filterable="false"
+                  :options="agency"
+                  label="nama"
+                  @search="onSearchInstansi"
+                >
+                  <template slot="no-options">
+                    Ketik Untuk Cari Nama Instansi
+                  </template>
+                  <template slot="option" slot-scope="option">
+                    <div class="d-center">
+                      {{ option.name }}
+                    </div>
+                  </template>
+                  <template slot="selected-option" slot-scope="option">
+                    <div class="selected d-center">
+                      {{ option.name }}
+                    </div>
+                  </template>
+                </v-select>
+
+                <!-- <select
                   v-model="search.agency"
                   class="form-control"
                   @change="fetchWorkUnit"
@@ -141,7 +164,7 @@
                   >
                     {{ value.name }}
                   </option>
-                </select>
+                </select> -->
               </div>
             </CCol>
             <CCol sm="12">
@@ -228,6 +251,9 @@
                   >
                   <th>Sistem Elektronik / Satuan Kerja / Penanggung Jawab</th>
                   <th>Keterangan</th>
+                  <th @click="filterOrderData()" class="pointer"
+                    >Tanggal Daftar</th
+                  >
                   <th>No Tanda Daftar</th>
                   <th>Progress</th>
                   <th>Bersedia Dipublish</th>
@@ -260,6 +286,9 @@
                       {{ value.deskripsi }}
                     </td>
                     <td>
+                      {{ value.tgl_daftar }}
+                    </td>
+                    <td>
                       <span class="mobile-only mr-1">Nomor registrasi: </span>
                       {{ value.no_reg }}
                     </td>
@@ -269,11 +298,13 @@
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Bersedia Dipublish: </span>
-                      {{  value.publish === 1 ? 'Ya' : 'Tidak' }}
+                      {{ value.publish === 1 ? 'Ya' : 'Tidak' }}
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Status: </span>
-                      {{ value.approved === 1 ? 'Terdaftar' : 'Belum Terdaftar' }}
+                      {{
+                        value.approved === 1 ? 'Terdaftar' : 'Belum Terdaftar'
+                      }}
                     </td>
                     <td>
                       <CButton
@@ -534,6 +565,14 @@ export default {
           id: '2021',
           name: '2021',
         },
+        {
+          id: '2022',
+          name: '2022',
+        },
+        {
+          id: '2023',
+          name: '2023',
+        },
       ],
       data: [],
       pagination: {
@@ -616,7 +655,7 @@ export default {
       this.modal.method = 'PATCH'
     },
     approve(value) {
-      console.log(value);
+      console.log(value)
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'
@@ -708,6 +747,34 @@ export default {
           }
         })
     },
+    filterOrderData() {
+      this.spinner = true
+
+      this.$http
+        .get('/systems/repository', {
+          params: {
+            page: this.pagination.current_page,
+            orderData: this.orderBy,
+          },
+        })
+        .then((response) => {
+          this.spinner = false
+          this.orderBy == 'ASC'
+            ? (this.orderBy = 'DESC')
+            : (this.orderBy = 'ASC')
+          this.data = response.data.data
+          this.pagination.current_page = response.data.meta.current_page
+          this.pagination.per_page = response.data.meta.per_page
+          this.pagination.last_page = response.data.meta.last_page
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
     getData() {
       this.spinner = true
 
@@ -765,6 +832,32 @@ export default {
           loading(false)
         })
     }, 350),
+    onSearchInstansi(searchInstansi, loading) {
+      loading(true)
+      this.searchInstansi(loading, searchInstansi, this)
+    },
+    searchInstansi: _.debounce((loading, searchInstansi, vm) => {
+      const defaultOptions = {
+        baseURL: process.env.VUE_APP_BASE_API_URL,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      }
+      const instance = axios.create(defaultOptions)
+      instance
+        .get('/public/parinstansi/filter', {
+          params: {
+            filter: 'name',
+            q: escape(searchInstansi),
+          },
+        })
+        .then((response) => {
+          vm.agency = response.data.data
+          loading(false)
+        })
+    }, 350),
     fetchAgency() {
       this.$http
         .get('parinstansi')
@@ -797,4 +890,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.pointer {
+  cursor: pointer;
+}
+</style>
