@@ -241,7 +241,10 @@ body {
 
 // Sidebar
 .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover{
-  background-color: #245c9c;
+  background-color: #003A79;
+}
+.c-sidebar {
+  background-color: #025FC4 !important;
 }
 .c-sidebar-brand{
   justify-content: flex-start;
@@ -373,7 +376,7 @@ div#identity-mobile {
   padding: 0 !important;
 }
 .bg-blue {
-  background-color: #2e5584 !important;
+  background-color: #025FC4 !important;
 }
 .label-strong label{
   font-weight: bold;

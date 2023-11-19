@@ -10,12 +10,14 @@
     <CSidebarBrand class="d-md-down-none" to="/">
       <div>
         <img
-          src="@/assets/images/logo.svg"
+          src="@/assets/images/logo-logo-white.png"
           alt="PSE"
           height="35"
           class="c-sidebar-brand-full"
         />
-        <div class="c-sidebar-brand-text">{{ data.status_register }} | {{ data.nama_instansi }}</div>
+        <div class="c-sidebar-brand-text"
+          >{{ data.status_register }} | {{ data.nama_instansi }}</div
+        >
       </div>
     </CSidebarBrand>
     <CRenderFunction flat :content-to-render="$options.Sidebar" />

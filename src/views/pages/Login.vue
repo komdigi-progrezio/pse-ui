@@ -33,7 +33,7 @@
               pada Menteri c.q Direktur Jenderal
               <a
                 style="color: #ffd93c"
-                href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
+                href="/FORMAT SURAT PERMOHONAN PENDAFTARAN LAMPIRAN II.docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
@@ -42,7 +42,7 @@
               >Penunjukan pejabat pendaftar melalui <b>Surat Tugas</b>
               <a
                 style="color: #ffd93c"
-                href="https://drive.google.com/drive/folders/1t4LyeJygoFeYGw-CwryAxcm0g1931W3u?usp=sharing"
+                href="/SURAT TUGAS LAMPIRAN PERMENKOMINFO 10 TH 2015 [LAMPIRAN I].docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
