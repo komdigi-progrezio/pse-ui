@@ -30,7 +30,7 @@ const data = [
             permissionName: 'Daftar Sistem Elektronik',
           },
           {
-            name: 'Sistem Elektronik Disetujui',
+            name: 'Sistem Elektronik Sudah Disetujui',
             to: '/admin/systems/approved',
             permissionName: 'Sistem Elektronik Sudah Disetujui',
           },
