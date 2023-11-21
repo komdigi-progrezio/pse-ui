@@ -128,10 +128,11 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th>Nama Penyelenggara</th>
+                  <th v-if="isAdmin">Nama Penyelenggara</th>
                   <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -145,7 +146,7 @@
                         1
                       }}
                     </th>
-                    <td>{{ item.organizer_profile }}</td>
+                    <td v-if="isAdmin">{{ item.organizer_profile }}</td>
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
                     >
@@ -154,6 +155,7 @@
                       ><span class="mobile-only mr-1">Progress: </span>
                       {{ item.progress }}%</td
                     >
+                    <td>{{ item.status }}</td>
                     <td>
                       <CButton
                         color="primary"
@@ -169,6 +171,19 @@
                         <span class="mobile-only ml-1"
                           >Detail Sistem Elektronik
                         </span>
+                      </CButton>
+                      <CButton
+                        v-if="!isAdmin"
+                        color="danger"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Hapus Sistem Elektronik',
+                          placement: 'bottom',
+                        }"
+                        @click="destroy(item)"
+                      >
+                        <CIcon name="cil-trash" />
                       </CButton>
                       <CButton
                         v-if="
@@ -233,6 +248,34 @@
         </CButton>
       </template>
     </CModal>
+    <CModal
+      :title="modal.delete.title"
+      :color="modal.delete.color"
+      :show.sync="modal.delete.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.delete.message }}
+            <strong>{{ modal.delete.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton
+          color="secondary"
+          size="sm"
+          class="m-2"
+          @click="closeModalDelete"
+        >
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="submitDelete">
+          {{ modal.delete.labelButton }}
+        </CButton>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -250,6 +293,14 @@ export default {
         nama_instansi: null,
       },
       modal: {
+        delete: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+        },
         showModal: false,
         title: null,
         color: null,
@@ -271,6 +322,14 @@ export default {
       }
 
       return 'cil-filter'
+    },
+
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
     },
   },
   created() {
@@ -321,6 +380,44 @@ export default {
     filter() {
       this.listFilter = !this.listFilter
       this.clearFilter()
+    },
+    submitDelete() {
+      this.$http
+        .delete(`systems/${this.modal.delete.uniqueId}`)
+        .then((response) => {
+          this.filterData()
+          this.closeModalDelete()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.closeModalDelete()
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    clearModalDelete() {
+      this.modal.delete.title = null
+      this.modal.delete.color = null
+      this.modal.delete.data = null
+      this.modal.delete.uniqueId = null
+      this.modal.delete.message = null
+      this.modal.delete.labelButton = null
+    },
+    closeModalDelete() {
+      this.modal.delete.showModal = false
+      this.clearModalDelete()
+    },
+    destroy(item) {
+      this.modal.delete.showModal = true
+      this.modal.delete.title = 'Hapus Data'
+      this.modal.delete.color = 'danger'
+      this.modal.delete.data = item.nama
+      this.modal.delete.uniqueId = item.id
+      this.modal.delete.message = 'Ingin Menghapus Data'
+      this.modal.delete.labelButton = 'Hapus'
     },
     clearFilter() {
       this.search.nama_eksternal = null
