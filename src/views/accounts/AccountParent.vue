@@ -618,6 +618,8 @@ export default {
         no_telepon: null,
         no_hp: null,
         dokumen: null,
+        instansi_induk: this.$store.state.auth.data.instansi_induk,
+        status_register: 1,
       },
       spinner: true,
       listFilter: false,
