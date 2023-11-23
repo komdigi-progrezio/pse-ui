@@ -538,6 +538,41 @@
                   </ul>
                 </div>
               </CCol>
+              <CCol sm="12">
+                <div class="form-group">
+                  <label for="no_hp">File Upload</label>
+                  <ValidationProvider
+                    name="File"
+                    rules="required|mimes:application/pdf"
+                    v-slot="{ errors, validate }"
+                  >
+                    <div class="custom-file">
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="customFile"
+                        accept="application/pdf"
+                        @change="
+                          onFilePickedDocument($event) || validate($event)
+                        "
+                        @blur="errorValidations.dokumen = []"
+                      />
+                      <label class="custom-file-label" for="customFile">{{
+                        filename
+                      }}</label>
+                      <div
+                        v-if="errors.length > 0"
+                        :class="{
+                          'has-error-file': errors.length > 0,
+                        }"
+                      >
+                        {{ errors[0] }}
+                      </div>
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.dokumen" />
+                </div>
+              </CCol>
             </CRow>
           </div>
         </template>
@@ -582,6 +617,7 @@ export default {
         jabatan: null,
         no_telepon: null,
         no_hp: null,
+        dokumen: null,
       },
       spinner: true,
       listFilter: false,
@@ -637,6 +673,7 @@ export default {
         jabatan: [],
         no_telepon: [],
         no_hp: [],
+        dokumen: [],
         satuan_kerja: [],
       },
       treeData: {
@@ -644,6 +681,7 @@ export default {
         name: 'Satuan Kerja',
         children: [],
       },
+      filename: 'Choose File',
     }
   },
   computed: {
@@ -773,8 +811,10 @@ export default {
       this.forms.jabatan = null
       this.forms.no_telepon = null
       this.forms.no_hp = null
+      this.forms.dokumen = null
 
       this.$store.commit('resetCheckbox')
+      this.filename = 'Choose File'
     },
     post() {
       this.clearForm()
@@ -998,6 +1038,15 @@ export default {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
         })
+    },
+    onFilePickedDocument() {
+      if (event.target.files[0].type === 'application/pdf') {
+        this.forms.dokumen = event.target.files[0]
+        this.filename = event.target.files[0].name
+      } else {
+        this.forms.dokumen = null
+        this.filename = 'Choose File'
+      }
     },
   },
 }
