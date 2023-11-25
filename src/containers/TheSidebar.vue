@@ -15,7 +15,12 @@
           height="35"
           class="c-sidebar-brand-full"
         />
-        <div class="c-sidebar-brand-text">{{ data.status_register }} | {{ data.nama_instansi }}</div>
+        <div class="c-sidebar-brand-text">
+          <span v-if="data.roles == 'Admin'">Admin</span>
+          <span v-if="data.roles != 'Admin'"
+            >{{ data.status_register }} | {{ data.nama_instansi }}</span
+          >
+        </div>
       </div>
     </CSidebarBrand>
     <CRenderFunction flat :content-to-render="$options.Sidebar" />
