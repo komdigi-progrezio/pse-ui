@@ -128,7 +128,7 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th v-if="isAdmin">Nama Penyelenggara</th>
+                  <th v-if="!isSubPejabat">Nama Penyelenggara</th>
                   <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
@@ -146,7 +146,7 @@
                         1
                       }}
                     </th>
-                    <td v-if="isAdmin">{{ item.organizer_profile }}</td>
+                    <td v-if="!isSubPejabat">{{ item.organizer_profile }}</td>
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
                     >
@@ -326,6 +326,14 @@ export default {
 
     isAdmin() {
       if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
+
+    isSubPejabat() {
+      if (this.$store.state.auth.data.roles.includes('Sub Pejabat')) {
         return true
       }
 
