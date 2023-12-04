@@ -19,11 +19,11 @@
     "url": "git@github.com:coreui/coreui-free-vue-admin-template.git"
   },
   "homepage": "http://coreui.io",
-  "copyright": "Copyright 2020 creativeLabs Łukasz Holeczek",
+  "copyright": "Copyright 2023 Portal Sistem Elektronik",
   "license": "MIT",
   "scripts": {
     "prettier": "prettier",
-    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 4000",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 8080",
     "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.11.6",
+    "@babel/plugin-transform-runtime": "^7.23.4",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
     "@vue/cli-plugin-babel": "~4.5.4",

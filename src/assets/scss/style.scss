@@ -14,3 +14,19 @@
   height: 1.2rem;
   font-size: 1.2rem;
 }
+
+.btn-primary {
+  color: #fff;
+  background-color: #045fc4;
+  border-color: #045fc4;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #084ba1;
+  border-color: #084ba1;
+}
+
+.space-between {
+  justify-content: space-between;
+}

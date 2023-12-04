@@ -10,7 +10,7 @@
     <CSidebarBrand class="d-md-down-none" to="/">
       <div>
         <img
-          src="@/assets/images/logo-logo-white.png"
+          src="@/assets/images/pse-logo-white.png"
           alt="PSE"
           height="35"
           class="c-sidebar-brand-full"

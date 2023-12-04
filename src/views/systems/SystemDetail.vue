@@ -33,27 +33,19 @@
 
           <div>
             <CButton
-            v-if="data.system.approved !== 1"
-            class="mr-1"
-            color="success"
-            v-c-tooltip="{
-              content: 'Setujui Sistem Elektronik',
-              placement: 'bottom',
-            }"
-            @click="approve(data.system)"
-          >
-            <CIcon name="cil-check" />
-            &nbsp;
-            <span class=""
-              >Setujui Sistem Elektronik</span
+              v-if="data.system.approved !== 1"
+              class="mr-1"
+              color="success"
+              v-c-tooltip="{
+                content: 'Setujui Sistem Elektronik',
+                placement: 'bottom',
+              }"
+              @click="approve(data.system)"
             >
-          </CButton>
-          <router-link
-            to="/admin/repository"
-            class="btn btn-primary align-self-center"
-          >
-            Kembali <CIcon name="cil-arrow-right" />
-          </router-link>
+              <CIcon name="cil-check" />
+              &nbsp;
+              <span class="">Setujui Sistem Elektronik</span>
+            </CButton>
           </div>
         </div>
       </CCardBody>
@@ -214,8 +206,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-import _ from 'lodash'
 import SystemGeneralData from './partials/SystemGeneralData'
 import SystemOrganizerProfile from './partials/SystemOrganizerProfile'
 import SystemDocument from './partials/SystemDocument'
@@ -343,7 +333,7 @@ export default {
       this.clearModal()
     },
     approve(value) {
-      console.log(value);
+      console.log(value)
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'

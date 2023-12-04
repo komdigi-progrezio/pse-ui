@@ -11,7 +11,7 @@
       @click="$store.commit('dashboard/toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <img src="@/assets/images/logo.svg" alt="PSE" width="200" />
+      <img src="@/assets/images/pse-logo-white.png" alt="PSE" width="200" />
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
@@ -41,37 +41,33 @@
         </CHeaderNavLink>
       </CHeaderNavItem> -->
       <template v-if="isAdmin">
-        <NotifikasiNew />
-        <Notifikasi100 />
-        <NotifikasiGantiPenjabat />
-        <NotifikasiUbahData />
-        <NotifikasiPejabatBaru />
+        <Notifikasi />
       </template>
       <TheHeaderDropdownAccnt />
     </CHeaderNav>
-    <CSubheader class="px-3">
+    <CSubheader class="px-3 space-between">
       <CBreadcrumbRouter class="border-0 mb-0" />
+      <router-link
+        v-if="showBackButton"
+        :to="dynamicTo"
+        @click.native="goBack"
+        class="btn btn-primary align-self-center"
+      >
+        <CIcon name="cil-arrow-left" /> Kembali
+      </router-link>
     </CSubheader>
   </CHeader>
 </template>
 
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
-import Notifikasi100 from './Notifikasi100'
-import NotifikasiNew from './NotifikasiNew'
-import NotifikasiUbahData from './NotifikasiUbahData'
-import NotifikasiGantiPenjabat from './NotifikasiGantiPenjabat'
-import NotifikasiPejabatBaru from './NotifikasiPejabatBaru'
+import Notifikasi from './Notifikasi'
 
 export default {
   name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt,
-    Notifikasi100,
-    NotifikasiNew,
-    NotifikasiUbahData,
-    NotifikasiGantiPenjabat,
-    NotifikasiPejabatBaru,
+    Notifikasi,
   },
   computed: {
     isAdmin() {
@@ -80,6 +76,17 @@ export default {
       }
 
       return false
+    },
+    showBackButton() {
+      return this.$route.params.id !== undefined
+    },
+    dynamicTo() {
+      return false
+    },
+  },
+  methods: {
+    goBack() {
+      this.$router.go(-1)
     },
   },
 }

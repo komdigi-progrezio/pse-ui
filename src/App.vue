@@ -3,7 +3,7 @@
     <loading
       :active.sync="getIsLoading"
       :can-cancel="false"
-      :background-color="'#f26060'"
+      :background-color="'#025FC4'"
       :is-full-page="true"
       :opacity="1"
     >
