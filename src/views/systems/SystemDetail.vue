@@ -33,7 +33,7 @@
 
           <div>
             <CButton
-            v-if="data.system.approved !== 1"
+            v-if="data.system.approved !== 1 && isAdmin"
             class="mr-1"
             color="success"
             v-c-tooltip="{
@@ -326,6 +326,15 @@ export default {
   mounted() {
     this.getData()
     this.fetchTreeViewWorkUnit()
+  },
+  computed: {
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
   methods: {
     clearModal() {
