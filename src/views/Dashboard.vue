@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="isAdmin">
+    <template>
       <div class="row">
         <div class="col-6 col-lg-3">
           <div class="card text-white bg-blue">

@@ -5,543 +5,311 @@
   >
     <div id="left-side">
       <div id="identity">
-        <img id="logo" src="@/assets/images/logo.svg" alt="PSE" width="200" />
+        <img
+          src="@/assets/images/pse-logo-white.png"
+          alt="PSE"
+          height="35"
+          class="c-sidebar-brand-full"
+        />
         <p>Pendaftaran Aplikasi Elektronik <br />&amp; Repositori Pemerintah</p>
       </div>
     </div>
     <div id="right-side">
-      <router-link
-        to="/login"
-        class="btn primary-color-link px-0 d-flex align-items-center"
-      >
-        <img width="12" src="@/assets/svgs/arrow-left.svg" />
-        <span class="ml-1">Kembali</span>
-      </router-link>
-      <h3 class="font-montserrat font-weight-bold"
-        >Pendaftaran Pejabat Pendaftar Sistem Elektronik</h3
-      >
-      <div class="card">
-        <div class="card-body p-3">
-          <ValidationObserver v-slot="{ invalid }" ref="form">
-            <h5>Data Akun</h5>
-            <div class="form-group row">
-              <label for="email" class="col-sm-2 col-form-label"
-                >Alamat Email / Username</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="E-mail"
-                  :rules="{
-                    required: true,
-                    email: true,
-                    // regex: /[^\s@]+@[^\s@]+\.go.id$|[^\s@]+@mkri.id$/,
-                  }"
-                  v-slot="{ errors }"
+      <div id="right-side-container">
+        <router-link
+          to="/login"
+          class="btn primary-color-link px-0 d-flex align-items-center"
+        >
+          <img width="12" src="@/assets/svgs/arrow-left.svg" />
+          <span class="ml-1">Kembali</span>
+        </router-link>
+        <h3 class="font-montserrat font-weight-bold"
+          >Pendaftaran Pejabat Pendaftar Sistem Elektronik</h3
+        >
+        <div class="card">
+          <div class="card-body p-3">
+            <ValidationObserver v-slot="{ invalid }" ref="form">
+              <h5>Data Akun</h5>
+              <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label"
+                  >Alamat Email / Username</label
                 >
-                  <input
-                    v-model="forms.username"
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukan Email"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 ||
-                        errorValidations.username.length > 0,
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="E-mail"
+                    :rules="{
+                      required: true,
+                      email: true,
+                      // regex: /[^\s@]+@[^\s@]+\.go.id$|[^\s@]+@mkri.id$/,
                     }"
-                    @blur="errorValidations.username = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.username" />
-              </div>
-            </div>
-            <!-- <div class="form-group row">
-              <label for="password" class="col-sm-2 col-form-label"
-                >Password</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Password"
-                  rules="required|confirmed:Konfirmasi Password|min:6"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.password"
-                    type="password"
-                    class="form-control"
-                    placeholder="Masukan Password"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 ||
-                        errorValidations.password.length > 0,
-                    }"
-                    @blur="errorValidations.password = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.password" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="password_confirmation" class="col-sm-2 col-form-label"
-                >Konfirmasi Password</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider rules="required" vid="Konfirmasi Password">
-                  <input
-                    v-model="forms.password_confirmation"
-                    type="password"
-                    placeholder="Masukan Konfirmasi Password"
-                    class="form-control"
-                  />
-                </ValidationProvider>
-              </div>
-            </div> -->
-            <hr />
-            <h5>Data Diri</h5>
-            <div class="form-group row">
-              <label for="name" class="col-sm-2 col-form-label"
-                >Status Pendaftar</label
-              >
-              <div class="col-sm-10 d-flex align-items-center">
-                <ValidationProvider
-                  name="Status Pendaftar"
-                  rules="required"
-                  v-slot="{ errors }"
-                >
-                  <div class="form-check form-check-inline">
-                    <input
-                      v-model="forms.status_register"
-                      class="form-check-input"
-                      type="radio"
-                      id="inlineCheckbox1"
-                      value="1"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox1"
-                      >Pendaftar Baru</label
-                    >
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      v-model="forms.status_register"
-                      class="form-check-input"
-                      type="radio"
-                      id="inlineCheckbox1"
-                      value="2"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox1"
-                      >Pendaftar Pengganti</label
-                    >
-                  </div>
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.name" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="name" class="col-sm-2 col-form-label"
-                >Nama Lengkap</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Nama Lengkap"
-                  rules="required|alpha_spaces"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.nama"
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukan Nama Lengkap"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 || errorValidations.name.length > 0,
-                    }"
-                    @blur="errorValidations.name = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.name" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="nip" class="col-sm-2 col-form-label">NIP</label>
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="NIP"
-                  rules="required"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.nip"
-                    type="text"
-                    maxlength="18"
-                    class="form-control"
-                    placeholder="Masukan NIP"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 || errorValidations.nip.length > 0,
-                    }"
-                    @blur="errorValidations.nip = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.nip" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="jabatan" class="col-sm-2 col-form-label"
-                >Jabatan</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Jabatan"
-                  rules="required|alpha_spaces"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.jabatan"
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukan Jabatan"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 ||
-                        errorValidations.jabatan.length > 0,
-                    }"
-                    @blur="errorValidations.jabatan = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.jabatan" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="no_telepon" class="col-sm-2 col-form-label"
-                >Nomor Telepon</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Nomor Telepon"
-                  rules="required|numeric"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.no_telepon"
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukan Nomor Telepon"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 ||
-                        errorValidations.no_telepon.length > 0,
-                    }"
-                    @blur="errorValidations.no_telepon = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.no_telepon" />
-                <p class="text-muted">
-                  Gunakan kode area, contoh: 02133334444
-                </p>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="no_hp" class="col-sm-2 col-form-label"
-                >Nomor HP</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Nomor HP"
-                  rules="required|numeric"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.no_hp"
-                    type="text"
-                    class="form-control"
-                    placeholder="Masukan Nomor HP"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 || errorValidations.no_hp.length > 0,
-                    }"
-                    @blur="errorValidations.no_hp = []"
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.no_hp" />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label for="provinsi" class="col-sm-2 col-form-label">
-                Provinsi
-              </label>
-              <div class="col-sm-10">
-                <select
-                  v-model="forms.propinsi"
-                  class="form-control"
-                  :class="{
-                    'is-invalid': errorValidations.propinsi.length > 0,
-                  }"
-                  @change="getDistrictDaftar"
-                  @blur="errorValidations.propinsi = []"
-                  required
-                >
-                  <option value="" selected="selected"> Pilih Provinsi </option>
-                  <option
-                    :value="value.id"
-                    v-for="(value, index) in dataSelect.provinsi"
-                    :key="`provivnsi-${index}`"
+                    v-slot="{ errors }"
                   >
-                    {{ value.nama }}
-                  </option>
-                </select>
-              </div>
-              <message :messages="errorValidations.propinsi" />
-            </div>
-            <div class="form-group row">
-              <label for="kota" class="col-sm-2 col-form-label">Kota</label>
-              <div class="col-sm-10">
-                <select
-                  v-model="forms.kota"
-                  class="form-control"
-                  :class="{
-                    'is-invalid': errorValidations.kota.length > 0,
-                  }"
-                  @blur="errorValidations.kota = []"
-                  required
-                >
-                  <option value="" selected="selected"> Pilih Kota </option>
-                  <option
-                    :value="value.id"
-                    v-for="(value, index) in dataSelect.kota"
-                    :key="`kota-${index}`"
-                  >
-                    {{ value.nama }}
-                  </option>
-                </select>
-              </div>
-              <message :messages="errorValidations.kota" />
-            </div>
-
-            <hr />
-            <h5>Data Instansi</h5>
-            <div class="form-group row">
-              <label for="instansi" class="col-sm-2 col-form-label"
-                >Instansi</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="Instansi"
-                  rules="required"
-                  v-slot="{ errors }"
-                >
-                  <input
-                    v-model="forms.instansi_induk_text"
-                    type="text"
-                    class="form-control"
-                    :class="{
-                      'is-invalid': errors.length > 0,
-                    }"
-                    disabled
-                  />
-                  <div v-if="errors.length > 0" class="invalid-feedback">
-                    {{ errors[0] }}
-                  </div>
-                </ValidationProvider>
-                <a href="" @click.prevent="modalInstansi"
-                  >Klik untuk memilih nama instansi</a
-                >
-              </div>
-            </div>
-            <div class="form-group row">
-              <label
-                for="document"
-                class="col-sm-2 col-form-label"
-                v-if="
-                  forms.status_register == 1 || forms.status_register == null
-                "
-                :style="{ display: none }"
-              >
-                Unggah Dokumen Surat Permohonan dan Surat Tugas (dalam 1 file
-                PDF)</label
-              >
-              <label
-                for="document"
-                class="col-sm-2 col-form-label"
-                v-if="forms.status_register == 2"
-                :style="{ display: none }"
-              >
-                Unggah Dokumen Surat Tugas (PDF)</label
-              >
-              <div class="col-sm-10">
-                <ValidationProvider
-                  name="File"
-                  rules="required|mimes:application/pdf"
-                  v-slot="{ errors, validate }"
-                >
-                  <div class="custom-file">
                     <input
-                      type="file"
-                      class="custom-file-input"
-                      id="customFile"
-                      accept="application/pdf"
-                      @change="onFilePickedDocument($event) || validate($event)"
-                      @blur="errorValidations.dokumen = []"
-                    />
-                    <label class="custom-file-label" for="customFile">{{
-                      filename
-                    }}</label>
-                    <div
-                      v-if="errors.length > 0"
+                      v-model="forms.username"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Email"
                       :class="{
-                        'has-error-file': errors.length > 0,
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.username.length > 0,
                       }"
-                    >
+                      @blur="errorValidations.username = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
                       {{ errors[0] }}
                     </div>
-                  </div>
-                </ValidationProvider>
-                <message :messages="errorValidations.dokumen" />
+                  </ValidationProvider>
+                  <message :messages="errorValidations.username" />
+                </div>
               </div>
-            </div>
-            <div class="d-flex" id="action">
-              <router-link
-                to="/login"
-                class="btn primary-color-link px-0 d-flex align-items-center"
-              >
-                <img width="12" src="@/assets/svgs/arrow-left.svg" />
-                <span class="ml-1">Kembali</span>
-              </router-link>
-              <button class="btn btn-secondary ml-auto mr-2 btn-lg"
-                >Reset</button
-              >
-              <button
-                type="submit"
-                class="btn primary-color btn-lg"
-                :disabled="invalid"
-                @click="handleSubmit"
-              >
-                Simpan
-              </button>
-            </div>
-          </ValidationObserver>
-        </div>
-      </div>
-      <CModal
-        :title="modal.instansi.title"
-        :color="modal.instansi.color"
-        :size="'xl'"
-        :show.sync="modal.instansi.showModal"
-      >
-        <template v-slot:body-wrapper>
-          <div class="modal-body">
-            <template v-if="modal.instansi.add">
-              <CRow>
-                <CCol sm="12">
-                  <label for="kelompok">Kelompok</label>
-                  <select
-                    v-model="forms_add_agency.kelompok"
-                    class="form-control"
-                    :class="{
-                      'is-invalid':
-                        errorValidationsAddAgency.kelompok.length > 0,
-                    }"
-                    @blur="errorValidationsAddAgency.kelompok = []"
+              <!-- <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label"
+                  >Password</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Password"
+                    rules="required|confirmed:Konfirmasi Password|min:6"
+                    v-slot="{ errors }"
                   >
-                    <option value="" selected="selected">
-                      Pilih Kategori
-                    </option>
-                    <option
-                      :value="value.id"
-                      v-for="(value, index) in dataSelect.kelompok"
-                      :key="index"
-                    >
-                      {{ value.param_value }}
-                    </option>
-                  </select>
-                  <message :messages="errorValidationsAddAgency.kelompok" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="kategori">Kategori</label>
-                  <select
-                    v-model="forms_add_agency.kategori"
-                    class="form-control"
-                    :class="{
-                      'is-invalid':
-                        errorValidationsAddAgency.kategori.length > 0,
-                    }"
-                    @blur="errorValidationsAddAgency.kategori = []"
+                    <input
+                      v-model="forms.password"
+                      type="password"
+                      class="form-control"
+                      placeholder="Masukan Password"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.password.length > 0,
+                      }"
+                      @blur="errorValidations.password = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.password" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="password_confirmation" class="col-sm-2 col-form-label"
+                  >Konfirmasi Password</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider rules="required" vid="Konfirmasi Password">
+                    <input
+                      v-model="forms.password_confirmation"
+                      type="password"
+                      placeholder="Masukan Konfirmasi Password"
+                      class="form-control"
+                    />
+                  </ValidationProvider>
+                </div>
+              </div> -->
+              <hr />
+              <h5>Data Diri</h5>
+              <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label"
+                  >Status Pendaftar</label
+                >
+                <div class="col-sm-10 d-flex align-items-center">
+                  <ValidationProvider
+                    name="Status Pendaftar"
+                    rules="required"
+                    v-slot="{ errors }"
                   >
-                    <option value="" selected="selected">
-                      Pilih Kategori
-                    </option>
-                    <option
-                      :value="value.id"
-                      v-for="(value, index) in dataSelect.kategori"
-                      :key="index"
-                    >
-                      {{ value.name }}
-                    </option>
-                  </select>
-                  <message :messages="errorValidationsAddAgency.kategori" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="name">Nama Instansi</label>
-                  <input
-                    v-model="forms_add_agency.name"
-                    type="text"
-                    placeholder="Masukan Nama Instansi"
-                    class="form-control"
-                    :class="{
-                      'is-invalid': errorValidationsAddAgency.name.length > 0,
-                    }"
-                    @blur="errorValidationsAddAgency.name = []"
-                  />
-                  <message :messages="errorValidationsAddAgency.name" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="alamat">Alamat</label>
-                  <textarea
-                    v-model="forms_add_agency.alamat"
-                    cols="30"
-                    rows="10"
-                    class="form-control"
-                    :class="{
-                      'is-invalid': errorValidationsAddAgency.alamat.length > 0,
-                    }"
-                    @blur="errorValidationsAddAgency.alamat = []"
-                  ></textarea>
-                  <message :messages="errorValidationsAddAgency.alamat" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="provinsi">Provinsi</label>
+                    <div class="form-check form-check-inline">
+                      <input
+                        v-model="forms.status_register"
+                        class="form-check-input"
+                        type="radio"
+                        id="inlineCheckbox1"
+                        value="1"
+                      />
+                      <label class="form-check-label" for="inlineCheckbox1"
+                        >Pendaftar Baru</label
+                      >
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        v-model="forms.status_register"
+                        class="form-check-input"
+                        type="radio"
+                        id="inlineCheckbox1"
+                        value="2"
+                      />
+                      <label class="form-check-label" for="inlineCheckbox1"
+                        >Pendaftar Pengganti</label
+                      >
+                    </div>
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.name" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label"
+                  >Nama Lengkap</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Nama Lengkap"
+                    rules="required|alpha_spaces"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.nama"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Nama Lengkap"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 || errorValidations.name.length > 0,
+                      }"
+                      @blur="errorValidations.name = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.name" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="nip" class="col-sm-2 col-form-label">NIP</label>
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="NIP"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.nip"
+                      type="text"
+                      maxlength="18"
+                      class="form-control"
+                      placeholder="Masukan NIP"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 || errorValidations.nip.length > 0,
+                      }"
+                      @blur="errorValidations.nip = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.nip" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="jabatan" class="col-sm-2 col-form-label"
+                  >Jabatan</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Jabatan"
+                    rules="required|alpha_spaces"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.jabatan"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Jabatan"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.jabatan.length > 0,
+                      }"
+                      @blur="errorValidations.jabatan = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.jabatan" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="no_telepon" class="col-sm-2 col-form-label"
+                  >Nomor Telepon</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Nomor Telepon"
+                    rules="required|numeric"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.no_telepon"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Nomor Telepon"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.no_telepon.length > 0,
+                      }"
+                      @blur="errorValidations.no_telepon = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.no_telepon" />
+                  <p class="text-muted">
+                    Gunakan kode area, contoh: 02133334444
+                  </p>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="no_hp" class="col-sm-2 col-form-label"
+                  >Nomor HP</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Nomor HP"
+                    rules="required|numeric"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.no_hp"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Nomor HP"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.no_hp.length > 0,
+                      }"
+                      @blur="errorValidations.no_hp = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.no_hp" />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="provinsi" class="col-sm-2 col-form-label">
+                  Provinsi
+                </label>
+                <div class="col-sm-10">
                   <select
-                    v-model="forms_add_agency.propinsi"
+                    v-model="forms.propinsi"
                     class="form-control"
                     :class="{
-                      'is-invalid':
-                        errorValidationsAddAgency.propinsi.length > 0,
+                      'is-invalid': errorValidations.propinsi.length > 0,
                     }"
-                    @change="getDistrict"
-                    @blur="errorValidationsAddAgency.propinsi = []"
+                    @change="getDistrictDaftar"
+                    @blur="errorValidations.propinsi = []"
+                    required
                   >
                     <option value="" selected="selected">
                       Pilih Provinsi
@@ -554,17 +322,20 @@
                       {{ value.nama }}
                     </option>
                   </select>
-                  <message :messages="errorValidationsAddAgency.propinsi" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="kota">Kota</label>
+                </div>
+                <message :messages="errorValidations.propinsi" />
+              </div>
+              <div class="form-group row">
+                <label for="kota" class="col-sm-2 col-form-label">Kota</label>
+                <div class="col-sm-10">
                   <select
-                    v-model="forms_add_agency.kota"
+                    v-model="forms.kota"
                     class="form-control"
                     :class="{
-                      'is-invalid': errorValidationsAddAgency.kota.length > 0,
+                      'is-invalid': errorValidations.kota.length > 0,
                     }"
-                    @blur="errorValidationsAddAgency.kota = []"
+                    @blur="errorValidations.kota = []"
+                    required
                   >
                     <option value="" selected="selected"> Pilih Kota </option>
                     <option
@@ -575,199 +346,441 @@
                       {{ value.nama }}
                     </option>
                   </select>
-                  <message :messages="errorValidationsAddAgency.kota" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="kode_pos">Kode Pos</label>
-                  <input
-                    v-model="forms_add_agency.kode_pos"
-                    type="text"
-                    maxlength="5"
-                    placeholder="Masukan Kode Pos"
-                    class="form-control"
-                    :class="{
-                      'is-invalid':
-                        errorValidationsAddAgency.kode_pos.length > 0,
-                    }"
-                    @input="validateKodePos"
-                    @blur="errorValidationsAddAgency.kode_pos = []"
-                  />
-                  <message :messages="errorValidationsAddAgency.kode_pos" />
-                </CCol>
-                <CCol sm="12">
-                  <label for="website">Website</label>
-                  <input
-                    v-model="forms_add_agency.website"
-                    type="text"
-                    placeholder="Masukan Domain Website"
-                    class="form-control"
-                    :class="{
-                      'is-invalid':
-                        errorValidationsAddAgency.website.length > 0,
-                    }"
-                    @input="validateWebsite"
-                    @blur="errorValidationsAddAgency.website = []"
-                  />
-                  <message :messages="errorValidationsAddAgency.website" />
-                </CCol>
-              </CRow>
-            </template>
-            <template v-else>
-              <div class="d-flex mb-3">
-                <CButton
-                  color="dark"
-                  variant="outline"
-                  size="sm"
-                  class="mr-2"
-                  :class="{ 'mr-auto': search.name === null }"
-                  @click="filter"
-                >
-                  Filter
-                  <CIcon name="cil-filter" />
-                </CButton>
-                <CButton
-                  v-show="search.name !== null"
-                  color="info"
-                  variant="outline"
-                  size="sm"
-                  class="mr-auto"
-                  @click="clearFilter"
-                >
-                  Clear All
-                  <CIcon name="cil-clear-all" />
-                </CButton>
-                <CButton
-                  color="success"
-                  variant="outline"
-                  size="sm"
-                  class="mr-2"
-                  @click="addAgency"
-                >
-                  Tambah
-                  <CIcon name="cil-plus" />
-                </CButton>
-                <template v-if="listFilter">
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    size="sm"
-                    class="mr-2"
-                    @click="filterAgency"
-                  >
-                    Search
-                    <CIcon name="cil-search" />
-                  </CButton>
-                  <CButton
-                    color="danger"
-                    variant="outline"
-                    size="sm"
-                    @click="resetFilter"
-                  >
-                    Reset
-                    <CIcon name="cil-reload" />
-                  </CButton>
-                </template>
+                </div>
+                <message :messages="errorValidations.kota" />
               </div>
-              <template v-if="listFilter">
-                <CRow class="my-3">
+
+              <hr />
+              <h5>Data Instansi</h5>
+              <div class="form-group row">
+                <label for="instansi" class="col-sm-2 col-form-label"
+                  >Instansi</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="Instansi"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.instansi_induk_text"
+                      type="text"
+                      class="form-control"
+                      :class="{
+                        'is-invalid': errors.length > 0,
+                      }"
+                      disabled
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <a href="" @click.prevent="modalInstansi"
+                    >Klik untuk memilih nama instansi</a
+                  >
+                </div>
+              </div>
+              <div class="form-group row">
+                <label
+                  for="document"
+                  class="col-sm-2 col-form-label"
+                  v-if="
+                    forms.status_register == 1 || forms.status_register == null
+                  "
+                  :style="{ display: none }"
+                >
+                  Unggah Dokumen Surat Permohonan dan Surat Tugas (dalam 1 file
+                  PDF)</label
+                >
+                <label
+                  for="document"
+                  class="col-sm-2 col-form-label"
+                  v-if="forms.status_register == 2"
+                  :style="{ display: none }"
+                >
+                  Unggah Dokumen Surat Tugas (PDF)</label
+                >
+                <div class="col-sm-10">
+                  <ValidationProvider
+                    name="File"
+                    rules="required|mimes:application/pdf"
+                    v-slot="{ errors, validate }"
+                  >
+                    <div class="custom-file">
+                      <input
+                        type="file"
+                        class="custom-file-input"
+                        id="customFile"
+                        accept="application/pdf"
+                        @change="
+                          onFilePickedDocument($event) || validate($event)
+                        "
+                        @blur="errorValidations.dokumen = []"
+                      />
+                      <label class="custom-file-label" for="customFile">{{
+                        filename
+                      }}</label>
+                      <div
+                        v-if="errors.length > 0"
+                        :class="{
+                          'has-error-file': errors.length > 0,
+                        }"
+                      >
+                        {{ errors[0] }}
+                      </div>
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.dokumen" />
+                </div>
+              </div>
+              <div class="d-flex" id="action">
+                <router-link
+                  to="/login"
+                  class="btn primary-color-link px-0 d-flex align-items-center"
+                >
+                  <img width="12" src="@/assets/svgs/arrow-left.svg" />
+                  <span class="ml-1">Kembali</span>
+                </router-link>
+                <button class="btn btn-secondary ml-auto mr-2 btn-lg"
+                  >Reset</button
+                >
+                <button
+                  type="submit"
+                  class="btn primary-color btn-lg"
+                  :disabled="invalid"
+                  @click="handleSubmit"
+                >
+                  Simpan
+                </button>
+              </div>
+            </ValidationObserver>
+          </div>
+        </div>
+        <CModal
+          :title="modal.instansi.title"
+          :color="modal.instansi.color"
+          :size="'xl'"
+          :show.sync="modal.instansi.showModal"
+        >
+          <template v-slot:body-wrapper>
+            <div class="modal-body">
+              <template v-if="modal.instansi.add">
+                <CRow>
+                  <CCol sm="12">
+                    <label for="kelompok">Kelompok</label>
+                    <select
+                      v-model="forms_add_agency.kelompok"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.kelompok.length > 0,
+                      }"
+                      @blur="errorValidationsAddAgency.kelompok = []"
+                    >
+                      <option value="" selected="selected">
+                        Pilih Kategori
+                      </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.kelompok"
+                        :key="index"
+                      >
+                        {{ value.param_value }}
+                      </option>
+                    </select>
+                    <message :messages="errorValidationsAddAgency.kelompok" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="kategori">Kategori</label>
+                    <select
+                      v-model="forms_add_agency.kategori"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.kategori.length > 0,
+                      }"
+                      @blur="errorValidationsAddAgency.kategori = []"
+                    >
+                      <option value="" selected="selected">
+                        Pilih Kategori
+                      </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.kategori"
+                        :key="index"
+                      >
+                        {{ value.name }}
+                      </option>
+                    </select>
+                    <message :messages="errorValidationsAddAgency.kategori" />
+                  </CCol>
                   <CCol sm="12">
                     <label for="name">Nama Instansi</label>
                     <input
-                      v-model="search.name"
+                      v-model="forms_add_agency.name"
                       type="text"
                       placeholder="Masukan Nama Instansi"
                       class="form-control"
+                      :class="{
+                        'is-invalid': errorValidationsAddAgency.name.length > 0,
+                      }"
+                      @blur="errorValidationsAddAgency.name = []"
                     />
+                    <message :messages="errorValidationsAddAgency.name" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="alamat">Alamat</label>
+                    <textarea
+                      v-model="forms_add_agency.alamat"
+                      cols="30"
+                      rows="10"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.alamat.length > 0,
+                      }"
+                      @blur="errorValidationsAddAgency.alamat = []"
+                    ></textarea>
+                    <message :messages="errorValidationsAddAgency.alamat" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="provinsi">Provinsi</label>
+                    <select
+                      v-model="forms_add_agency.propinsi"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.propinsi.length > 0,
+                      }"
+                      @change="getDistrict"
+                      @blur="errorValidationsAddAgency.propinsi = []"
+                    >
+                      <option value="" selected="selected">
+                        Pilih Provinsi
+                      </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.provinsi"
+                        :key="`provivnsi-${index}`"
+                      >
+                        {{ value.nama }}
+                      </option>
+                    </select>
+                    <message :messages="errorValidationsAddAgency.propinsi" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="kota">Kota</label>
+                    <select
+                      v-model="forms_add_agency.kota"
+                      class="form-control"
+                      :class="{
+                        'is-invalid': errorValidationsAddAgency.kota.length > 0,
+                      }"
+                      @blur="errorValidationsAddAgency.kota = []"
+                    >
+                      <option value="" selected="selected"> Pilih Kota </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.kota"
+                        :key="`kota-${index}`"
+                      >
+                        {{ value.nama }}
+                      </option>
+                    </select>
+                    <message :messages="errorValidationsAddAgency.kota" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="kode_pos">Kode Pos</label>
+                    <input
+                      v-model="forms_add_agency.kode_pos"
+                      type="text"
+                      maxlength="5"
+                      placeholder="Masukan Kode Pos"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.kode_pos.length > 0,
+                      }"
+                      @input="validateKodePos"
+                      @blur="errorValidationsAddAgency.kode_pos = []"
+                    />
+                    <message :messages="errorValidationsAddAgency.kode_pos" />
+                  </CCol>
+                  <CCol sm="12">
+                    <label for="website">Website</label>
+                    <input
+                      v-model="forms_add_agency.website"
+                      type="text"
+                      placeholder="Masukan Domain Website"
+                      class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errorValidationsAddAgency.website.length > 0,
+                      }"
+                      @input="validateWebsite"
+                      @blur="errorValidationsAddAgency.website = []"
+                    />
+                    <message :messages="errorValidationsAddAgency.website" />
                   </CCol>
                 </CRow>
               </template>
-              <div class="table-responsive">
-                <table class="table table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th>No</th>
-                      <th>Kategori</th>
-                      <th>Kelompok</th>
-                      <th>Nama Instansi</th>
-                      <th>Alamat</th>
-                      <th>Provinsi</th>
-                      <th>Kabupaten / Kota</th>
-                      <th>Kode Pos</th>
-                      <th>Website</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="instansi.length > 0">
-                      <tr
-                        v-for="(item, index) in instansi"
-                        :key="index"
-                        @click="getValue(item)"
-                      >
-                        <th scope="row">
-                          {{
-                            (modal.instansi.pagination.current_page - 1) *
-                              modal.instansi.pagination.per_page +
-                            index +
-                            1
-                          }}
-                        </th>
-                        <td>{{ item.kategori }}</td>
-                        <td>{{ item.kelompok }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.alamat }}</td>
-                        <td>
-                          {{ item.nama_propinsi }}
-                        </td>
-                        <td>{{ item.nama_kota }}</td>
-                        <td>{{ item.kode_pos }}</td>
-                        <td>{{ item.website }}</td>
-                      </tr>
-                    </template>
-                    <template v-else>
+              <template v-else>
+                <div class="d-flex mb-3">
+                  <CButton
+                    color="dark"
+                    variant="outline"
+                    size="sm"
+                    class="mr-2"
+                    :class="{ 'mr-auto': search.name === null }"
+                    @click="filter"
+                  >
+                    Filter
+                    <CIcon name="cil-filter" />
+                  </CButton>
+                  <CButton
+                    v-show="search.name !== null"
+                    color="info"
+                    variant="outline"
+                    size="sm"
+                    class="mr-auto"
+                    @click="clearFilter"
+                  >
+                    Clear All
+                    <CIcon name="cil-clear-all" />
+                  </CButton>
+                  <CButton
+                    color="success"
+                    variant="outline"
+                    size="sm"
+                    class="mr-2"
+                    @click="addAgency"
+                  >
+                    Tambah
+                    <CIcon name="cil-plus" />
+                  </CButton>
+                  <template v-if="listFilter">
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      size="sm"
+                      class="mr-2"
+                      @click="filterAgency"
+                    >
+                      Search
+                      <CIcon name="cil-search" />
+                    </CButton>
+                    <CButton
+                      color="danger"
+                      variant="outline"
+                      size="sm"
+                      @click="resetFilter"
+                    >
+                      Reset
+                      <CIcon name="cil-reload" />
+                    </CButton>
+                  </template>
+                </div>
+                <template v-if="listFilter">
+                  <CRow class="my-3">
+                    <CCol sm="12">
+                      <label for="name">Nama Instansi</label>
+                      <input
+                        v-model="search.name"
+                        type="text"
+                        placeholder="Masukan Nama Instansi"
+                        class="form-control"
+                      />
+                    </CCol>
+                  </CRow>
+                </template>
+                <div class="table-responsive">
+                  <table class="table table-hover table-striped">
+                    <thead>
                       <tr>
-                        <td colspan="9" class="text-center"> Data Kosong </td>
+                        <th>No</th>
+                        <th>Kategori</th>
+                        <th>Kelompok</th>
+                        <th>Nama Instansi</th>
+                        <th>Alamat</th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten / Kota</th>
+                        <th>Kode Pos</th>
+                        <th>Website</th>
                       </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
-              <CPagination
-                :activePage.sync="modal.instansi.pagination.current_page"
-                :pages="modal.instansi.pagination.last_page"
-                size="sm"
-                align="center"
-                @update:activePage="getAgency"
-                v-if="instansi.length > 0"
-              />
-            </template>
-          </div>
-        </template>
-        <template v-slot:footer-wrapper>
-          <template v-if="modal.instansi.add">
-            <div class="modal-footer">
-              <CButton
-                color="secondary"
-                size="sm"
-                class="m-2"
-                @click="cancelAddAgency"
-              >
-                Cancel
-              </CButton>
-              <CButton
-                color="primary"
-                size="sm"
-                class="m-2"
-                @click="submitPostPut"
-              >
-                Simpan
-              </CButton>
+                    </thead>
+                    <tbody>
+                      <template v-if="instansi.length > 0">
+                        <tr
+                          v-for="(item, index) in instansi"
+                          :key="index"
+                          @click="getValue(item)"
+                        >
+                          <th scope="row">
+                            {{
+                              (modal.instansi.pagination.current_page - 1) *
+                                modal.instansi.pagination.per_page +
+                              index +
+                              1
+                            }}
+                          </th>
+                          <td>{{ item.kategori }}</td>
+                          <td>{{ item.kelompok }}</td>
+                          <td>{{ item.name }}</td>
+                          <td>{{ item.alamat }}</td>
+                          <td>
+                            {{ item.nama_propinsi }}
+                          </td>
+                          <td>{{ item.nama_kota }}</td>
+                          <td>{{ item.kode_pos }}</td>
+                          <td>{{ item.website }}</td>
+                        </tr>
+                      </template>
+                      <template v-else>
+                        <tr>
+                          <td colspan="9" class="text-center"> Data Kosong </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+                <CPagination
+                  :activePage.sync="modal.instansi.pagination.current_page"
+                  :pages="modal.instansi.pagination.last_page"
+                  size="sm"
+                  align="center"
+                  @update:activePage="getAgency"
+                  v-if="instansi.length > 0"
+                />
+              </template>
             </div>
           </template>
-          <template v-else>
-            <div></div>
+          <template v-slot:footer-wrapper>
+            <template v-if="modal.instansi.add">
+              <div class="modal-footer">
+                <CButton
+                  color="secondary"
+                  size="sm"
+                  class="m-2"
+                  @click="cancelAddAgency"
+                >
+                  Cancel
+                </CButton>
+                <CButton
+                  color="primary"
+                  size="sm"
+                  class="m-2"
+                  @click="submitPostPut"
+                >
+                  Simpan
+                </CButton>
+              </div>
+            </template>
+            <template v-else>
+              <div></div>
+            </template>
           </template>
-        </template>
-      </CModal>
+        </CModal>
+      </div>
     </div>
   </div>
 </template>
@@ -1294,6 +1307,6 @@ export default {
 }
 .primary-color {
   color: #fff;
-  background-color: #ff5f5f;
+  background-color: #025fc4;
 }
 </style>
