@@ -516,7 +516,7 @@ export default {
       this.errorValidations.no_hp = []
 
       this.$http({
-        method: 'post',
+        method: 'patch',
         url: url,
         data: formData,
       })
