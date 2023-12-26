@@ -558,10 +558,6 @@ export default {
             name: 'NIP',
           },
           {
-            id: 'satuan_kerja',
-            name: 'Satuan Kerja',
-          },
-          {
             id: 'jabatan',
             name: 'Jabatan',
           },
