@@ -133,7 +133,7 @@
                   :reduce="(agency) => agency.id"
                   :filterable="false"
                   :options="agency"
-                  label="nama"
+                  label="name"
                   @search="onSearchInstansi"
                 >
                   <template slot="no-options">
