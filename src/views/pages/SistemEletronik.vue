@@ -104,10 +104,9 @@
                 <v-select
                   v-model="search.user_id"
                   :reduce="(users) => users.id"
-                  :filterable="false"
+                  :filterable="true"
                   :options="users"
                   label="nama"
-                  @search="onSearch"
                 >
                   <template slot="no-options">
                     Ketik Untuk Cari Nama Pengguna
@@ -131,10 +130,9 @@
                 <v-select
                   v-model="search.agency"
                   :reduce="(agency) => agency.id"
-                  :filterable="false"
+                  :filterable="true"
                   :options="agency"
                   label="name"
-                  @search="onSearchInstansi"
                 >
                   <template slot="no-options">
                     Ketik Untuk Cari Nama Instansi
@@ -608,6 +606,7 @@ export default {
   },
   created() {
     this.fetchAgency()
+    this.fetchUsers()
     this.getData()
   },
   methods: {
@@ -863,6 +862,20 @@ export default {
         .get('parinstansi')
         .then((response) => {
           this.agency = response.data.data
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    fetchUsers() {
+      this.$http
+        .get('users')
+        .then((response) => {
+          this.users = response.data.data
         })
         .catch((error) => {
           if (error.response.status === 500) {
