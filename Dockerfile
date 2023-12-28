@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM registry.dev.layanan.go.id/base/node:12-alpine
 
 RUN apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
 RUN python3 -m ensurepip
@@ -27,7 +27,7 @@ RUN npm install
 RUN npm run build
 
 # Set the base image to nginx
-FROM nginx:alpine
+FROM registry.dev.layanan.go.id/base/nginx:latest
 
 # Remove the default nginx static content
 RUN rm -rf /usr/share/nginx/html/*
