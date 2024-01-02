@@ -18,7 +18,7 @@ const data = [
         icon: 'cil-cloud',
         items: [
           {
-            name: 'Sistem Elektronik Disetujui',
+            name: 'Sistem Elektronik Sudah Disetujui',
             to: '/admin/systems/approved',
           },
         ],

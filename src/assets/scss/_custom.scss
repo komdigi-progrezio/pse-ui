@@ -144,7 +144,11 @@ body {
 #register {
   background-image: url(/img/bg-pse-left.png);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
+
+  @media (max-width: 991px) {
+    background-size: contain;
+  }
   #right-side-container {
     background-color: #fff;
     border-radius: 20px;

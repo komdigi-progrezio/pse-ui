@@ -33,7 +33,7 @@
 
           <div>
             <CButton
-              v-if="data.system.approved !== 1"
+              v-if="data.system.approved !== 1 && isAdmin"
               class="mr-1"
               color="success"
               v-c-tooltip="{
@@ -42,6 +42,9 @@
               }"
               @click="approve(data.system)"
             >
+              <CIcon name="cil-check" />
+              &nbsp;
+              <span class="">Setujui Sistem Elektronik</span>
               <CIcon name="cil-check" />
               &nbsp;
               <span class="">Setujui Sistem Elektronik</span>
@@ -316,6 +319,15 @@ export default {
   mounted() {
     this.getData()
     this.fetchTreeViewWorkUnit()
+  },
+  computed: {
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
   methods: {
     clearModal() {

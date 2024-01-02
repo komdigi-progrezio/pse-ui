@@ -377,7 +377,7 @@ export default {
       this.search.chartSystem.year = new Date(Date.now()).getFullYear()
 
       this.fetchChartSystemElectronic()
-      this.downloadChartSystemElectronic()
+      // this.downloadChartSystemElectronic()
     },
 
     fetchWidget() {

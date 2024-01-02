@@ -183,10 +183,12 @@
                   <th>Role</th>
                   <th>Jabatan</th>
                   <th>Instansi</th>
-                  <th @click="filterOrderData()" class="pointer"
+                  <th @click="filterOrderData(1)" class="pointer"
                     >Tanggal Daftar</th
                   >
-                  <th>Tanggal Update</th>
+                  <th @click="filterOrderData(2)" class="pointer"
+                    >Tanggal Update</th
+                  >
                   <th>Status</th>
                   <th colspan="2">Aksi</th>
                 </tr>
@@ -786,12 +788,13 @@ export default {
           }
         })
     },
-    filterOrderData() {
+    filterOrderData(id) {
       this.spinner = true
       this.$http
         .get('/users/filter/official', {
           params: {
             page: 1,
+            q: id == 1 ? 'daftar' : 'update',
             orderData: this.orderBy,
           },
         })
