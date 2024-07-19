@@ -18,6 +18,7 @@ const actions = {
       $axiosApi
         .post(`${process.env.VUE_APP_BASE_API_URL}users/logout`, {
           refresh_token: localStorage.getItem('refresh_token'),
+          token: localStorage.getItem('token'),
         })
         .then((response) => {
           localStorage.removeItem('token')
