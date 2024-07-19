@@ -60,7 +60,7 @@
           </ul>
         </div>
         <div id="footer"
-          >Copyright © 2023 Kementerian Komunikasi dan Informatika RI</div
+          >Copyright © 2024 Kementerian Komunikasi dan Informatika RI</div
         >
       </div>
     </div>
