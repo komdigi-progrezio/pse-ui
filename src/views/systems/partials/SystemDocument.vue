@@ -225,6 +225,7 @@
                   >
                     {{ validation.document.dokumen.message.size }}
                   </small>
+                  <small class="text-danger">Max ukuran file upload 3MB</small>
                 </div>
               </CCol>
             </CRow>

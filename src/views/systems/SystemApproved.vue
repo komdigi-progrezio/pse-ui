@@ -101,6 +101,7 @@
           <strong>Sistem Elektronik</strong>
           <div class="card-header-actions ml-auto">
             <CButton
+              v-if="!isAdmin"
               color="success"
               shape="pill"
               size="sm"

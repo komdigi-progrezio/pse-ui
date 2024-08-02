@@ -1211,6 +1211,7 @@
                     </div>
                   </ValidationProvider>
                   <message :messages="errorValidations.certificate.dokumen" />
+                  <small class="text-danger">Max ukuran file upload 3MB</small><br/>
                   <template v-if="modal.certificate.method === 'patch'">
                     <a
                       href=""

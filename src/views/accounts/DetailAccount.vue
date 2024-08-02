@@ -97,6 +97,7 @@
               </CRow>
               <div class="text-center my-3" v-if="data.status == 0 || NULL">
                 <CButton
+                  v-if="isAdmin"
                   color="primary"
                   size="sm"
                   v-c-tooltip="{

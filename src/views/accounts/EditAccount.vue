@@ -208,6 +208,7 @@
                 </div>
               </ValidationProvider>
               <message :messages="errorValidations.dokumen" />
+              <small class="text-danger">Max ukuran file upload 3MB</small><br/>
               <a href="" @click.prevent="showFile(label.urlDokumen)"
                 >Klik untuk Melihat File</a
               >

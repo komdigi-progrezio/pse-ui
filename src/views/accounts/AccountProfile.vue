@@ -344,6 +344,7 @@
                     </div>
                   </ValidationProvider>
                   <message :messages="errorValidations.dokumen" />
+                  <small class="text-danger">Max ukuran file upload 3MB</small><br/>
                   <template v-if="modal.method === 'patch'">
                     <a href="" @click.prevent="showFile(label.dokumen.url)"
                       >Lihat File</a

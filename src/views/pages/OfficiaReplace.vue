@@ -284,6 +284,7 @@
                 </div>
               </ValidationProvider>
               <message :messages="errorValidations.dokumen" />
+              <small class="text-danger">Max ukuran file upload 3MB</small>
             </div>
           </div>
           <div class="text-center">
