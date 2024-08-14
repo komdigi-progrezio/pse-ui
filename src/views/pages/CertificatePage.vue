@@ -47,7 +47,7 @@
         PermenKominfo no. 10 Tahun 2015
       </div>
       <div class="qr-code-certificate">
-        <img src="@/assets/images/qr-code.png" class="qr-code-image" />
+        <img src="@/assets/images/qr-code-updated.png" class="qr-code-image" />
       </div>
     </div>
   </center>

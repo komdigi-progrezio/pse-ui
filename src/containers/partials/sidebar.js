@@ -44,7 +44,7 @@ const data = [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Sturktur Organisasi',
+        name: 'Struktur Organisasi',
         to: '/admin/organizational-structure',
         icon: 'cil-fork',
         permissionName: 'Daftar Struktur Organisasi',

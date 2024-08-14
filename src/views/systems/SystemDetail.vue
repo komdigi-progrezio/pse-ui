@@ -45,9 +45,6 @@
               <CIcon name="cil-check" />
               &nbsp;
               <span class="">Setujui Sistem Elektronik</span>
-              <CIcon name="cil-check" />
-              &nbsp;
-              <span class="">Setujui Sistem Elektronik</span>
             </CButton>
           </div>
         </div>

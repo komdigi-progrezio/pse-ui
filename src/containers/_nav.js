@@ -60,7 +60,7 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Sturktur Organisasi',
+        name: 'Struktur Organisasi',
         to: '/admin/organizational-structure',
         icon: 'cil-fork',
       },
