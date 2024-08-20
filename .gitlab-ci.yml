@@ -1,29 +1,30 @@
-stages: # List of stages for jobs, and their order of execution
-  - build
+stages:
+  - publish
   - deploy
-
+  
 variables:
-  DOCKER_TLS_CERTDIR: ''
-  DOCKER_VERSION: stable
-  DOCKER_DIND_VERSION: 18.09-dind
-  DOCKER_CONFIG_FILE: '--config .docker'
-  DOCKER_REGCRED: 'nexus-regcred'
-  CI_IMAGE_NAME: '${REGISTRY}/${GROUP_NAME}/${APP_NAME}'
-  #APP_NAME: ${CI_PROJECT_NAME}
-  APP_NAME: 'front-end-prd'
-  GROUP_NAME: 'pse-repo' ##########
-  APP_NAMESPACE: 'dev-pse' ##########
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_VERSION: "20.10"
+  DOCKER_CONFIG_FILE: "--config .docker"
+  DOCKER_REGCRED: "nexus-regcred"
+  CI_IMAGE_NAME: "${REGISTRY}/${GROUP_NAME}/${APP_NAME}"
+  APP_NAME: ${CI_PROJECT_NAME}
+  GROUP_NAME: "pse-om2024"
+  APP_NAMESPACE: "pse-om2024"
+  APP_PORT: 80
 
-build: # This job runs in the build and publish stage, which runs first.
-  stage: build
-  image: private.nexus-regs.docker:8086/docker:${DOCKER_VERSION}
+publish:
+  stage: publish
+  image: docker:${DOCKER_VERSION}-cli
+  tags:
+    - docker
   services:
-    - name: private.nexus-regs.docker:8086/docker:${DOCKER_DIND_VERSION}
+    - name: docker:${DOCKER_VERSION}-dind
       entrypoint:
         - dockerd-entrypoint.sh
       command:
-        - '--insecure-registry=private.nexus-regs.docker:8087'
-        - '--insecure-registry=private.nexus-regs.docker:8086'
+        - "--insecure-registry=private.nexus-regs.docker:8087"
+        - "--insecure-registry=private.nexus-regs.docker:8086"
       alias: dockerd
   variables:
     DOCKER_HOST: tcp://dockerd:2375
@@ -33,41 +34,25 @@ build: # This job runs in the build and publish stage, which runs first.
   script:
     - docker $DOCKER_CONFIG_FILE build --tag ${CI_IMAGE_NAME}:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_IID} .
     - docker $DOCKER_CONFIG_FILE push ${CI_IMAGE_NAME}:${CI_COMMIT_REF_NAME}-${CI_PIPELINE_IID}
-  tags:
-    - docker
   only:
-    - live-dev
-    - live-prod
-    - production-live
+    - pse-om2024/prod
 
-# deploy-dev:      # This job runs in the deploy stage.
-#   image:
-#     name: "private.nexus-regs.docker:8086/runner/kubectl-run:3.3.1"
-#   stage: deploy
-#   tags:
-#     - docker
-#   variables:
-#     CLUSTER_CONFIG: ${CLUSTER_DEV}
-#     PROJECT_ID: "c-7j2fq:p-hf9z4"       ########## url project di rancher
-#   script:
-#     - envsubst < deployment-${CI_COMMIT_REF_NAME}.yaml > deployment.yaml
-#     - cat deployment.yaml
-#     - kubectl apply -f deployment.yaml
-#   only:
-#     - live-dev
-
-deploy-prd: # This job runs in the deploy stage.
+deploy-dev:
   image:
     name: 'private.nexus-regs.docker:8086/runner/kubectl-run:3.3.1'
   stage: deploy
   tags:
     - docker
   variables:
-    CLUSTER_CONFIG: ${CLUSTER_PRD}
-    PROJECT_ID: 'c-blkmc:p-tzt88' ########## url project di rancher
+    CLUSTER_CONFIG: ${CLUSTER_DEV}
+    PROJECT_ID: 'c-7j2fq:p-hf9z4'
+    APP_URN: 'pse-dev.layanan.go.id'
+    APP_URN_PATH: '/'
   script:
-    - envsubst < deployment-${CI_COMMIT_REF_NAME}.yaml > deployment.yaml
-    - cat deployment.yaml
-  #  - kubectl apply -f deployment.yaml
+    - envsubst < deployment.yaml > deployment-dev.yaml
+    - cat deployment-dev.yaml
+    - kubectl apply -f deployment-dev.yaml
+  needs:
+    - job: publish
   only:
-    - master # TODO: move to live-prod
+    - pse-om2024/prod
