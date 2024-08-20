@@ -18,7 +18,7 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
-#RUN npm install
+RUN npm install
 RUN npm install --legacy-peer-deps
 
 #ENV NODE_OPTIONS=--openssl-legacy-provider
