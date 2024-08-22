@@ -1,13 +1,15 @@
-FROM registry.dev.layanan.go.id/base/node:12-alpine
+## FROM registry.dev.layanan.go.id/base/node:12-alpine
 
-RUN apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
-RUN python3 -m ensurepip
-RUN pip3 install --no-cache --upgrade pip setuptools
-RUN python --version
-RUN npm info node-gyp version
+## RUN apk add --update --no-cache python3 g++ make && ln -sf python3 /usr/bin/python
+## RUN python3 -m ensurepip
+## RUN pip3 install --no-cache --upgrade pip setuptools
+## RUN python --version
+## RUN npm info node-gyp version
 
-# install simple http server for serving static content
-RUN npm install -g http-server
+## install simple http server for serving static content
+## RUN npm install -g http-server
+
+FROM registry.dev.layanan.go.id/base/node:12-alpine-pse
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -16,7 +18,8 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
-RUN npm install
+RUN npm install cross-env --save-dev
+RUN npm install --legacy-peer-deps
 
 #ENV NODE_OPTIONS=--openssl-legacy-provider
 
