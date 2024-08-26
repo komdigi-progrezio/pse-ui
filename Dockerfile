@@ -19,9 +19,8 @@ WORKDIR /app
 COPY . .
 
 # install project dependencies
-##RUN npm install cross-env --save-dev
+RUN npm install cross-env --save-dev
 ##RUN npm install --legacy-peer-deps
-RUN npm install
 
 #ENV NODE_OPTIONS=--openssl-legacy-provider
 
