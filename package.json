@@ -23,8 +23,8 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier",
-    "serve": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve --port 8080",
-    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "serve": "cross-env vue-cli-service serve --port 8080",
+    "build": "cross-env vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
