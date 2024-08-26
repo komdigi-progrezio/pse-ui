@@ -25,3 +25,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# test ignore package-lock.json
+package-lock.json
