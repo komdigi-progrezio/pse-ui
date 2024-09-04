@@ -227,7 +227,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama_dasar_hukum"> Jenis </label>
+                  <label for="nama_dasar_hukum"> Jenis<span class="text-danger">*</span> </label>
 
                   <ValidationProvider
                     name="jenis"
@@ -259,7 +259,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="nama_dasar_hukum"> Pemilik </label>
+                  <label for="nama_dasar_hukum"> Pemilik<span class="text-danger">*</span> </label>
 
                   <ValidationProvider
                     name="pemilik"
@@ -291,7 +291,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for=""> Tipe </label>
+                  <label for=""> Tipe<span class="text-danger">*</span> </label>
 
                   <ValidationProvider
                     name="tipe"
@@ -314,7 +314,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for=""> Jumlah </label>
+                  <label for=""> Jumlah<span class="text-danger">*</span> </label>
 
                   <ValidationProvider
                     name="jumlah"
@@ -337,7 +337,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for=""> Processor </label>
+                  <label for=""> Processor<span class="text-danger">*</span> </label>
 
                   <ValidationProvider
                     name="processor"
@@ -361,7 +361,7 @@
 
                 <div class="form-row">
                   <div class="form-group col-md-4">
-                    <label for="">Kapasitas harddisk</label>
+                    <label for="">Kapasitas harddisk<span class="text-danger">*</span></label>
 
                     <ValidationProvider
                       name="harddisk"
@@ -403,7 +403,7 @@
 
                 <div class="form-row">
                   <div class="form-group col-md-4">
-                    <label for="">Kapasitas Memory</label>
+                    <label for="">Kapasitas Memory<span class="text-danger">*</span></label>
 
                     <ValidationProvider
                       name="memory"
@@ -445,7 +445,7 @@
 
                 <div class="form-group">
                   <div class="d-flex">
-                    <label for=""> Menggunakan Fasilitas Data Center? </label>
+                    <label for=""> Menggunakan Fasilitas Data Center?<span class="text-danger">*</span> </label>
 
                     <div class="form-check ml-2">
                       <input
@@ -479,7 +479,7 @@
 
                 <template v-if="form.primaryHardware.fasilitas_data_center">
                   <div class="form-group">
-                    <label for="">Lokasi</label>
+                    <label for="">Lokasi<span class="text-danger">*</span></label>
 
                     <ValidationProvider
                       name="lokasi"
@@ -506,7 +506,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="">Penyedia Data Center</label>
+                    <label for="">Penyedia Data Center<span class="text-danger">*</span></label>
 
                     <ValidationProvider
                       name="data_center"
@@ -534,7 +534,7 @@
 
                   <div class="form-row">
                     <div class="form-group col-md-4">
-                      <label for="">Bandwidth</label>
+                      <label for="">Bandwidth<span class="text-danger">*</span></label>
 
                       <ValidationProvider
                         name="bandwidth"
@@ -582,7 +582,7 @@
                 <div class="form-group">
                   <div class="d-flex">
                     <label for="">
-                      Server digunakan bersama dengan aplikasi lain?
+                      Server digunakan bersama dengan aplikasi lain?<span class="text-danger">*</span>
                     </label>
 
                     <div class="form-check ml-2">

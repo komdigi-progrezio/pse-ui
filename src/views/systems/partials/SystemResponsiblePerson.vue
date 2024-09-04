@@ -115,7 +115,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama">Nama Lengkap</label>
+                  <label for="nama">Nama Lengkap<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Nama Lengkap"
                     rules="required|alpha_spaces"
@@ -143,7 +143,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nip">NIP</label>
+                  <label for="nip">NIP<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="NIP"
                     rules="required"
@@ -171,7 +171,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="jabatan">Jabatan</label>
+                  <label for="jabatan">Jabatan<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Jabatan"
                     rules="required|alpha_spaces"
@@ -199,7 +199,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="email">Email</label>
+                  <label for="email">Email<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="E-mail"
                     :rules="{
@@ -229,7 +229,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="handphone">Nomor Handphone</label>
+                  <label for="handphone">Nomor Handphone<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Nomor Handphone"
                     rules="required|numeric"
@@ -264,14 +264,24 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="name">Satuan Kerja</label>
-                  <input
-                    v-model="forms.responsible.satuan_kerja"
-                    type="text"
-                    name="name"
-                    class="form-control"
-                    disabled
-                  />
+                  <label for="name">Satuan Kerja<small class="text-danger">*</small></label>
+                  <ValidationProvider
+                    name="Satuan kerja"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.responsible.satuan_kerja"
+                      type="text"
+                      name="name"
+                      class="form-control"
+                      disabled
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.responsible.satuan_kerja" />
                 </div>
               </CCol>
             </CRow>

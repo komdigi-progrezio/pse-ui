@@ -158,7 +158,7 @@
               <CCol sm="12">
                 <div class="form-group">
                   <label for="">
-                    Nama <small class="text-danger">*</small>
+                    Nama<small class="text-danger">*</small>
                   </label>
                   <ValidationProvider
                     name="nama"
@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="">Jenis</label>
+                  <label for="">Jenis<small class="text-danger">*</small></label>
 
                   <ValidationProvider
                     name="tipe"
@@ -213,7 +213,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="">Penyedia Perangkat Lunak</label>
+                  <label for="">Penyedia Perangkat Lunak<small class="text-danger">*</small></label>
 
                   <ValidationProvider
                     name="vendor"

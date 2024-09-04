@@ -175,7 +175,25 @@
                     >Alamat URL (Gunakan http://, Contoh
                     http://www.layanan.go.id)</p
                   >
-                  <input v-model="forms.url" type="text" class="form-control" />
+                  <ValidationProvider
+                    name="Alamat URL"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
+                    <input 
+                      v-model="forms.url"
+                      type="text"
+                      class="form-control"
+                      :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.url.length > 0,
+                    }"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>                    
                   <message :messages="errorValidations.url" />
                 </template>
               </div>

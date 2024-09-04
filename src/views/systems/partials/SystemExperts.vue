@@ -176,7 +176,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="jenis">Jenis</label>
+                  <label for="jenis">Jenis<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Jenis"
                     rules="required"
@@ -213,7 +213,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="jumlah_personil">Jumlah Personil</label>
+                  <label for="jumlah_personil">Jumlah Personil<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Jumlah Personil"
                     rules="required|numeric"
@@ -248,7 +248,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="kompetensi">Kompetensi</label>
+                  <label for="kompetensi">Kompetensi<small class="text-danger">*</small></label>
                   <ValidationProvider
                     name="Kompetensi"
                     rules="required"

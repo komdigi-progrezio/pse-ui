@@ -563,7 +563,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="fungsi_sistem">Fungsi Sistem</label>
+                  <label for="fungsi_sistem">Fungsi Sistem<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Fungsi Sistem"
                     rules="required|alpha_spaces"
@@ -593,14 +593,30 @@
                 </div>
               </CCol>
               <CCol sm="12">
-                <label for="keterangan">Keterangan</label>
-                <textarea
-                  v-model="forms.mainFunction.keterangan"
-                  name="keterangan"
-                  cols="10"
-                  rows="10"
-                  class="form-control"
-                ></textarea>
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <ValidationProvider
+                  name="Keterangan"
+                  rules="required|alpha_spaces"
+                  v-slot="{ errors }"
+                >
+                  <textarea
+                    v-model="forms.mainFunction.keterangan"
+                    name="keterangan"
+                    cols="10"
+                    rows="10"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.mainFunction.keterangan.length >
+                          0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.mainFunction.keterangan" />
               </CCol>
             </CRow>
           </div>
@@ -641,7 +657,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-check">
-                  <label for="ruang_lingkup">Ruang Lingkup</label>
+                  <label for="ruang_lingkup">Ruang Lingkup<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Ruang Lingkup"
                     rules="required"
@@ -723,7 +739,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="jenis_layanan">Jenis Layanan</label>
+                  <label for="jenis_layanan">Jenis Layanan<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Jenis Layanan"
                     rules="required|alpha_spaces"
@@ -753,14 +769,32 @@
                 </div>
               </CCol>
               <CCol sm="12">
-                <label for="keterangan">Keterangan</label>
-                <textarea
-                  v-model="forms.kindOfService.keterangan"
-                  name="keterangan"
-                  cols="10"
-                  rows="10"
-                  class="form-control"
-                ></textarea>
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <ValidationProvider
+                  name="Keterangan"
+                  rules="required|alpha_spaces"
+                  v-slot="{ errors }"
+                >
+                  <textarea
+                    v-model="forms.kindOfService.keterangan"
+                    name="keterangan"
+                    cols="10"
+                    rows="10"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.kindOfService.keterangan.length >
+                          0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message
+                  :messages="errorValidations.kindOfService.keterangan"
+                />
               </CCol>
             </CRow>
           </div>
@@ -801,7 +835,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama_sistem">Nama Sistem</label>
+                  <label for="nama_sistem">Nama Sistem<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Nama Sistem"
                     rules="required|alpha_spaces"
@@ -828,14 +862,29 @@
                 </div>
               </CCol>
               <CCol sm="12">
-                <label for="keterangan">Keterangan</label>
-                <textarea
-                  v-model="forms.security.keterangan"
-                  name="keterangan"
-                  cols="10"
-                  rows="10"
-                  class="form-control"
-                ></textarea>
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <ValidationProvider
+                  name="Keterangan"
+                  rules="required|alpha_spaces"
+                  v-slot="{ errors }"
+                >
+                  <textarea
+                    v-model="forms.security.keterangan"
+                    name="keterangan"
+                    cols="10"
+                    rows="10"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.security.keterangan.length > 0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.security.keterangan" />
               </CCol>
             </CRow>
           </div>
@@ -876,7 +925,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="id_sistem">Sistem Terkait</label>
+                  <label for="id_sistem">Sistem Terkait<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Sistem Terkait"
                     :rules="relatedIdSystem"
@@ -909,7 +958,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama_sistem">Nama Sistem</label>
+                  <label for="nama_sistem">Nama Sistem<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Nama Sistem"
                     :rules="relatedSystemName"
@@ -984,7 +1033,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama_sertifikat">Nama Sertifikat</label>
+                  <label for="nama_sertifikat">Nama Sertifikat<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Nama Sertifikat"
                     rules="required"
@@ -1015,7 +1064,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="nama_institusi">Nama Institusi</label>
+                  <label for="nama_institusi">Nama Institusi<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Nama Institusi"
                     rules="required"
@@ -1046,7 +1095,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="tgl_terbit">Tanggal Terbit</label>
+                  <label for="tgl_terbit">Tanggal Terbit<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Tanggal Terbit"
                     rules="required"
@@ -1057,6 +1106,11 @@
                       name="tgl_terbit"
                       :config="optionTanggalTerbit"
                       class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.certificate.tgl_terbit.length > 0,
+                      }"
                       @input="changeMinDate"
                     />
                     <div v-if="errors.length > 0" class="invalid-feedback">
@@ -1070,7 +1124,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="tgl_expire">Tanggal Habis Berlaku</label>
+                  <label for="tgl_expire">Tanggal Habis Berlaku<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Tanggal Habis Berlaku"
                     rules="required"
@@ -1081,6 +1135,11 @@
                       name="tgl_expire"
                       :config="optionTanggalHabisBerlaku"
                       class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.certificate.tgl_expire.length > 0,
+                      }"
                     />
                     <div v-if="errors.length > 0" class="invalid-feedback">
                       {{ errors[0] }}
@@ -1093,7 +1152,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="masa_berlaku">Masa Berlaku</label>
+                  <label for="masa_berlaku">Masa Berlaku<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Masa Berlaku"
                     rules="required"
@@ -1123,7 +1182,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="no_sertifikat">Nomor Sertifikat</label>
+                  <label for="no_sertifikat">Nomor Sertifikat<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Nomor Sertifikat"
                     rules="required"
@@ -1153,7 +1212,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="ruang_lingkup">Ruang Lingkup</label>
+                  <label for="ruang_lingkup">Ruang Lingkup<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Ruang Lingkup"
                     rules="required"
@@ -1183,7 +1242,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="dokumen">Dokumen</label>
+                  <label for="dokumen">Dokumen<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Dokumen"
                     rules="required|mimes:application/pdf"
@@ -1223,7 +1282,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="tgl_mulai">Tanggal Mulai</label>
+                  <label for="tgl_mulai">Tanggal Mulai<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Tanggal Mulai"
                     rules="required"
@@ -1234,6 +1293,11 @@
                       name="tgl_mulai"
                       :config="optionTanggalHabisBerlaku"
                       class="form-control"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.certificate.tgl_mulai.length > 0,
+                      }"
                     />
                     <div v-if="errors.length > 0" class="invalid-feedback">
                       {{ errors[0] }}
@@ -1281,7 +1345,7 @@
             <CRow>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="jenis_pengguna">Jenis Pengguna</label>
+                  <label for="jenis_pengguna">Jenis Pengguna<span class="text-danger">*</span></label>
                   <ValidationProvider
                     name="Jenis Pengguna"
                     rules="required"
@@ -1316,14 +1380,29 @@
                 </div>
               </CCol>
               <CCol sm="12">
-                <label for="keterangan">Keterangan</label>
-                <textarea
-                  v-model="forms.serviceUsers.keterangan"
-                  name="keterangan"
-                  cols="10"
-                  rows="10"
-                  class="form-control"
-                ></textarea>
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <ValidationProvider
+                  name="Keterangan"
+                  rules="required"
+                  v-slot="{ errors }"
+                >
+                  <textarea
+                    v-model="forms.serviceUsers.keterangan"
+                    name="keterangan"
+                    cols="10"
+                    rows="10"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.serviceUsers.keterangan.length > 0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.serviceUsers.keterangan" />
               </CCol>
             </CRow>
           </div>
@@ -1603,15 +1682,18 @@ export default {
       errorValidations: {
         mainFunction: {
           fungsi_sistem: [],
+          keterangan: [],
         },
         scope: {
           ruang_lingkup: [],
         },
         kindOfService: {
           jenis_layanan: [],
+          keterangan: [],
         },
         security: {
           nama_sistem: [],
+          keterangan: [],
         },
         related: {
           id_sistem: [],
@@ -1711,6 +1793,7 @@ export default {
         }
       })
       this.errorValidations.mainFunction.fungsi_sistem = []
+      this.errorValidations.mainFunction.keterangan = []
 
       this.$http({
         method: 'post',
@@ -1730,6 +1813,10 @@ export default {
             this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan')
             this.errorValidations.mainFunction.fungsi_sistem =
               typeof error.response.data.errors.fungsi_sistem === 'undefined'
+                ? []
+                : error.response.data.errors.fungsi_sistem
+            this.errorValidations.mainFunction.keterangan =
+              typeof error.response.data.errors.keterangan === 'undefined'
                 ? []
                 : error.response.data.errors.fungsi_sistem
           } else if (error.response.status === 500) {
@@ -1911,6 +1998,7 @@ export default {
         }
       })
       this.errorValidations.kindOfService.jenis_layanan = []
+      this.errorValidations.kindOfService.keterangan = []
 
       this.$http({
         method: 'post',
@@ -1932,6 +2020,10 @@ export default {
               typeof error.response.data.errors.jenis_layanan === 'undefined'
                 ? []
                 : error.response.data.errors.jenis_layanan
+            this.errorValidations.kindOfService.keterangan =
+              typeof error.response.data.errors.keterangan === 'undefined'
+                ? []
+                : error.response.data.errors.keterangan
           } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
@@ -2008,6 +2100,7 @@ export default {
         }
       })
       this.errorValidations.security.nama_sistem = []
+      this.errorValidations.security.keterangan = []
 
       this.$http({
         method: 'post',
@@ -2029,6 +2122,10 @@ export default {
               typeof error.response.data.errors.nama_sistem === 'undefined'
                 ? []
                 : error.response.data.errors.nama_sistem
+            this.errorValidations.security.keterangan =
+              typeof error.response.data.errors.keterangan === 'undefined'
+                ? []
+                : error.response.data.errors.keterangan
           } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {

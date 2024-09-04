@@ -6,7 +6,7 @@
         <CRow>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Nama Internal</label>
+              <label for="name">Nama Internal<span class="text-danger">*</span></label>
               <ValidationProvider
                 name="Nama Internal"
                 rules="required"
@@ -33,7 +33,7 @@
           </CCol>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Nama Eksternal</label>
+              <label for="name">Nama Eksternal<span class="text-danger">*</span></label>
               <ValidationProvider
                 name="Nama Eksternal"
                 rules="required"
@@ -60,18 +60,30 @@
           </CCol>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Keterangan</label>
-              <textarea
-                v-model="forms.deskripsi"
-                cols="30"
-                rows="2"
-                class="form-control"
-              ></textarea>
+              <label for="name">Keterangan<span class="text-danger">*</span></label>
+              <ValidationProvider
+                name="Nama Eksternal"
+                rules="required"
+                v-slot="{ errors }"
+              >
+                <textarea
+                  v-model="forms.deskripsi"
+                  cols="30"
+                  rows="2"
+                  class="form-control"
+                  :class="{
+                    'is-invalid':
+                      errors.length > 0 ||
+                      errorValidations.deskripsi.length > 0,
+                  }"
+                ></textarea>
+              </ValidationProvider>
+              <message :messages="errorValidations.deskripsi" />
             </div>
           </CCol>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Sasaran Pelayanan</label>
+              <label for="name">Sasaran Pelayanan<span class="text-danger">*</span></label>
               <ValidationProvider
                 name="Sasaran Pelayanan"
                 rules="required"
@@ -103,7 +115,7 @@
           </CCol>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Kategori Sistem Elektronik</label>
+              <label for="name">Kategori Sistem Elektronik<span class="text-danger">*</span></label>
               <ValidationProvider
                 name="Kategori Sistem Elektronik"
                 rules="required|numeric"
@@ -140,7 +152,7 @@
           </CCol>
           <CCol sm="12">
             <div class="form-group">
-              <label for="name">Kategori Akses</label>
+              <label for="name">Kategori Akses<span class="text-danger">*</span></label>
               <ValidationProvider
                 name="Kategori Akses"
                 rules="required"
@@ -183,7 +195,7 @@
             <div class="form-group">
               <label for="name"
                 >Bersedia Untuk di Publikasikan Melalu Portal Layanan
-                Publik</label
+                Publik<span class="text-danger">*</span></label
               >
               <div class="d-flex">
                 <div class="form-check form-check-inline mr-1">
@@ -245,6 +257,7 @@ export default {
       errorValidations: {
         nama_internal: [],
         nama_eksternal: [],
+        keterangan: [],
         cakupan_wilayah: [],
         sifat_khusus: [],
         kategori_akses: [],
@@ -364,6 +377,7 @@ export default {
       })
       this.errorValidations.nama_internal = []
       this.errorValidations.nama_eksternal = []
+      this.errorValidations.deskripsi = []
       this.errorValidations.cakupan_wilayah = []
       this.errorValidations.sifat_khusus = []
       this.errorValidations.kategori_akses = []
@@ -394,6 +408,10 @@ export default {
               typeof error.response.data.errors.nama_eksternal === 'undefined'
                 ? []
                 : error.response.data.errors.nama_eksternal
+            this.errorValidations.deskripsi =
+              typeof error.response.data.errors.deskripsi === 'undefined'
+                ? []
+                : error.response.data.errors.deskripsi
             this.errorValidations.cakupan_wilayah =
               typeof error.response.data.errors.cakupan_wilayah === 'undefined'
                 ? []
