@@ -15,7 +15,7 @@
         <div class="d-flex justify-content-between">
           <div>
             <img
-              v-if="data.system.approved === 1 && data.system.img_badge"
+              v-if="data.system.progress === 100 && data.system.approved === 1 && data.system.img_badge"
               :src="data.system.img_badge"
             />
             <p ref="logo_img" style="display: none">
@@ -23,7 +23,7 @@
             >
 
             <button
-              v-if="data.system.approved === 1 && data.system.img_badge"
+              v-if="data.system.progress === 100 && data.system.approved === 1 && data.system.img_badge"
               class="btn btn-info align-self-center m-2"
               @click="showCopyModal()"
             >
