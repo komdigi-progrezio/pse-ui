@@ -345,7 +345,7 @@ export default {
       this.clearModal()
     },
     approve(value) {
-      console.log(value)
+      //console.log(value)
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'
