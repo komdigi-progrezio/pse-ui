@@ -108,7 +108,7 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th v-if="isAdmin">Nama Penyelenggara</th>
+                  <th v-if="isAdmin">Nama Instansi</th>
                   <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
@@ -127,7 +127,7 @@
                         1
                       }}
                     </th>
-                    <td v-if="isSubPejabat">{{ item.organizer_profile }}</td>
+                    <td v-if="isAdmin">{{ item.organizer_profile }}</td>
                     <td>
                       <span class="mobile-only mr-1"
                         >Nama Sistem Elektronik:
