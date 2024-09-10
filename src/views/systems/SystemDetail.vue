@@ -33,7 +33,7 @@
 
           <div>
             <CButton
-              v-if="data.system.approved !== 1 && isAdmin"
+              v-if="data.system.progress === 100 && data.system.approved !== 1 && isAdmin"
               class="mr-1"
               color="success"
               v-c-tooltip="{
