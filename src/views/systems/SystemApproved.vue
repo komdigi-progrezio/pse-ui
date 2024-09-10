@@ -188,7 +188,7 @@
                       </CButton>
                       <CButton
                         v-if="
-                          (item.is_locked === 0 || item.is_locked === null) &&
+                          item.status === 'Tidak Terdaftar' && (item.is_locked === 0 || item.is_locked === null) &&
                           item.progress === 100
                         "
                         color="success"
