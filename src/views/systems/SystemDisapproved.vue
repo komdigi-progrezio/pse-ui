@@ -108,8 +108,8 @@
               <thead>
                 <tr>
                   <th>No</th>
-                  <th v-if="isAdmin">Nama Instansi</th>
                   <th>Nama Sistem Elektronik</th>
+                  <th>URL</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
                   <template v-if="isAdmin">
@@ -127,12 +127,17 @@
                         1
                       }}
                     </th>
-                    <td v-if="isAdmin">{{ item.organizer_profile }}</td>
                     <td>
                       <span class="mobile-only mr-1"
                         >Nama Sistem Elektronik:
                       </span>
                       {{ item.nama_eksternal }}
+                    </td>
+                    <td>
+                      <span class="mobile-only mr-1"
+                        >URL:
+                      </span>
+                      {{ item.url }}
                     </td>
                     <td>
                       <span class="mobile-only mr-1">Tanggal Update: </span>
