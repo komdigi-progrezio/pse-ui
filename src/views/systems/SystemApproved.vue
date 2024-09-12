@@ -346,7 +346,12 @@ export default {
   },
   methods: {
     formatDate: function (date) {
-      return moment(date).format('DD-MM-YYYY HH:mm:ss')
+      if(date){
+        return moment(date).format('DD-MM-YYYY HH:mm:ss')
+      }else{
+        return moment('01-01-2000 00:00:00').format('DD-MM-YYYY HH:mm:ss')
+      }
+
     },
     closeModal() {
       this.modal.showModal = false
