@@ -107,7 +107,7 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
-                  <label for="name">Satuan Kerja</label>
+                  <label for="name">Satuan Kerja<span class="text-danger">*</span></label>
                   <input
                     v-model="forms.organizer.name"
                     type="text"
