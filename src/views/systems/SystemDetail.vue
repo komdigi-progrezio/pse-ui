@@ -33,7 +33,7 @@
 
           <div>
             <CButton
-              v-if="data.system.approved !== 1 && isAdmin"
+              v-if="data.system.progress === 100 && data.system.approved !== 1 && isAdmin"
               class="mr-1"
               color="success"
               v-c-tooltip="{
@@ -342,7 +342,7 @@ export default {
       this.clearModal()
     },
     approve(value) {
-      console.log(value)
+      //console.log(value)
       this.modal.showModal = true
       this.modal.title = 'Setujui Data'
       this.modal.color = 'success'
