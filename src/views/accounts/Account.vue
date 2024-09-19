@@ -257,13 +257,13 @@
                           class="mr-2 mt-1"
                           size="sm"
                           v-c-tooltip="{
-                            content: 'Aktifkan User',
+                            content: 'Alasan',
                             placement: 'bottom',
                           }"
-                          @click="confirmEnable(value)"
+                          @click="modalReason(value)"
                         >
-                          <CIcon name="cil-check-circle" />
-                          <span class="mobile-only ml-1">Aktifkan User</span>
+                          <CIcon name="cil-list" />
+                          <span class="mobile-only ml-1">Alasan</span>
                         </CButton>
                       </template>
 
@@ -475,6 +475,46 @@
         </CButton>
       </template>
     </CModal>
+    <CModal
+      :title="modal.reason.title"
+      :color="modal.reason.color"
+      :show.sync="modal.reason.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <label for="reason">
+                {{ modal.reason.message }}
+                <strong>{{ modal.reason.data }}</strong>?
+              </label>
+              <input
+                v-model="forms.reason"
+                type="text"
+                name="reason"
+                placeholder="Masukan Alasan"
+                class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.reason.length > 0,
+                }"
+                @blur="errorValidations.reason = []"
+              />
+              <message :messages="errorValidations.reason" />
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <template v-if="modal.reason.status === 'Tidak Aktif'">
+          <CButton color="dark" size="sm" class="m-2" @click="rejectUserWithReason">
+            Tolak
+          </CButton>
+          <CButton color="primary" size="sm" class="m-2" @click="confirmUserWithReason">
+            Terima
+          </CButton>
+        </template>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -487,25 +527,13 @@ export default {
       orderBy: 'ASC',
       listFilter: false,
       data: [],
-      // formChangePassword: {
-      //   current_password: null,
-      //   password: null,
-      //   password_confirmation: null,
-      // },
-      // modal: {
-      //   changePassword: {
-      //     showModal: false,
-      //     title: null,
-      //     color: null,
-      //     labelButton: 'Submit',
-      //     method: null,
-      //     uniqueId: null,
-      //   },
-      // },
-      // errorValidations: {
-      //   current_password: [],
-      //   password: [],
-      // },
+      forms: {
+        id: null,
+        reason: null,
+      },
+      errorValidations: {
+        reason: [],
+      },
       modal: {
         disable: {
           showModal: false,
@@ -524,6 +552,16 @@ export default {
           labelButton: 'Submit',
           uniqueId: null,
           data: null,
+        },
+        reason: {
+          showModal: false,
+          title: 'Konfirmasi Diterima/ Ditolak User',
+          color: 'dark',
+          message: 'Isikan alasan diterima/ ditolak user',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+          status: null,
         },
       },
       search: {
@@ -652,6 +690,7 @@ export default {
     closeModal() {
       this.modal.disable.showModal = false
       this.modal.enable.showModal = false
+      this.modal.reason.showModal = false
     },
     confirmDisable(value) {
       this.modal.disable.showModal = true
@@ -663,15 +702,12 @@ export default {
       this.modal.enable.uniqueId = value.id
       this.modal.enable.data = value.nama
     },
-    // showModalChangePassword(value) {
-    //   this.modal.changePassword.showModal = true
-    //   this.modal.changePassword.title = `Ganti Password ${value.nama}`
-    //   this.modal.changePassword.color = 'primary'
-    //   this.modal.changePassword.label = value.nama
-    //   this.modal.changePassword.uniqueId = value.id
-    // },
-    // closeModalChangePassword() {},
-    // submitChangePassword() {},
+    modalReason(value) {
+      this.modal.reason.showModal = true
+      this.modal.reason.uniqueId = value.id
+      this.modal.reason.data = value.nama
+      this.modal.reason.status = value.nama_status
+    },
     editUser(id) {
       this.$router.push(`/admin/account/${id}/edit`)
     },
@@ -690,7 +726,27 @@ export default {
           this.$toastr.s(response.data.message, 'Pemberitahuan')
         })
         .catch((error) => {
-          this.modal.disable.showModal = false
+          this.modal.enable.showModal = false
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    confirmUserWithReason() {
+      this.$http({
+        method: 'patch',
+        url: `/users/enable/${this.modal.reason.uniqueId}`,
+      })
+        .then((response) => {
+          this.modal.reason.showModal = false
+          this.spinner = false
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.modal.reason.showModal = false
           if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
@@ -712,6 +768,29 @@ export default {
         .catch((error) => {
           if (error.response.status === 500) {
             this.modal.disable.showModal = false
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    rejectUserWithReason() {
+      this.$http({
+        method: 'patch',
+        url: `/users/disable/${this.modal.reason.uniqueId}`,
+        data: {
+          alasan: this.forms.reason,
+        },
+      })
+        .then((response) => {
+          this.modal.reason.showModal = false
+          this.spinner = false
+          this.filterData()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.modal.reason.showModal = false
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
