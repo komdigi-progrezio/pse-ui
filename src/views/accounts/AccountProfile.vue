@@ -4,7 +4,7 @@
       <CCardHeader>
         <CIcon name="cil-user" /> Profil
         <div class="card-header-actions">
-          <template v-if="isAdmin">
+          <template>
             <CButton
               color="success"
               shape="pill"

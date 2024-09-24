@@ -40,6 +40,7 @@
                     :rules="{
                       required: true,
                       email: true,
+                      regex: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
                       // regex: /[^\s@]+@[^\s@]+\.go.id$|[^\s@]+@mkri.id$/,
                     }"
                     v-slot="{ errors }"

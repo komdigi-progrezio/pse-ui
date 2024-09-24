@@ -753,14 +753,33 @@
                 </div>
               </CCol>
               <CCol sm="12">
-                <label for="keterangan">Keterangan</label>
-                <textarea
-                  v-model="forms.kindOfService.keterangan"
-                  name="keterangan"
-                  cols="10"
-                  rows="10"
-                  class="form-control"
-                ></textarea>
+                <label for="keterangan">Keterangan<span class="text-danger">*</span></label>
+                <ValidationProvider
+                  name="Keterangan"
+                  rules="required|alpha_spaces"
+                  v-slot="{ errors }"
+                >
+                  <textarea
+                    v-model="forms.kindOfService.keterangan"
+                    name="keterangan"
+                    cols="10"
+                    rows="10"
+                    class="form-control"
+                    maxlength="100"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.kindOfService.keterangan.length >
+                          0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
+                <message
+                  :messages="errorValidations.kindOfService.keterangan"
+                />
               </CCol>
             </CRow>
           </div>
