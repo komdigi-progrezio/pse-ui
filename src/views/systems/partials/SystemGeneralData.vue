@@ -677,6 +677,11 @@
                           v-model="forms.scope.ruang_lingkup"
                           class="form-check-input"
                           :id="value.id"
+                          :class="{
+                            'is-invalid':
+                              errorValidations.scope.ruang_lingkup.length >
+                                0,
+                          }"
                         />
                         <label class="form-check-label" :for="value.id">{{
                           value.param_value
@@ -781,6 +786,7 @@
                     cols="10"
                     rows="10"
                     class="form-control"
+                    maxlength="100"
                     :class="{
                       'is-invalid':
                         errors.length > 0 ||
