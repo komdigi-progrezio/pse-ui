@@ -664,7 +664,7 @@
                           :class="{
                             'is-invalid':
                               errorValidations.scope.ruang_lingkup.length >
-                                0,
+                                0 || forms.scope.param_name != null,
                           }"
                         />
                         <label class="form-check-label" :for="value.id">{{
