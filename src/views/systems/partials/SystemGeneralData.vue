@@ -786,7 +786,7 @@
                     cols="10"
                     rows="10"
                     class="form-control"
-                    maxlength="100"
+                    maxlength="500"
                     :class="{
                       'is-invalid':
                         errors.length > 0 ||
