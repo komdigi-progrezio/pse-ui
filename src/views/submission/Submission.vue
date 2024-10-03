@@ -143,7 +143,8 @@
                       <th>Nama Sistem Elektronik</th>
                       <th>Instansi Penyelenggara</th>
                       <th>Alasan</th>
-                      <th>Status</th>
+                      <th @click="filterOrderData(0)" class="pointer">Tanggal Pengajuan</th>
+                      <th @click="filterOrderData(1)" class="pointer">Status <CIcon name="cil-sort-descending"/></th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
@@ -172,6 +173,13 @@
                             >Alasan perubahan:
                           </span>
                           {{ item.reason }}
+                        </td>
+
+                        <td>
+                          <span class="mobile-only mr-1"
+                            >Tanggal pengajuan:
+                          </span>
+                          {{ item.tanggal_pengajuan }}
                         </td>
 
                         <td>
@@ -390,6 +398,7 @@ export default {
   name: 'Submission',
   data() {
     return {
+      orderBy: 'DESC',
       data: {
         changeSubmissions: [],
       },
@@ -404,7 +413,9 @@ export default {
         q: null,
       },
       pagination: {
-        last_page: null,
+        current_page: 1,
+        per_page: null,
+        last_page: 10,
       },
       checkFilter: true,
       modal: {
@@ -493,6 +504,27 @@ export default {
           },
         })
         .then((response) => {
+          this.data.changeSubmissions = response.data.data
+          this.loading.systemElectronic = false
+          this.pagination = response.data.meta
+        })
+    },
+
+    filterOrderData(id) {
+      this.loading.systemElectronic = true
+
+      this.$http
+        .get('request-update/filter', {
+          params: {
+            page: 1,
+            q: id == 0 ? "tanggal" : "status",
+            orderData: this.orderBy,
+          },
+        })
+        .then((response) => {
+          this.orderBy == 'ASC'
+            ? (this.orderBy = 'DESC')
+            : (this.orderBy = 'ASC')
           this.data.changeSubmissions = response.data.data
           this.loading.systemElectronic = false
           this.pagination = response.data.meta
@@ -660,4 +692,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.pointer {
+  cursor: pointer;
+}
+</style>
