@@ -183,10 +183,10 @@
                   <th>Role</th>
                   <th>Jabatan</th>
                   <th>Instansi</th>
-                  <th @click="filterOrderData(1)" class="pointer"
+                  <th @click="filterOrderData(1, true)" class="pointer"
                     >Tanggal Daftar</th
                   >
-                  <th @click="filterOrderData(2)" class="pointer"
+                  <th @click="filterOrderData(2, true)" class="pointer"
                     >Tanggal Update</th
                   >
                   <th>Status</th>
@@ -360,7 +360,7 @@
       :pages="pagination.last_page"
       size="sm"
       align="center"
-      @update:activePage="getData"
+      @update:activePage="!isFilter ? getData() : filterOrderData(gId, false)"
       v-if="data.length > 0"
     />
     <!-- <CModal
@@ -526,6 +526,8 @@ export default {
       spinner: false,
       orderBy: 'ASC',
       listFilter: false,
+      gId: 0,
+      isFilter: false,
       data: [],
       forms: {
         id: null,
@@ -867,21 +869,28 @@ export default {
           }
         })
     },
-    filterOrderData(id) {
+    filterOrderData(id, orderCLicked) {
       this.spinner = true
+      this.isFilter = true
+      this.gId = id
+      if (orderCLicked) {
+        this.orderBy == 'ASC'
+          ? (this.orderBy = 'DESC')
+          : (this.orderBy = 'ASC')
+      }
       this.$http
         .get('/users/filter/official', {
           params: {
-            page: 1,
+            page: this.pagination.current_page,
             q: id == 1 ? 'daftar' : 'update',
             orderData: this.orderBy,
           },
         })
         .then((response) => {
           this.spinner = false
-          this.orderBy == 'ASC'
-            ? (this.orderBy = 'DESC')
-            : (this.orderBy = 'ASC')
+          // this.orderBy == 'ASC'
+          //   ? (this.orderBy = 'DESC')
+          //   : (this.orderBy = 'ASC')
           this.data = response.data.data
           this.pagination.current_page = response.data.meta.current_page
           this.pagination.per_page = response.data.meta.per_page
@@ -897,7 +906,7 @@ export default {
     },
     getData() {
       this.spinner = true
-
+      this.isFilter = false
       this.$http
         .get('/users/filter/official', {
           params: {
