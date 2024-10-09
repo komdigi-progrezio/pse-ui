@@ -112,7 +112,7 @@
                   <th>URL</th>
                   <th>Tanggal Update</th>
                   <th>Progress</th>
-                  <template v-if="isAdmin">
+                  <template>
                     <th>Aksi</th>
                   </template>
                 </tr>
@@ -166,23 +166,36 @@
                         </CButton>
                       </td>
                     </template>
-                    <!-- <template v-else>
-                        <CButton
-                          color="primary"
-                          size="sm"
-                          class="mr-2"
-                          v-c-tooltip="{
-                            content: 'Detail Sistem Elektronik',
-                            placement: 'bottom',
-                          }"
-                          :to="`/admin/systems/${item.id}`"
-                        >
-                          <CIcon name="cil-description" />
-                          <span class="mobile-only ml-1"
-                            >Detail Sistem Elektronik
-                          </span>
-                        </CButton>
-                      </template> -->
+                    <template v-else>
+                      <!-- <CButton
+                        color="primary"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Detail Sistem Elektronik',
+                          placement: 'bottom',
+                        }"
+                        :to="`/admin/systems/${item.id}`"
+                      >
+                        <CIcon name="cil-description" />
+                        <span class="mobile-only ml-1"
+                          >Detail Sistem Elektronik
+                        </span>
+                      </CButton> -->
+                      <CButton
+                        v-if="!isAdmin"
+                        color="danger"
+                        size="sm"
+                        class="mr-2"
+                        v-c-tooltip="{
+                          content: 'Hapus Sistem Elektronik',
+                          placement: 'bottom',
+                        }"
+                        @click="destroy(item)"
+                      >
+                        <CIcon name="cil-trash" />
+                      </CButton>
+                    </template>
                   </tr>
                 </template>
                 <template v-else>
@@ -231,6 +244,34 @@
         >
           {{ modal.labelButton }}
           <CSpinner size="sm" color="info" v-if="isSubmit" />
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.delete.title"
+      :color="modal.delete.color"
+      :show.sync="modal.delete.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.delete.message }}
+            <strong>{{ modal.delete.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton
+          color="secondary"
+          size="sm"
+          class="m-2"
+          @click="closeModalDelete"
+        >
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="submitDelete">
+          {{ modal.delete.labelButton }}
         </CButton>
       </template>
     </CModal>
@@ -320,6 +361,44 @@ export default {
     filter() {
       this.listFilter = !this.listFilter
       this.clearFilter()
+    },
+    submitDelete() {
+      this.$http
+        .delete(`systems/${this.modal.delete.uniqueId}`)
+        .then((response) => {
+          this.filterData()
+          this.closeModalDelete()
+          this.$toastr.s(response.data.message, 'Pemberitahuan')
+        })
+        .catch((error) => {
+          this.closeModalDelete()
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    clearModalDelete() {
+      this.modal.delete.title = null
+      this.modal.delete.color = null
+      this.modal.delete.data = null
+      this.modal.delete.uniqueId = null
+      this.modal.delete.message = null
+      this.modal.delete.labelButton = null
+    },
+    closeModalDelete() {
+      this.modal.delete.showModal = false
+      this.clearModalDelete()
+    },
+    destroy(item) {
+      this.modal.delete.showModal = true
+      this.modal.delete.title = 'Hapus Data'
+      this.modal.delete.color = 'danger'
+      this.modal.delete.data = item.nama
+      this.modal.delete.uniqueId = item.id
+      this.modal.delete.message = 'Ingin Menghapus Data'
+      this.modal.delete.labelButton = 'Hapus'
     },
     clearFilter() {
       this.search.nama_eksternal = null
