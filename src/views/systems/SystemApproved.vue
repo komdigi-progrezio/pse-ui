@@ -388,10 +388,18 @@ export default {
   },
   created() {
     this.getData()
-    if (localStorage.getItem('isRegisteredSe')) {
+    const now = new Date().getTime()
+    if (sessionStorage.getItem('isRegisteredSe') && sessionStorage.getItem('isRegisteredSeExpiry')) {
       this.getDisapprovedData()
+      if (now > sessionStorage.getItem('isRegisteredSeExpiry')) {
+        sessionStorage.removeItem('nama_internal')
+        sessionStorage.removeItem('nama_eksternal')
+        sessionStorage.removeItem('isRegisteredSe')
+        sessionStorage.removeItem('isRegisteredSeExpiry')
+        this.modal.confirm.showModal = false
+      }
       this.modal.confirm.showModal = true
-      this.modal.confirm.nama_internal = localStorage.getItem('nama_internal')
+      this.modal.confirm.nama_internal = sessionStorage.getItem('nama_internal')
     }
   },
   methods: {
@@ -404,10 +412,11 @@ export default {
 
     },
     closeConfirmModal() {
-      if (localStorage.getItem('isRegisteredSe')) {
-        localStorage.removeItem('nama_internal')
-        localStorage.removeItem('nama_eksternal')
-        localStorage.removeItem('isRegisteredSe')
+      if (sessionStorage.getItem('isRegisteredSe')) {
+        sessionStorage.removeItem('nama_internal')
+        sessionStorage.removeItem('nama_eksternal')
+        sessionStorage.removeItem('isRegisteredSe')
+        sessionStorage.removeItem('isRegisteredSeExpiry')
       }
       this.modal.confirm.showModal = false
     },
@@ -583,7 +592,7 @@ export default {
         })
         .then((response) => {
           this.disapprovedData = response.data.data  
-          if (localStorage.getItem('isRegisteredSe')){
+          if (sessionStorage.getItem('isRegisteredSe')){
             this.modal.confirm.created_at = this.disapprovedData[0].date_updated
             this.modal.confirm.user_name = this.disapprovedData[0].user_name
           }

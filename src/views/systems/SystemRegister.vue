@@ -338,6 +338,7 @@ export default {
       this.isSubmit = true
       const url = '/systems'
       const formData = new FormData()
+      const expiryTime = new Date().getTime() + 1 * 60 * 1000
       formData.append('_method', 'POST')
       const forMapData = Object.entries(this.forms)
       forMapData.forEach((value) => {
@@ -364,9 +365,10 @@ export default {
       })
         .then((response) => {
           this.isSubmit = false
-          localStorage.setItem('nama_internal', this.forms.nama_internal)
-          localStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
-          localStorage.setItem('isRegisteredSe', true)
+          sessionStorage.setItem('nama_internal', this.forms.nama_internal)
+          sessionStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
+          sessionStorage.setItem('isRegisteredSe', true)
+          sessionStorage.setItem('isRegisteredSeExpiry', expiryTime)
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
           this.$nextTick(() => {
