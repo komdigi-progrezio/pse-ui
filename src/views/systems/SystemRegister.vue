@@ -364,6 +364,9 @@ export default {
       })
         .then((response) => {
           this.isSubmit = false
+          localStorage.setItem('nama_internal', this.forms.nama_internal)
+          localStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
+          localStorage.setItem('isRegisteredSe', true)
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
           this.$nextTick(() => {
