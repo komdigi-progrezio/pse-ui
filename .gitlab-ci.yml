@@ -75,4 +75,4 @@ deploy-prd:
   needs:
     - job: publish
   only:
-    - pse-om2024-prod
+    - pse-om2024-dev
