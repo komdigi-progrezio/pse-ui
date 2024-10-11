@@ -140,6 +140,41 @@
               </div>
             </CCol>
             <CCol sm="12">
+              <div class="col-sm-10">
+                <ValidationProvider
+                  name="File"
+                  rules="required|mimes:application/pdf"
+                  v-slot="{ errors, validate }"
+                >
+                  <div class="custom-file">
+                    <input
+                      type="file"
+                      class="custom-file-input"
+                      id="customFile"
+                      accept="application/pdf"
+                      @change="
+                        onFilePickedDocument($event) || validate($event)
+                      "
+                      @blur="errorValidations.dokumen = []"
+                    />
+                    <label class="custom-file-label" for="customFile">{{
+                      filename
+                    }}</label>
+                    <div
+                      v-if="errors.length > 0"
+                      :class="{
+                        'has-error-file': errors.length > 0,
+                      }"
+                    >
+                      {{ errors[0] }}
+                    </div>
+                  </div>
+                </ValidationProvider>
+                <message :messages="errorValidations.dokumen" />
+                <small class="text-danger">Max ukuran file upload 3MB</small>
+              </div>
+            </CCol>
+            <CCol sm="12">
               <div class="form-group">
                 <label for="name">Kategori Akses</label>
                 <ValidationProvider
@@ -175,7 +210,25 @@
                     >Alamat URL (Gunakan http://, Contoh
                     http://www.layanan.go.id)</p
                   >
-                  <input v-model="forms.url" type="text" class="form-control" />
+                  <ValidationProvider
+                    name="Alamat URL"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
+                    <input 
+                      v-model="forms.url"
+                      type="text"
+                      class="form-control"
+                      :class="{
+                      'is-invalid':
+                        errors.length > 0 ||
+                        errorValidations.url.length > 0,
+                    }"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>                    
                   <message :messages="errorValidations.url" />
                 </template>
               </div>
@@ -333,6 +386,16 @@ export default {
       this.forms.kategori_akses = 'Online'
       this.forms.url = null
       this.forms.publish = null
+      this.forms.dokumen = null
+    },
+    onFilePickedDocument() {
+      if (event.target.files[0].type === 'application/pdf') {
+        this.forms.dokumen = event.target.files[0]
+        this.filename = event.target.files[0].name
+      } else {
+        this.forms.dokumen = null
+        this.filename = 'Choose File'
+      }
     },
     submit() {
       this.isSubmit = true
