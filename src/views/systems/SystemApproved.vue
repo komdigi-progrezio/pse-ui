@@ -277,6 +277,42 @@
         </CButton>
       </template>
     </CModal>
+    <CModal
+      :title="modal.confirm.title"
+      :color="modal.confirm.color"
+      :show.sync="modal.confirm.showModal"
+      :keyboard="false"
+      @click.self.stop
+      class="modal-confirm-layout"
+    >
+      <template v-slot:header>
+        <h5 class="modal-title">{{ modal.confirm.title }}</h5>
+        <button type="button" class="close" aria-label="Close" @click="closeConfirmModal">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </template>
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <p>Yth {{ modal.confirm.user_name }}</p>
+              <p>Berikut ini merupakan informasi dari Sistem Elektronik yang Anda daftarkan. <br/><br/>
+                <b>Nama Sistem Elektronik:</b>  {{ modal.confirm.nama_internal }} <br/>
+                <b>Tanggal Daftar:</b>  {{ formatDate(modal.confirm.created_at) }} <br/>
+                <b>Status:</b>  Menunggu Diverifikasi <br /><br />
+                Best Regards, <br />
+                Webmaster PSE
+              </p>
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="primary" size="sm" class="m-2" @click="closeConfirmModal()">
+          Confirm
+        </CButton>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -289,11 +325,20 @@ export default {
       spinner: false,
       listFilter: false,
       data: [],
+      disapprovedData: [],
       search: {
         nama_eksternal: null,
         nama_instansi: null,
       },
       modal: {
+        confirm: {
+          showModal: false,
+          title: 'Informasi',
+          color: 'dark',
+          user_name: null,
+          created_at: null,
+          nama_internal: null,
+        },
         delete: {
           showModal: false,
           title: null,
@@ -343,6 +388,19 @@ export default {
   },
   created() {
     this.getData()
+    const now = new Date().getTime()
+    if (sessionStorage.getItem('isRegisteredSe') && sessionStorage.getItem('isRegisteredSeExpiry')) {
+      this.getDisapprovedData()
+      if (now > sessionStorage.getItem('isRegisteredSeExpiry')) {
+        sessionStorage.removeItem('nama_internal')
+        sessionStorage.removeItem('nama_eksternal')
+        sessionStorage.removeItem('isRegisteredSe')
+        sessionStorage.removeItem('isRegisteredSeExpiry')
+        this.modal.confirm.showModal = false
+      }
+      this.modal.confirm.showModal = true
+      this.modal.confirm.nama_internal = sessionStorage.getItem('nama_internal')
+    }
   },
   methods: {
     formatDate: function (date) {
@@ -352,6 +410,15 @@ export default {
         return moment('01-01-2000 00:00:00').format('DD-MM-YYYY HH:mm:ss')
       }
 
+    },
+    closeConfirmModal() {
+      if (sessionStorage.getItem('isRegisteredSe')) {
+        sessionStorage.removeItem('nama_internal')
+        sessionStorage.removeItem('nama_eksternal')
+        sessionStorage.removeItem('isRegisteredSe')
+        sessionStorage.removeItem('isRegisteredSeExpiry')
+      }
+      this.modal.confirm.showModal = false
     },
     closeModal() {
       this.modal.showModal = false
@@ -515,8 +582,35 @@ export default {
           }
         })
     },
+    getDisapprovedData() {
+      this.$http
+        .get('/systems/filter/disapproved', {
+          params: {
+            page: this.pagination.current_page,
+            filter: 'nama_eksternal',
+          },
+        })
+        .then((response) => {
+          this.disapprovedData = response.data.data  
+          if (sessionStorage.getItem('isRegisteredSe')){
+            this.modal.confirm.created_at = this.disapprovedData[0].date_updated
+            this.modal.confirm.user_name = this.disapprovedData[0].user_name
+          }
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
   },
 }
 </script>
 
-<style></style>
+<style>
+.modal-confirm-layout {
+  pointer-events: none;
+}
+</style>
