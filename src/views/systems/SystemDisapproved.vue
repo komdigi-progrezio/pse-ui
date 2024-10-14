@@ -293,6 +293,14 @@ export default {
         nama_instansi: null,
       },
       modal: {
+        delete: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+        },
         showModal: false,
         title: null,
         color: null,
