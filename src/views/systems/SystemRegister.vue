@@ -140,7 +140,8 @@
               </div>
             </CCol>
             <CCol sm="12">
-              <div class="col-sm-10">
+              <div class="form-group">
+                <label for="name">Dokumen Hasil Self Assesment</label>
                 <ValidationProvider
                   name="File"
                   rules="required|mimes:application/pdf"
