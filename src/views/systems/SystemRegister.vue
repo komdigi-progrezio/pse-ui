@@ -387,7 +387,7 @@ export default {
       this.forms.kategori_akses = 'Online'
       this.forms.url = null
       this.forms.publish = null
-      this.forms.dokumen = null
+      this.forms.dokumen = ''
     },
     onFilePickedDocument() {
       if (event.target.files[0].type === 'application/pdf') {
