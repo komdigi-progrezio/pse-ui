@@ -188,7 +188,7 @@
                       </CButton>
                       <CButton
                         v-if="
-                          item.status === 'Tidak Terdaftar' && (item.is_locked === 0 || item.is_locked === null) &&
+                          item.status === 'Tidak Terdaftar' && (item.is_locked === false || item.is_locked === null) &&
                           item.progress === 100
                         "
                         color="success"
@@ -438,7 +438,11 @@ export default {
         .then((response) => {
           this.filterData()
           this.closeModal()
-          this.$toastr.s(response.data.message, 'Pemberitahuan')
+          if(response.data.status === 400){
+            this.$toastr.e(response.data.message, 'Pemberitahuan')
+          }else{
+            this.$toastr.s(response.data.message, 'Pemberitahuan')
+          }
         })
         .catch((error) => {
           this.closeModal()
