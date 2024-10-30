@@ -33,7 +33,7 @@
               pada Menteri c.q Direktur Jenderal
               <a
                 style="color: #ffd93c"
-                href="/FINAL-Panduan_Juklak_Pendaftaran_PSE_Publik_2023.pdf"
+                href="/FORMAT_SURAT_PERMOHONAN_PENDAFTARAN_LAMPIRAN_II.docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
@@ -42,7 +42,7 @@
               >Penunjukan pejabat pendaftar melalui <b>Surat Tugas</b>
               <a
                 style="color: #ffd93c"
-                href="/FINAL-Panduan_Juknis_Pendaftaran_PSE_Publik_2023.pdf"
+                href="/SURAT_TUGAS_LAMPIRAN_PERMENKOMINFO_10_TH_2015_LAMPIRAN_I.docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
