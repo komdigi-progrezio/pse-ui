@@ -302,6 +302,13 @@
                   Provinsi
                 </label>
                 <div class="col-sm-10">
+                  <ValidationProvider
+                    name="provinsi"
+                    rules="required"
+                    :custom-messages="`Pilih salah satu provinsi`"
+                    v-slot="{ errors }"
+                    mode="aggressive"
+                  >
                   <select
                     v-model="forms.propinsi"
                     class="form-control"
@@ -323,12 +330,23 @@
                       {{ value.nama }}
                     </option>
                   </select>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                  </ValidationProvider>
                 </div>
                 <message :messages="errorValidations.propinsi" />
               </div>
               <div class="form-group row">
                 <label for="kota" class="col-sm-2 col-form-label">Kota</label>
                 <div class="col-sm-10">
+                  <ValidationProvider
+                    name="kota"
+                    rules="required"
+                    :custom-messages="`Pilih salah satu kota`"
+                    v-slot="{ errors }"
+                    mode="aggressive"
+                  >
                   <select
                     v-model="forms.kota"
                     class="form-control"
@@ -347,6 +365,10 @@
                       {{ value.nama }}
                     </option>
                   </select>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                  </ValidationProvider>
                 </div>
                 <message :messages="errorValidations.kota" />
               </div>
