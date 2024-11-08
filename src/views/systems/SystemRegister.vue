@@ -305,6 +305,7 @@ export default {
         kategori_akses: 'Online',
         url: null,
         publish: null,
+        dokumen: '',
       },
       errorValidations: {
         nama_internal: [],
