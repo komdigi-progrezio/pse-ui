@@ -314,6 +314,7 @@ export default {
         sifat_khusus: [],
         kategori_akses: [],
         url: [],
+        dokumen: [],
       },
       dataSelect: {
         serviceGoals: [
@@ -421,6 +422,7 @@ export default {
       this.errorValidations.sifat_khusus = []
       this.errorValidations.kategori_akses = []
       this.errorValidations.url = []
+      this.errorValidations.dokumen = []
 
       this.$http({
         method: 'post',
@@ -468,6 +470,10 @@ export default {
               typeof error.response.data.errors.url === 'undefined'
                 ? []
                 : error.response.data.errors.url
+            this.errorValidations.dokumen =
+              typeof error.response.data.errors.dokumen === 'undefined'
+                ? []
+                : error.response.data.errors.dokumen
           } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {
