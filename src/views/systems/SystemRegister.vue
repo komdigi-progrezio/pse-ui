@@ -420,7 +420,6 @@ export default {
       this.errorValidations.sifat_khusus = []
       this.errorValidations.kategori_akses = []
       this.errorValidations.url = []
-      this.errorValidations.name = []
 
       this.$http({
         method: 'post',
