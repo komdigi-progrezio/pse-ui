@@ -16,7 +16,6 @@
                   <input
                     v-model="forms.nama_internal"
                     type="text"
-                    name="name"
                     placeholder="Masukan Nama Internal"
                     class="form-control"
                     :class="{
@@ -43,7 +42,6 @@
                   <input
                     v-model="forms.nama_eksternal"
                     type="text"
-                    name="name"
                     placeholder="Masukan Eksternal"
                     class="form-control"
                     :class="{
@@ -248,7 +246,6 @@
                       id="inline-radio1"
                       type="radio"
                       value="0"
-                      name="inline-radios"
                     />
                     <label class="form-check-label" for="inline-radio1"
                       >Tidak</label
@@ -261,7 +258,6 @@
                       id="inline-radio1"
                       type="radio"
                       value="1"
-                      name="inline-radios"
                     />
                     <label class="form-check-label" for="inline-radio1"
                       >Ya</label
