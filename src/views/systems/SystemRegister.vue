@@ -29,7 +29,7 @@
                     {{ errors[0] }}
                   </div>
                 </ValidationProvider>
-                <message :messages="errorValidations.nama_eksternal" />
+                <message :messages="errorValidations.nama_internal" />
               </div>
             </CCol>
             <CCol sm="12">
@@ -343,6 +343,7 @@ export default {
           },
         ],
       },
+      filename: 'Choose File',
     }
   },
   created() {
@@ -390,6 +391,7 @@ export default {
       this.forms.url = null
       this.forms.publish = null
       this.forms.dokumen = ''
+      this.filename = 'Choose File'
     },
     onFilePickedDocument() {
       if (event.target.files[0].type === 'application/pdf') {
