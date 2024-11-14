@@ -15,6 +15,7 @@ import master from '@/router/partials/master.js'
 import systems from '@/router/partials/systems.js'
 
 const Dashboard = () => import('@/views/Dashboard')
+const LoginNew = () => import('@/views/pages/LoginPage')
 const Login = () => import('@/views/pages/Login')
 const Forbidden = () => import('@/views/pages/Forbidden')
 const OfficialNew = () => import('@/views/pages/OfficialNew')
@@ -56,6 +57,12 @@ function configRoutes() {
           meta: { requiresAuth: false },
         },
       ],
+    },
+    {
+      path: '/autentikasi-pengguna',
+      name: 'Autentikasi Pengguna',
+      component: LoginNew,
+      meta: { requiresAuth: false },
     },
     {
       path: '/sealid/:id',
