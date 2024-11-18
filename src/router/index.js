@@ -29,6 +29,7 @@ const AddReport = () => import('@/views/report/AddReport')
 const EditReport = () => import('@/views/report/EditReport')
 const Statistic = () => import('@/views/statistic/Statistic')
 const CertificatePage = () => import('@/views/pages/CertificatePage')
+const FaqPage = () => import('@/views/pages/FaqPage')
 
 Vue.use(Router)
 
@@ -80,6 +81,12 @@ function configRoutes() {
       path: '/register',
       name: 'Daftar Pejabat',
       component: OfficialNew,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/faq',
+      name: 'Pertanyan yang Sering Ditanyakan',
+      component: FaqPage,
       meta: { requiresAuth: false },
     },
     {

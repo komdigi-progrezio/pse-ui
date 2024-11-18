@@ -5,7 +5,7 @@
     style="background-image: url(/img/bg-pse-right.png)"
   >
     <div
-      class="align-items-center d-none d-lg-flex"
+      class="align-items-center d-block"
       id="left-side"
       style="background-image: url(/img/bg-pse-left.png)"
     >
@@ -58,6 +58,15 @@
               mendapat persetujuan dari Menteri</li
             >
           </ul>
+        </div>
+      </div>
+      <div class="disclaimer-wrapper text-center">
+        <div class="text-center">
+          <a
+            style="color: #fff"
+            href="/faq"
+            >FAQ
+          </a>
         </div>
         <div id="footer"
           >Copyright © 2024 Kementerian Komunikasi dan Informatika RI</div
