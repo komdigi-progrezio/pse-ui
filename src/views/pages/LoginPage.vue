@@ -73,6 +73,13 @@
               <message :messages="errorValidations.password" />
             </div>
             <div class="col-sm-12 pb-3">
+              <div
+                class="g-recaptcha"
+                :data-sitekey="siteKey"
+                data-callback="onRecaptchaSuccess"
+              ></div>
+            </div>
+            <div class="col-sm-12 pb-3">
               <button
                 type="submit"
                 class="btn primary-color btn-lg"
@@ -133,6 +140,8 @@ export default {
   name: 'OfficialNew',
   data() {
     return {
+      siteKey: process.env.SITE_KEY_RECAPTCHA,
+      isRecaptchaVerified: false,
       forms: {
         username: null,
         password: null,
@@ -158,7 +167,14 @@ export default {
       isSubmit: false,
     }
   },
+  created() {
+    this.checkRecaptcha()
+  },
   methods: {
+    onRecaptchaSuccess(token) {
+      this.isRecaptchaVerified = true
+      console.log('reCAPTCHA success:', token)
+    },
     clearFormOfficial() {
       this.forms.username = ''
       this.forms.password = ''
@@ -270,6 +286,23 @@ export default {
         });
       });
     },
+    checkRecaptcha(){
+      axios
+        .post(
+          `https://www.google.com/recaptcha/api/siteverify`,
+          null,
+          {
+            params: {
+              secret: process.env.SECRET_KEY_RECAPTCHA,
+            },
+          }
+        )
+        .then((response) => response.data.success) 
+        .catch((error) => {
+          console.error('Error verifying reCAPTCHA:', error);
+          return false; 
+        });
+    }
   },
 }
 </script>
