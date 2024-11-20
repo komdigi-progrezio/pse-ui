@@ -142,7 +142,7 @@ export default {
   },
   data() {
     return {
-      siteKey: `${process.env.SITE_KEY_RECAPTCHA}`,
+      siteKey: `6LdkfoMqAAAAAAehlJOjz-8oYS-Grd7yU0QYNjyC`,
       isRecaptchaVerified: false,
       forms: {
         username: null,
@@ -187,7 +187,7 @@ export default {
       this.modal.otp.uniqueId = value.id
       this.modal.otp.data = value.nama
     },
-    async onSubmit() {
+    onSubmit() {
       const url = '/users/get-otp'
       if (!this.recaptchaResponse) {
         console.log("Mohon selesaikan reCAPTCHA!");
