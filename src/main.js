@@ -29,6 +29,7 @@ import CoreuiVueCharts from '@coreui/vue-chartjs'
 import { CChartBar, CChartLine } from '@coreui/vue-chartjs'
 import './fb'
 import './utils/validations'
+import VueRecaptcha from 'vue-recaptcha'
 
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
@@ -41,6 +42,7 @@ Vue.component('vue-toastr', VueToastr)
 //importing single component
 Vue.component('CChartBar', CChartBar)
 Vue.component('CChartLine', CChartLine)
+Vue.component('vue-recaptcha', VueRecaptcha)
 
 new Vue({
   el: '#app',

@@ -73,17 +73,19 @@
               <message :messages="errorValidations.password" />
             </div>
             <div class="col-sm-12 pb-3">
-              <div
-                class="g-recaptcha"
-                :data-sitekey="siteKey"
-                data-callback="onRecaptchaSuccess"
-              ></div>
+              <vue-recaptcha
+                ref="recaptcha"
+                :sitekey="siteKey"
+                @verify="onVerify"
+                @expired="onExpired"
+              ></vue-recaptcha>
             </div>
             <div class="col-sm-12 pb-3">
               <button
                 type="submit"
                 class="btn primary-color btn-lg"
-                @click="loginSubmit"
+                @click="onSubmit"
+                :disabled="!recaptchaResponse"
               >
                 Submit
               </button>
@@ -107,7 +109,7 @@
                     v-model="forms.otp"
                     type="text"
                     name="otp"
-                    placeholder="Masukan Alasan"
+                    placeholder="Masukan OTP anda"
                     class="form-control"
                     :class="{
                       'is-invalid': errorValidations.otp.length > 0,
@@ -120,11 +122,8 @@
             </div>
           </template>
           <template v-slot:footer>
-            <CButton color="dark" size="sm" class="m-2">
-              Tolak
-            </CButton>
             <CButton color="primary" size="sm" class="m-2">
-              Terima
+              Submit
             </CButton>
           </template>
         </CModal>
@@ -134,13 +133,16 @@
 </template>
 
 <script>
-import axios from 'axios'
+import VueRecaptcha from "vue-recaptcha";
 
 export default {
-  name: 'OfficialNew',
+  name: "LoginPage",
+  components: {
+    VueRecaptcha,
+  },
   data() {
     return {
-      siteKey: process.env.SITE_KEY_RECAPTCHA,
+      siteKey: `${process.env.SITE_KEY_RECAPTCHA}`,
       isRecaptchaVerified: false,
       forms: {
         username: null,
@@ -165,15 +167,15 @@ export default {
         },
       },
       isSubmit: false,
+      recaptchaResponse: null,
     }
   },
-  created() {
-    this.checkRecaptcha()
-  },
   methods: {
-    onRecaptchaSuccess(token) {
-      this.isRecaptchaVerified = true
-      console.log('reCAPTCHA success:', token)
+    onVerify(response) {
+      this.recaptchaResponse = response;
+    },
+    onExpired() {
+      this.recaptchaResponse = null;
     },
     clearFormOfficial() {
       this.forms.username = ''
@@ -184,6 +186,48 @@ export default {
       this.modal.otp.showModal = true
       this.modal.otp.uniqueId = value.id
       this.modal.otp.data = value.nama
+    },
+    async onSubmit() {
+      const url = '/users/get-otp'
+      if (!this.recaptchaResponse) {
+        console.log("Mohon selesaikan reCAPTCHA!");
+        return;
+      }
+      // Kirim data form ke server
+      const formPayload = {
+        ...this.formData,
+        recaptcha: this.recaptchaResponse,
+      }
+
+      this.$http({
+        method: 'post',
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+          },
+        data: JSON.stringify(formPayload),
+        body: JSON.stringify(formPayload),
+      })
+      .then((response) => {
+        this.$toastr.s(response.data.message, 'Pemberitahuan');
+        this.clearFormOfficial();
+        this.$nextTick(() => {
+          this.$refs.form.reset();
+        });
+        this.otpModal();
+      })
+      .catch((error) => {
+        if (error.response.status === 422) {
+          this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
+          this.errorValidations.username = error.response.data.errors.username || [];
+          this.errorValidations.password = error.response.data.errors.password || [];
+          this.errorValidations.otp = error.response.data.errors.otp || [];
+        } else if (error.response.status === 500) {
+          this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
+        } else {
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan');
+        }
+      });
     },
     loginSubmit() {
         this.isSubmit = true
@@ -286,25 +330,8 @@ export default {
         });
       });
     },
-    checkRecaptcha(){
-      axios
-        .post(
-          `https://www.google.com/recaptcha/api/siteverify`,
-          null,
-          {
-            params: {
-              secret: process.env.SECRET_KEY_RECAPTCHA,
-            },
-          }
-        )
-        .then((response) => response.data.success) 
-        .catch((error) => {
-          console.error('Error verifying reCAPTCHA:', error);
-          return false; 
-        });
-    }
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -326,5 +353,9 @@ export default {
 }
 #register{
   min-height: 100vh;
+}
+.btn:disabled {
+  background-color: #ccc;
+  cursor: default;
 }
 </style>
