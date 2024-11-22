@@ -298,7 +298,7 @@
               <p>Yth {{ modal.confirm.user_name }}</p>
               <p>Berikut ini merupakan informasi dari Sistem Elektronik yang Anda daftarkan. <br/><br/>
                 <b>Nama Sistem Elektronik:</b>  {{ modal.confirm.nama_internal }} <br/>
-                <b>Tanggal Daftar:</b>  {{ formatDate(modal.confirm.created_at) }} <br/>
+                <b>Tanggal Daftar:</b>  {{ createdAtformatDate(modal.confirm.created_at) }} <br/>
                 <b>Status:</b>  Menunggu Diverifikasi <br /><br />
                 Best Regards, <br />
                 Webmaster PSE
@@ -400,6 +400,14 @@ export default {
         return moment(date).format('DD-MM-YYYY HH:mm:ss')
       }else{
         return moment('01-01-2000 00:00:00').format('DD-MM-YYYY HH:mm:ss')
+      }
+
+    },
+    createdAtformatDate: function (date) {
+      if(date){
+        return moment(date).format('DD-MM-YYYY HH:mm:ss')
+      }else{
+        return moment().format('DD-MM-YYYY HH:mm:ss')
       }
 
     },
