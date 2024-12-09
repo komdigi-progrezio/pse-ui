@@ -84,7 +84,7 @@
               <button
                 type="submit"
                 class="btn primary-color btn-lg"
-                @click="onSubmit"
+                @click="loginSubmit"
                 :disabled="!recaptchaResponse"
               >
                 Submit
@@ -106,7 +106,6 @@
                     <strong>{{ modal.otp.data }}</strong>?
                   </label>
                   <input
-                    v-model="forms.otp"
                     type="text"
                     name="otp"
                     placeholder="Masukan OTP anda"
@@ -145,9 +144,9 @@ export default {
       siteKey: `6LdkfoMqAAAAAAehlJOjz-8oYS-Grd7yU0QYNjyC`,
       isRecaptchaVerified: false,
       forms: {
-        username: null,
-        password: null,
-        otp: null,
+        username: '',
+        password: '',
+        recaptcha: '',
       },
       errorValidations: {
         username: [],
@@ -180,22 +179,22 @@ export default {
     clearFormOfficial() {
       this.forms.username = ''
       this.forms.password = ''
-      this.forms.otp = ''
     },
     otpModal(value) {
       this.modal.otp.showModal = true
-      this.modal.otp.uniqueId = value.id
-      this.modal.otp.data = value.nama
+      // this.modal.otp.uniqueId = value.id
+      // this.modal.otp.data = value.nama
     },
     onSubmit() {
-      const url = '/users/get-otp'
+      const url = '/login-activity'
       if (!this.recaptchaResponse) {
         console.log("Mohon selesaikan reCAPTCHA!");
         return;
       }
       // Kirim data form ke server
       const formPayload = {
-        ...this.formData,
+        username: this.forms.username,
+        password: this.forms.password,
         recaptcha: this.recaptchaResponse,
       }
 
@@ -206,32 +205,32 @@ export default {
             "Content-Type": "application/json",
           },
         data: JSON.stringify(formPayload),
-        body: JSON.stringify(formPayload),
       })
       .then((response) => {
-        this.$toastr.s(response.data.message, 'Pemberitahuan');
-        this.clearFormOfficial();
+        // this.$toastr.s(response.data.message, 'Pemberitahuan');
+        // this.clearFormOfficial();
+        console.log('ngecekRESPONSE === ',response)
         this.$nextTick(() => {
           this.$refs.form.reset();
         });
-        this.otpModal();
+        if(response.data.status === 200){
+          this.otpModal();
+        }
       })
       .catch((error) => {
-        if (error.response.status === 422) {
-          this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
-          this.errorValidations.username = error.response.data.errors.username || [];
-          this.errorValidations.password = error.response.data.errors.password || [];
-          this.errorValidations.otp = error.response.data.errors.otp || [];
-        } else if (error.response.status === 500) {
-          this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
-        } else {
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan');
-        }
+        console.log('errorREsponse === ',error)
+        // if (error.response.data.status === 422) {
+        //   this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
+        // } else if (error.response.data.status === 500) {
+        //   this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
+        // } else {
+        //   this.$toastr.e(error.response.data.message, 'Pemberitahuan');
+        // }
       });
     },
     loginSubmit() {
         this.isSubmit = true
-        const url = '/users/get-otp'
+        const url = '/login-activity/get-access-token'
         const formData = new FormData()
         formData.append('_method', 'POST')
         const forMapData = Object.entries(this.forms)
@@ -258,12 +257,18 @@ export default {
           data: formData,
         })
         .then((response) => {
+          console.log('RESP === ',response)
           this.$toastr.s(response.data.message, 'Pemberitahuan');
           this.clearFormOfficial();
           this.$nextTick(() => {
             this.$refs.form.reset();
           });
-          this.otpModal();
+          if(response.data.data.access_token){
+            localStorage.setItem('token', response.data.data.access_token)
+            localStorage.setItem('refresh_token', response.data.data.refresh_token)
+            this.otpModal();
+            this.$router.push('/admin/dashboard')
+          }
         })
         .catch((error) => {
           if (error.response.status === 422) {
