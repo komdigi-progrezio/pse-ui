@@ -195,6 +195,21 @@
                 </select>
               </div>
             </CCol>
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Progress</label>
+                <select v-model="search.progres" class="form-control">
+                  <option value="">Pilih Progress</option>
+                  <option
+                    v-for="(value, index) in progress"
+                    :value="value.id"
+                    :key="`progress-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+              </div>
+            </CCol>
             <CCol sm="12" md="6" lg="6">
               <div class="form-group">
                 <label for="bulan">Bulan</label>
@@ -454,14 +469,28 @@ export default {
       users: [],
       agency: [],
       workUnit: [],
+      progress: [
+        {
+          id: 1,
+          name: '50%',
+        },
+        {
+          id: 2,
+          name: '60%-90%',
+        },
+        {
+          id: 3,
+          name: '100%',
+        },
+      ],
       status: [
         {
           id: 0,
-          name: 'Tidak Dihapus',
+          name: 'Belum Terdaftar',
         },
         {
           id: 1,
-          name: 'Dihapus',
+          name: 'Terdaftar',
         },
       ],
       month: [
@@ -596,6 +625,7 @@ export default {
         this.search.agency !== '' ||
         this.search.workunit !== '' ||
         this.search.status !== '' ||
+        this.search.progres !== '' ||
         this.search.bulan !== 'all' ||
         this.search.tahun !== 'current'
       ) {
@@ -638,6 +668,7 @@ export default {
       this.search.agency = ''
       this.search.workunit = ''
       this.search.status = ''
+      this.search.progres = ''
     },
     destroy(value) {
       this.modal.showModal = true
@@ -735,6 +766,7 @@ export default {
             agency: this.search.agency,
             workunit: this.search.workunit,
             status: this.search.status,
+            progres: this.search.progres,
             bulan: this.search.bulan,
             tahun: this.search.tahun,
           },
@@ -794,6 +826,7 @@ export default {
             agency: this.search.agency,
             workunit: this.search.workunit,
             status: this.search.status,
+            progres: this.search.progres,
             bulan: this.search.bulan,
             tahun: this.search.tahun,
           },
