@@ -316,6 +316,126 @@
               </CCol>
               <CCol sm="12">
                 <div class="form-group">
+                  <label for="alamat">Alamat</label>
+                  <ValidationProvider
+                    name="Alamat"
+                    rules="required|alpha_spaces"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.alamat"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan Alamat"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.alamat.length > 0,
+                      }"
+                      @blur="errorValidations.alamat = []"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                  <message :messages="errorValidations.alamat" />
+                </div>
+              </CCol>
+              <CCol sm="12">
+                <div class="form-group">
+                  <label for="provinsi">Provinsi</label>
+                  <ValidationProvider
+                    name="provinsi"
+                    rules="required"
+                    v-slot="{ errors }"
+                    mode="aggressive"
+                  >
+                    <select
+                      v-model="forms.propinsi"
+                      class="form-control"
+                      :class="{
+                        'is-invalid': errorValidations.nama_provinsi.length > 0,
+                      }"
+                      @change="getDistrictOnChange"
+                      @blur="errorValidations.nama_provinsi = []"
+                      required
+                      placeholder="profile.nama_provinsi"
+                    >
+                      <option value="" selected="selected">
+                        Pilih Provinsi
+                      </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.provinsi"
+                        :key="`provivnsi-${index}`"
+                      >
+                        {{ value.nama }}
+                      </option>
+                    </select>
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                </div>
+              </CCol>
+              <CCol sm="12">
+                <div class="form-group">
+                  <label for="kota">Kota</label>
+                  <ValidationProvider
+                    name="kota"
+                    rules="required"
+                    v-slot="{ errors }"
+                    mode="aggressive"
+                  >
+                    <select
+                      v-model="forms.kota"
+                      class="form-control"
+                      :class="{
+                        'is-invalid': errorValidations.nama_kota.length > 0,
+                      }"
+                      @blur="errorValidations.nama_kota = []"
+                      required
+                    >
+                      <option value="" selected="selected"> Pilih Kota </option>
+                      <option
+                        :value="value.id"
+                        v-for="(value, index) in dataSelect.kota"
+                        :key="`kota-${index}`"
+                      >
+                        {{ value.nama }}
+                      </option>
+                    </select>
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                </div>
+              </CCol>
+              <CCol sm="12">
+                <div class="form-group">
+                  <label for="kode_pos">Kode pos</label>
+                  <ValidationProvider
+                    name="kode_pos"
+                    v-slot="{ errors }"
+                  >
+                    <input
+                      v-model="forms.kode_pos"
+                      type="text"
+                      class="form-control"
+                      placeholder="Masukan kode pos"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0,
+                      }"
+                    />
+                    <div v-if="errors.length > 0" class="invalid-feedback">
+                      {{ errors[0] }}
+                    </div>
+                  </ValidationProvider>
+                </div>
+              </CCol>
+              <CCol sm="12">
+                <div class="form-group">
                   <label for="dokumen">Dokumen</label>
                   <ValidationProvider
                     name="Dokumen"
@@ -374,6 +494,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import moment from 'moment'
+
 export default {
   name: 'AccountProfile',
   data() {
@@ -388,7 +511,9 @@ export default {
         instansi_induk_text: null,
         kode_pos: null,
         dokumen: null,
+        id_provinsi: null,
         nama_provinsi: null,
+        id_kota: null,
         nama_kota: null,
         created_at: null,
         modified_at: null,
@@ -402,7 +527,11 @@ export default {
         jabatan: null,
         no_telepon: null,
         no_hp: null,
+        alamat: null,
+        propinsi: null,
+        kota: null,
         dokumen: null,
+        kode_pos: null,
       },
       label: {
         dokumen: {
@@ -427,7 +556,14 @@ export default {
         jabatan: [],
         no_telepon: [],
         no_hp: [],
+        alamat: [],
+        nama_provinsi: [],
+        nama_kota: [],
         dokumen: [],
+      },
+      dataSelect: {
+        provinsi: [],
+        kota: [],
       },
     }
   },
@@ -442,8 +578,90 @@ export default {
   },
   created() {
     this.getProfile()
+    this.getProvince()
+    this.getProvinceOnChange()
+    this.getDistrictOnChange()
   },
   methods: {
+    formatDate(date) {
+      if(date){
+        return moment(date).format('DD-MM-YYYY HH:mm:ss')
+      }
+    },
+    getProvince() {
+      axios
+        .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi`)
+        .then((response) => {
+          // this.dataSelect.provinsi = response.data.data
+
+          response.data.data.forEach((provinsi) => {
+            if (provinsi.id ==  this.profile.id_provinsi) {
+              this.profile.nama_provinsi = provinsi.nama
+            }
+          });
+          this.getDistrict()
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    getProvinceOnChange() {
+      axios
+        .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi`)
+        .then((response) => {
+          this.dataSelect.provinsi = response.data.data    
+        })
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+          } else {
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          }
+        })
+    },
+    getDistrict() {
+      axios
+        .get(
+          `${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.profile.id_provinsi}/kota`
+        )
+        .then((response) => {
+          // this.forms.nama_kota = ''
+
+          response.data.data.forEach((kota) => {
+            if (kota.id ==  this.profile.id_kota) {
+              this.profile.nama_kota = kota.nama
+            }
+              console.log(`Kota ditemukan: ${kota.id}`); 
+              console.log(`Kota id ditemukan: ${ this.profile.nama_kota}`); 
+          });
+
+        })
+        .catch((error) => {
+          console.log(`Error kota: ${error}`)
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        })
+    },
+    getDistrictOnChange() {
+      this.dataSelect.kota = []
+      this.forms.kota = ''
+      
+      if (this.forms.propinsi) {
+        axios
+          .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.forms.propinsi}/kota`)
+          .then((response) => {
+            this.dataSelect.kota = response.data.data
+          })
+          .catch((error) => {
+            console.log(`Error kota: ${error}`);
+            this.$toastr.e(error.response.data.message, 'Pemberitahuan');
+          });
+      }
+    },
+
     onFilePicked(event) {
       const eventTarget = event.target
       if (eventTarget.files[0].type === 'application/pdf') {
@@ -464,13 +682,12 @@ export default {
           this.profile.no_telepon = response.data.data.no_telepon
           this.profile.satuan_kerja = response.data.data.satuan_kerja
           this.profile.alamat = response.data.data.alamat
-          this.profile.instansi_induk_text =
-            response.data.data.instansi_induk_text
+          this.profile.instansi_induk_text = response.data.data.instansi_induk_text
           this.profile.kode_pos = response.data.data.kode_pos
           this.profile.dokumen = response.data.data.dokumen
-          this.profile.nama_provinsi = response.data.data.nama_provinsi
-          this.profile.nama_kota = response.data.data.nama_kota
-          this.profile.created_at = response.data.data.created_at
+          this.profile.id_provinsi = response.data.data.propinsi
+          this.profile.id_kota = response.data.data.kota
+          this.profile.created_at = this.formatDate(response.data.data.created_at)
           this.profile.modified_at = response.data.data.modified_at
           this.profile.status = response.data.data.status
           this.profile.url = response.data.data.url_dokumen
@@ -481,6 +698,10 @@ export default {
           this.forms.jabatan = response.data.data.jabatan
           this.forms.no_telepon = response.data.data.no_telepon
           this.forms.no_hp = response.data.data.no_hp
+          this.forms.alamat = response.data.data.alamat
+          this.forms.kode_pos = response.data.data.kode_pos
+          // this.forms.propinsi = response.data.data.nama_provinsi
+          // this.forms.nama_kota = response.data.data.nama_kota
 
           this.label.dokumen.old_name = response.data.data.dokumen
           this.label.dokumen.url = response.data.data.url_dokumen
@@ -515,6 +736,9 @@ export default {
       this.errorValidations.no_telepon = []
       this.errorValidations.dokumen = []
       this.errorValidations.no_hp = []
+      this.errorValidations.alamat = []
+      this.errorValidations.nama_provinsi = []
+      this.errorValidations.nama_kota = []
 
       this.$http({
         method: 'patch',
@@ -528,6 +752,7 @@ export default {
           })
           this.closeModalPostPut()
           this.getProfile()
+          window.location.reload()
         })
         .catch((error) => {
           if (error.response.status === 422) {
