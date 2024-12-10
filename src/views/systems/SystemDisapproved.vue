@@ -108,6 +108,7 @@
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Nama User</th>
                   <th>Nama Sistem Elektronik</th>
                   <th>URL</th>
                   <th>Tanggal Update</th>
@@ -127,6 +128,9 @@
                         1
                       }}
                     </th>
+                    <td
+                      ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
+                    >
                     <td>
                       <span class="mobile-only mr-1"
                         >Nama Sistem Elektronik:
@@ -163,6 +167,33 @@
                           <span class="mobile-only ml-1"
                             >Setujui Sistem Elektronik</span
                           >
+                        </CButton>
+                        <CButton
+                          color="primary"
+                          size="sm"
+                          class="ml-2"
+                          v-c-tooltip="{
+                            content: 'Detail Sistem Elektronik',
+                            placement: 'bottom',
+                          }"
+                          :to="`/admin/systems/${item.id}`"
+                        >
+                          <CIcon name="cil-description" />
+                          <span class="mobile-only ml-1"
+                            >Detail Sistem Elektronik
+                          </span>
+                        </CButton>
+                        <CButton
+                          color="danger"
+                          size="sm"
+                          class="ml-2"
+                          v-c-tooltip="{
+                            content: 'Hapus Sistem Elektronik',
+                            placement: 'bottom',
+                          }"
+                          @click="destroy(item)"
+                        >
+                          <CIcon name="cil-trash" />
                         </CButton>
                       </td>
                     </template>

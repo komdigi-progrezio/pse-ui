@@ -90,6 +90,21 @@
                 />
               </div>
             </CCol>
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Progress</label>
+                <select v-model="search.progres" class="form-control">
+                  <option value="">Pilih Progress</option>
+                  <option
+                    v-for="(value, index) in progress"
+                    :value="value.id"
+                    :key="`progress-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+              </div>
+            </CCol>
           </CRow>
         </template>
       </CCardBody>
@@ -129,6 +144,7 @@
               <thead>
                 <tr>
                   <th>No</th>
+                  <th>Nama User</th>
                   <th v-if="!isSubPejabat">Nama Penyelenggara</th>
                   <th>Nama Sistem Elektronik</th>
                   <th>Tanggal Update</th>
@@ -147,6 +163,9 @@
                         1
                       }}
                     </th>
+                    <td
+                      ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
+                    >
                     <td v-if="!isSubPejabat">{{ item.organizer_profile }}</td>
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
@@ -359,6 +378,20 @@ export default {
         last_page: 10,
         per_page: null,
       },
+      progress: [
+        {
+          id: 1,
+          name: '50%',
+        },
+        {
+          id: 2,
+          name: '60%-90%',
+        },
+        {
+          id: 3,
+          name: '100%',
+        },
+      ],
     }
   },
   computed: {
@@ -507,6 +540,7 @@ export default {
     clearFilter() {
       this.search.nama_eksternal = null
       this.search.nama_instansi = null
+      this.search.progres = ''
     },
     getData() {
       this.spinner = true
@@ -517,6 +551,7 @@ export default {
             filter: 'nama_eksternal',
             q: this.search.nama_eksternal,
             agency: this.search.nama_instansi,
+            progres: this.search.progres
           },
         })
         .then((response) => {
@@ -544,6 +579,7 @@ export default {
             filter: 'nama_eksternal',
             q: this.search.nama_eksternal,
             agency: this.search.nama_instansi,
+            progres: this.search.progres,
           },
         })
         .then((response) => {
