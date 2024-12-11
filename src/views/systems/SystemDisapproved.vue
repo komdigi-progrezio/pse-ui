@@ -128,7 +128,7 @@
                         1
                       }}
                     </th>
-                    <td v-if="item.account.nama"
+                    <td v-if="item.account"
                       ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
                     >
                     <td v-else> - </td>
