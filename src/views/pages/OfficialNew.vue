@@ -1303,15 +1303,30 @@ export default {
           }
         })
     },
-    onFilePickedDocument() {
-      if (event.target.files[0].type === 'application/pdf') {
-        this.forms.dokumen = event.target.files[0]
-        this.filename = event.target.files[0].name
+    onFilePickedDocument(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        if (file.type === 'application/pdf') {
+          if (file.size <= 3 * 1024 * 1024) { // Validasi ukuran maksimal 3 MB
+            this.forms.dokumen = file;
+            this.filename = file.name;
+          } else {
+            this.$toastr.e('Ukuran file tidak boleh lebih dari 3 MB', 'Pemberitahuan')
+            this.forms.dokumen = null;
+            this.filename = 'Choose File';
+          }
+        } else {
+          this.$toastr.e('Hanya file PDF yang diperbolehkan', 'Pemberitahuan')
+          this.forms.dokumen = null;
+          this.filename = 'Choose File';
+        }
       } else {
-        this.forms.dokumen = null
-        this.filename = 'Choose File'
+        this.$toastr.e('Tidak ada file yang dipilih', 'Pemberitahuan')
+        this.forms.dokumen = null;
+        this.filename = 'Choose File';
       }
-    },
+    }
   },
 }
 </script>
