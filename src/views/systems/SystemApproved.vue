@@ -163,9 +163,10 @@
                         1
                       }}
                     </th>
-                    <td
+                    <td  v-if="item.account.nama"
                       ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
                     >
+                    <td v-else> - </td>
                     <td v-if="!isSubPejabat">{{ item.organizer_profile }}</td>
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
