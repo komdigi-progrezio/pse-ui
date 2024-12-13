@@ -20,7 +20,7 @@
           >Login</h3
         >
         <div class="col-lg-12">
-          <ValidationObserver ref="form">
+          <ValidationObserver v-slot="{ invalid }" ref="form">
             <div class="col-sm-12 pb-3">
               <ValidationProvider
                 name="Username atau email"
@@ -85,7 +85,7 @@
                 type="submit"
                 class="btn primary-color btn-lg"
                 @click="loginSubmit"
-                :disabled="!recaptchaResponse"
+                :disabled="!recaptchaResponse && invalid"
               >
                 Submit
               </button>
@@ -96,6 +96,9 @@
           :title="modal.otp.title"
           :color="modal.otp.color"
           :show.sync="modal.otp.showModal"
+          :keyboard="false"
+          @click.self.stop
+          class="modal-otp"
         >
           <template v-slot:body-wrapper>
             <div class="modal-body">
@@ -106,6 +109,7 @@
                     <strong>{{ modal.otp.data }}</strong>?
                   </label>
                   <input
+                    v-model="forms.otp"
                     type="text"
                     name="otp"
                     placeholder="Masukan OTP anda"
@@ -121,9 +125,13 @@
             </div>
           </template>
           <template v-slot:footer>
-            <CButton color="primary" size="sm" class="m-2">
+            <button
+              type="submit"
+              class="btn primary-color btn-sm"
+              @click="handleOtp"
+            >
               Submit
-            </CButton>
+            </button>
           </template>
         </CModal>
       </div>
@@ -147,6 +155,7 @@ export default {
         username: '',
         password: '',
         recaptcha: '',
+        otp: '',
       },
       errorValidations: {
         username: [],
@@ -180,22 +189,76 @@ export default {
       this.forms.username = ''
       this.forms.password = ''
     },
-    otpModal(value) {
+    otpModal() {
       this.modal.otp.showModal = true
       // this.modal.otp.uniqueId = value.id
       // this.modal.otp.data = value.nama
     },
-    onSubmit() {
-      const url = '/login-activity'
-      if (!this.recaptchaResponse) {
-        console.log("Mohon selesaikan reCAPTCHA!");
-        return;
-      }
-      // Kirim data form ke server
-      const formPayload = {
-        username: this.forms.username,
-        password: this.forms.password,
-        recaptcha: this.recaptchaResponse,
+    loginSubmit() {
+      this.$refs.form.validate().then((success) => {
+        const url = '/login-activity/get-access-token'
+        if (!success) {
+          return
+        }
+
+        if (!this.recaptchaResponse) {
+          this.$toastr.e('Mohon selesaikan reCAPTCHA!', 'Pemberitahuan');
+          return;
+        }
+
+        const formData = {
+          username: this.forms.username,
+          password: this.forms.password,
+          recaptcha: this.recaptchaResponse,
+        }
+
+        console.log('logformDataLoginSubmit :', formData)
+        // Reset validasi error
+        this.errorValidations.username = [];
+        this.errorValidations.password = [];
+
+        this.$http({
+          method: 'post',
+          url: url,
+          headers: {
+              "Content-Type": "application/json",
+            },
+          data: JSON.stringify(formData),
+        })
+        .then((response) => {
+          //console.log('resLoginSubmit => ', response.data.status)
+          //this.$toastr.s(response.data.message, 'Pemberitahuan');
+          this.clearFormOfficial();
+          this.$nextTick(() => {
+            this.$refs.form.reset();
+          });
+          if(response.data.status == 500){
+            this.$toastr.e(response.data.message, 'Pemberitahuan');
+          }else{
+            this.$toastr.s(response.data.message, 'Pemberitahuan');
+            localStorage.setItem('token', response.data.data.access_token)
+            localStorage.setItem('refresh_token', response.data.data.refresh_token)
+            this.otpModal();
+          }
+        })
+        .catch((error) => {
+          console.log('errLoginSubmit => ', error)
+          if (error.response.data.data.status === 422) {
+            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
+          } else if (error.response.data.status === 500) {
+            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
+          } else {
+            console.log('errLoginSubmit => ', error)
+            this.$toastr.e('Periksa kembali username dan password Anda', 'Pemberitahuan');
+          }
+        });
+      })
+    },
+    handleOtp() {
+      const url = '/login-activity/otp-verify'
+        
+      const formData = {
+        otp: this.forms.otp,
       }
 
       this.$http({
@@ -204,135 +267,25 @@ export default {
         headers: {
             "Content-Type": "application/json",
           },
-        data: JSON.stringify(formPayload),
+        data: JSON.stringify(formData),
       })
       .then((response) => {
-        // this.$toastr.s(response.data.message, 'Pemberitahuan');
-        // this.clearFormOfficial();
-        console.log('ngecekRESPONSE === ',response)
+        this.$store.state.textLoading
+        this.$toastr.s(response.data.message, 'Pemberitahuan');
+        this.clearFormOfficial();
         this.$nextTick(() => {
           this.$refs.form.reset();
         });
-        if(response.data.status === 200){
-          this.otpModal();
-        }
+        this.$router.push('/admin/dashboard')
       })
       .catch((error) => {
-        console.log('errorREsponse === ',error)
-        // if (error.response.data.status === 422) {
-        //   this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
-        // } else if (error.response.data.status === 500) {
-        //   this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
-        // } else {
-        //   this.$toastr.e(error.response.data.message, 'Pemberitahuan');
-        // }
-      });
-    },
-    loginSubmit() {
-        this.isSubmit = true
-        const url = '/login-activity/get-access-token'
-        const formData = new FormData()
-        formData.append('_method', 'POST')
-        const forMapData = Object.entries(this.forms)
-        forMapData.forEach((value) => {
-          if (Array.isArray(value[1])) {
-            for (let index = 0; index < value[1].length; index++) {
-              formData.append(`${value[0]}[${index}]`, value[1][index])
-            }
-          } else {
-            formData.append(value[0], value[1] === null ? [] : value[1])
-          }
-        })
-
-        console.log('cekFormData ====== ', formData)
-        // Reset validasi error
-        this.errorValidations.username = [];
-        this.errorValidations.password = [];
-        // this.errorValidations.otp = [];
-
-        // Mengirim request HTTP POST
-        this.$http({
-          method: 'post',
-          url: url,
-          data: formData,
-        })
-        .then((response) => {
-          console.log('RESP === ',response)
-          this.$toastr.s(response.data.message, 'Pemberitahuan');
-          this.clearFormOfficial();
-          this.$nextTick(() => {
-            this.$refs.form.reset();
-          });
-          if(response.data.data.access_token){
-            localStorage.setItem('token', response.data.data.access_token)
-            localStorage.setItem('refresh_token', response.data.data.refresh_token)
-            this.otpModal();
-            this.$router.push('/admin/dashboard')
-          }
-        })
-        .catch((error) => {
-          if (error.response.status === 422) {
-            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
-            this.errorValidations.username = error.response.data.errors.username || [];
-            this.errorValidations.password = error.response.data.errors.password || [];
-            this.errorValidations.otp = error.response.data.errors.otp || [];
-          } else if (error.response.status === 500) {
-            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
-          } else {
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan');
-          }
-        });
-    },
-    handleSubmit() {
-      this.$refs.form.validate().then((success) => {
-        if (!success) {
-          return;
+        if (error.response.status === 422) {
+          this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
+        } else if (error.response.status === 500) {
+          this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
+        } else {
+          console.log('errHandleOtp => ', error)
         }
-
-        // URL API
-        const url = 'https://api-splp.layanan.go.id/api-sso/1.0/realms/SPBE/protocol/openid-connect/token';
-
-        // Membuat data dengan format x-www-form-urlencoded
-        const params = new URLSearchParams();
-        params.append('client_id', 'testing-sso');
-        params.append('client_secret', 'c0baeb95-a154-4225-a2fc-cfaaf3d52075');
-        params.append('grant_type', 'password');
-        params.append('username', 'testing-sso-10');
-        params.append('password', 'password');
-
-        // Reset validasi error
-        this.errorValidations.username = [];
-        this.errorValidations.password = [];
-        this.errorValidations.otp = [];
-
-        // Mengirim request HTTP POST
-        this.$http({
-          method: 'post',
-          url: url,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          data: params,
-        })
-        .then((response) => {
-          this.$toastr.s(response.data.message, 'Pemberitahuan');
-          this.clearFormOfficial();
-          this.$nextTick(() => {
-            this.$refs.form.reset();
-          });
-        })
-        .catch((error) => {
-          if (error.response.status === 422) {
-            this.$toastr.e('Silahkan Cek Form Anda Kembali', 'Pemberitahuan');
-            this.errorValidations.username = error.response.data.errors.username || [];
-            this.errorValidations.password = error.response.data.errors.password || [];
-            this.errorValidations.otp = error.response.data.errors.otp || [];
-          } else if (error.response.status === 500) {
-            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan');
-          } else {
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan');
-          }
-        });
       });
     },
   },
@@ -362,5 +315,8 @@ export default {
 .btn:disabled {
   background-color: #ccc;
   cursor: default;
+}
+.modal-otp {
+  pointer-events: none;
 }
 </style>

@@ -250,31 +250,154 @@ function configRoutes() {
   ]
 }
 
+// createRouter.beforeEach((to, from, next) => {
+//   const initOptions = {
+//     url: process.env.VUE_APP_KEYCLOAK_URL,
+//     realm: process.env.VUE_APP_KEYCLOAK_REALM,
+//     clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
+//     onLoad: 'login-required',
+//   }
+//   const keycloak = Keycloak(initOptions)
+//   if (to.meta.requiresAuth) {
+//     if (!store.state.auth.isLogin) {
+//       keycloak
+//         .init({
+//           onLoad: initOptions.onLoad,
+//           checkLoginIframe: true,
+//           pkceMethod: 'S256',
+//           // redirectUri: 'http://localhost:8082/check-sso',
+//         })
+//         .then((authenticated) => {
+//           if (!authenticated) {
+//             window.location.reload()
+//           }
+//           localStorage.setItem('token', keycloak.token)
+//           localStorage.setItem('refresh_token', keycloak.refreshToken)
+//           store.dispatch('auth/fetchAuth').then((response) => {
+//             store.dispatch('dispatchLogin', response.data.data).then(() => {
+//               try {
+//                 if (firebase.messaging.isSupported()) {
+//                   const messaging = firebase.messaging()
+//                   Notification.requestPermission().then(() => {
+//                     messaging
+//                       .getToken({
+//                         vapidKey:
+//                           'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                       })
+//                       .then((currentToken) => {
+//                         $axiosApi
+//                           .post('/users/notification-token', {
+//                             token: currentToken,
+//                             type: 'web',
+//                           })
+//                           .then(() => {
+//                             next()
+//                           })
+//                           .catch(() => {
+//                             localStorage.removeItem('token')
+//                             localStorage.removeItem('refresh_token')
+//                             localStorage.removeItem('user')
+//                             store.dispatch('dispatchDisableLoading')
+//                           })
+//                       })
+//                       .catch(() => {
+//                         next()
+//                       })
+//                   })
+//                 }
+//               } catch (error) {
+//                 alert(error)
+//               }
+//             })
+//           })
+//         })
+//         .catch(() => {
+//           alert('Server Bermasalah')
+//         })
+//     } else {
+//       next()
+//     }
+//   } else {
+//     if (to.path === '/register') {
+//       const token = localStorage.getItem('token')
+//       if (token !== null && typeof token !== 'undefined') {
+//         next({ path: '/admin/dashboard' })
+//       } else {
+//         next()
+//       }
+//     } else if (to.path === '/sealid/:id') {
+//       next()
+//     } else {
+//       keycloak
+//         .init({
+//           onLoad: 'check-sso',
+//           checkLoginIframe: true,
+//           pkceMethod: 'S256',
+//         })
+//         .then((response) => {
+//           if (response) {
+//             localStorage.setItem('token', keycloak.token)
+//             localStorage.setItem('refresh_token', keycloak.refreshToken)
+//             store.dispatch('auth/fetchAuth').then((response) => {
+//               store
+//                 .dispatch('dispatchLogin', response.data.data)
+//                 .then(() => {
+//                   try {
+//                     if (firebase.messaging.isSupported()) {
+//                       const messaging = firebase.messaging()
+//                       Notification.requestPermission().then(() => {
+//                         messaging
+//                           .getToken({
+//                             vapidKey:
+//                               'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                           })
+//                           .then((currentToken) => {
+//                             $axiosApi
+//                               .post('/users/notification-token', {
+//                                 token: currentToken,
+//                                 type: 'web',
+//                               })
+//                               .then(() => {
+//                                 next({ path: '/admin/dashboard' })
+//                               })
+//                               .catch(() => {
+//                                 localStorage.removeItem('token')
+//                                 localStorage.removeItem('refresh_token')
+//                                 localStorage.removeItem('user')
+//                                 store.dispatch('dispatchDisableLoading')
+//                               })
+//                           })
+//                           .catch(() => {
+//                             next({ path: '/admin/dashboard' })
+//                           })
+//                       })
+//                     }
+//                   } catch (error) {
+//                     alert(error)
+//                   }
+//                 })
+//                 .catch(() => {
+//                   alert('Server Bermasalah')
+//                 })
+//             })
+//           } else {
+//             next()
+//           }
+//         })
+//     }
+//   }
+// })
+
 createRouter.beforeEach((to, from, next) => {
-  const initOptions = {
-    url: process.env.VUE_APP_KEYCLOAK_URL,
-    realm: process.env.VUE_APP_KEYCLOAK_REALM,
-    clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
-    onLoad: 'login-required',
-  }
-  const keycloak = Keycloak(initOptions)
+
   if (to.meta.requiresAuth) {
     if (!store.state.auth.isLogin) {
-      keycloak
-        .init({
-          onLoad: initOptions.onLoad,
-          checkLoginIframe: true,
-          pkceMethod: 'S256',
-          // redirectUri: 'http://localhost:8082/check-sso',
-        })
-        .then((authenticated) => {
-          if (!authenticated) {
-            window.location.reload()
-          }
-          localStorage.setItem('token', keycloak.token)
-          localStorage.setItem('refresh_token', keycloak.refreshToken)
-          store.dispatch('auth/fetchAuth').then((response) => {
-            store.dispatch('dispatchLogin', response.data.data).then(() => {
+      const token = localStorage.getItem('token')
+      if (token !== null && typeof token !== 'undefined') {
+        store.dispatch('auth/fetchAuth').then((response) => {
+          store
+            .dispatch('dispatchLogin', response.data.data)
+            .then(() => {
               try {
                 if (firebase.messaging.isSupported()) {
                   const messaging = firebase.messaging()
@@ -291,7 +414,7 @@ createRouter.beforeEach((to, from, next) => {
                             type: 'web',
                           })
                           .then(() => {
-                            next()
+                            next({ path: '/admin/dashboard' })
                           })
                           .catch(() => {
                             localStorage.removeItem('token')
@@ -301,7 +424,7 @@ createRouter.beforeEach((to, from, next) => {
                           })
                       })
                       .catch(() => {
-                        next()
+                        next({ path: '/admin/dashboard' })
                       })
                   })
                 }
@@ -309,81 +432,117 @@ createRouter.beforeEach((to, from, next) => {
                 alert(error)
               }
             })
-          })
+            .catch(() => {
+              alert('Server Bermasalah')
+            })
         })
-        .catch(() => {
-          alert('Server Bermasalah')
-        })
+      } else {
+        console.log('Access denied, login before please')
+        next({ path: '/' })
+      }
     } else {
+      console.log('isLogin is true, continue please')
       next()
     }
   } else {
     if (to.path === '/register') {
       const token = localStorage.getItem('token')
       if (token !== null && typeof token !== 'undefined') {
-        next({ path: '/admin/dashboard' })
+        store.dispatch('auth/fetchAuth').then((response) => {
+          store
+            .dispatch('dispatchLogin', response.data.data)
+            .then(() => {
+              try {
+                if (firebase.messaging.isSupported()) {
+                  const messaging = firebase.messaging()
+                  Notification.requestPermission().then(() => {
+                    messaging
+                      .getToken({
+                        vapidKey:
+                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+                      })
+                      .then((currentToken) => {
+                        $axiosApi
+                          .post('/users/notification-token', {
+                            token: currentToken,
+                            type: 'web',
+                          })
+                          .then(() => {
+                            next({ path: '/admin/dashboard' })
+                          })
+                          .catch(() => {
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('refresh_token')
+                            localStorage.removeItem('user')
+                            store.dispatch('dispatchDisableLoading')
+                          })
+                      })
+                      .catch(() => {
+                        next({ path: '/admin/dashboard' })
+                      })
+                  })
+                }
+              } catch (error) {
+                alert(error)
+              }
+            })
+            .catch(() => {
+              alert('Server Bermasalah')
+            })
+        })
       } else {
         next()
       }
     } else if (to.path === '/sealid/:id') {
       next()
     } else {
-      keycloak
-        .init({
-          onLoad: 'check-sso',
-          checkLoginIframe: true,
-          pkceMethod: 'S256',
-        })
-        .then((response) => {
-          if (response) {
-            localStorage.setItem('token', keycloak.token)
-            localStorage.setItem('refresh_token', keycloak.refreshToken)
-            store.dispatch('auth/fetchAuth').then((response) => {
-              store
-                .dispatch('dispatchLogin', response.data.data)
-                .then(() => {
-                  try {
-                    if (firebase.messaging.isSupported()) {
-                      const messaging = firebase.messaging()
-                      Notification.requestPermission().then(() => {
-                        messaging
-                          .getToken({
-                            vapidKey:
-                              'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+      const token = localStorage.getItem('token')
+      if (token !== null && typeof token !== 'undefined') {
+        store.dispatch('auth/fetchAuth').then((response) => {
+          store
+            .dispatch('dispatchLogin', response.data.data)
+            .then(() => {
+              try {
+                if (firebase.messaging.isSupported()) {
+                  const messaging = firebase.messaging()
+                  Notification.requestPermission().then(() => {
+                    messaging
+                      .getToken({
+                        vapidKey:
+                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+                      })
+                      .then((currentToken) => {
+                        $axiosApi
+                          .post('/users/notification-token', {
+                            token: currentToken,
+                            type: 'web',
                           })
-                          .then((currentToken) => {
-                            $axiosApi
-                              .post('/users/notification-token', {
-                                token: currentToken,
-                                type: 'web',
-                              })
-                              .then(() => {
-                                next({ path: '/admin/dashboard' })
-                              })
-                              .catch(() => {
-                                localStorage.removeItem('token')
-                                localStorage.removeItem('refresh_token')
-                                localStorage.removeItem('user')
-                                store.dispatch('dispatchDisableLoading')
-                              })
-                          })
-                          .catch(() => {
+                          .then(() => {
                             next({ path: '/admin/dashboard' })
                           })
+                          .catch(() => {
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('refresh_token')
+                            localStorage.removeItem('user')
+                            store.dispatch('dispatchDisableLoading')
+                          })
                       })
-                    }
-                  } catch (error) {
-                    alert(error)
-                  }
-                })
-                .catch(() => {
-                  alert('Server Bermasalah')
-                })
+                      .catch(() => {
+                        next({ path: '/admin/dashboard' })
+                      })
+                  })
+                }
+              } catch (error) {
+                alert(error)
+              }
             })
-          } else {
-            next()
-          }
+            .catch(() => {
+              alert('Server Bermasalah')
+            })
         })
+      } else {
+        next()
+      }
     }
   }
 })
