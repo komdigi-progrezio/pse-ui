@@ -393,49 +393,77 @@ createRouter.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     if (!store.state.auth.isLogin) {
       const token = localStorage.getItem('token')
+      const username = localStorage.getItem('username')
+      const password = localStorage.getItem('password')
+      const startAt = localStorage.getItem('start_at')
+      
       if (token !== null && typeof token !== 'undefined') {
-        store.dispatch('auth/fetchAuth').then((response) => {
-          store
-            .dispatch('dispatchLogin', response.data.data)
+        if(startAt){
+          const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
+          const currentTime = new Date()
+          const timeDifference = currentTime - startAtDate
+          const differenceInHours = timeDifference / (1000 * 60 * 60)
+          if(differenceInHours >= 1){
+            localStorage.removeItem('token')
+            localStorage.removeItem('refresh_token')
+            localStorage.removeItem('user')
+            localStorage.removeItem('username')
+            localStorage.removeItem('password')
+            localStorage.removeItem('start_at')
+          }else{
+            $axiosApi
+            .post('/login-activity/reaccess-token', {
+              username: username,
+              password: password,
+            })
             .then(() => {
-              try {
-                if (firebase.messaging.isSupported()) {
-                  const messaging = firebase.messaging()
-                  Notification.requestPermission().then(() => {
-                    messaging
-                      .getToken({
-                        vapidKey:
-                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                      })
-                      .then((currentToken) => {
-                        $axiosApi
-                          .post('/users/notification-token', {
-                            token: currentToken,
-                            type: 'web',
+              store.dispatch('auth/fetchAuth').then((response) => {
+              store.dispatch('dispatchLogin', response.data.data)
+                .then(() => {
+                  try {
+                    if (firebase.messaging.isSupported()) {
+                      const messaging = firebase.messaging()
+                      Notification.requestPermission().then(() => {
+                        messaging
+                          .getToken({
+                            vapidKey:
+                              'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
                           })
-                          .then(() => {
-                            next({ path: '/admin/dashboard' })
+                          .then((currentToken) => {
+                            $axiosApi
+                              .post('/users/notification-token', {
+                                token: currentToken,
+                                type: 'web',
+                              })
+                              .then(() => {
+                                next()
+                              })
+                              .catch(() => {
+                                localStorage.removeItem('token')
+                                localStorage.removeItem('refresh_token')
+                                localStorage.removeItem('user')
+                                localStorage.removeItem('username')
+                                localStorage.removeItem('password')
+                                localStorage.removeItem('start_at')
+                                store.dispatch('dispatchDisableLoading')
+                              })
                           })
                           .catch(() => {
-                            localStorage.removeItem('token')
-                            localStorage.removeItem('refresh_token')
-                            localStorage.removeItem('user')
-                            store.dispatch('dispatchDisableLoading')
+                            next()
                           })
                       })
-                      .catch(() => {
-                        next({ path: '/admin/dashboard' })
-                      })
-                  })
-                }
-              } catch (error) {
-                alert(error)
-              }
+                    }
+                  } catch (error) {
+                    alert(error)
+                  }
+                })
+                .catch(() => {
+                  alert('Server Bermasalah')
+                })
+              })
             })
-            .catch(() => {
-              alert('Server Bermasalah')
-            })
-        })
+          }
+        }
       } else {
         console.log('Access denied, login before please')
         next({ path: '/' })
@@ -474,6 +502,9 @@ createRouter.beforeEach((to, from, next) => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('refresh_token')
                             localStorage.removeItem('user')
+                            localStorage.removeItem('username')
+                            localStorage.removeItem('password')
+                            localStorage.removeItem('start_at')
                             store.dispatch('dispatchDisableLoading')
                           })
                       })
@@ -497,10 +528,92 @@ createRouter.beforeEach((to, from, next) => {
       next()
     } else {
       const token = localStorage.getItem('token')
+      const username = localStorage.getItem('username')
+      const password = localStorage.getItem('password')
+      const thisUser = localStorage.getItem('user')
+      const startAt = localStorage.getItem('start_at')
+
       if (token !== null && typeof token !== 'undefined') {
-        store.dispatch('auth/fetchAuth').then((response) => {
-          store
-            .dispatch('dispatchLogin', response.data.data)
+        if (thisUser == 'undefined'){
+          console.log('log2a undefined')
+          if(startAt){
+            const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
+            const currentTime = new Date()
+            const timeDifference = currentTime - startAtDate
+            const differenceInHours = timeDifference / (1000 * 60 * 60)
+            if(differenceInHours >= 1){
+              localStorage.removeItem('token')
+              localStorage.removeItem('refresh_token')
+              localStorage.removeItem('user')
+              localStorage.removeItem('username')
+              localStorage.removeItem('password')
+              localStorage.removeItem('start_at')
+            }else{
+              $axiosApi
+              .post('/login-activity/reaccess-token', {
+                username: username,
+                password: password,
+              })
+              .then(() => {
+                store.dispatch('auth/fetchAuth').then((response) => {
+                store.dispatch('dispatchLogin', response.data.data)
+                  .then(() => {
+                    try {
+                      if (firebase.messaging.isSupported()) {
+                        const messaging = firebase.messaging()
+                        Notification.requestPermission().then(() => {
+                          messaging
+                            .getToken({
+                              vapidKey:
+                                'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+                            })
+                            .then((currentToken) => {
+                              $axiosApi
+                                .post('/users/notification-token', {
+                                  token: currentToken,
+                                  type: 'web',
+                                })
+                                .then(() => {
+                                  next({ path: '/admin/dashboard' })
+                                })
+                                .catch(() => {
+                                  localStorage.removeItem('token')
+                                  localStorage.removeItem('refresh_token')
+                                  localStorage.removeItem('user')
+                                  localStorage.removeItem('username')
+                                  localStorage.removeItem('password')
+                                  localStorage.removeItem('start_at')
+                                  store.dispatch('dispatchDisableLoading')
+                                })
+                            })
+                            .catch(() => {
+                              next({ path: '/admin/dashboard' })
+                            })
+                        })
+                      }
+                    } catch (error) {
+                      alert(error)
+                    }
+                  })
+                  .catch(() => {
+                    alert('Server Bermasalah')
+                  })
+                })
+              })
+              .catch(() => {
+                localStorage.removeItem('token')
+                localStorage.removeItem('refresh_token')
+                localStorage.removeItem('user')
+                localStorage.removeItem('username')
+                localStorage.removeItem('password')
+                store.dispatch('dispatchDisableLoading')
+              })
+            }
+          }
+        }else{
+          console.log('log2b undefined')
+          store.dispatch('auth/fetchAuth').then((response) => {
+          store.dispatch('dispatchLogin', response.data.data)
             .then(() => {
               try {
                 if (firebase.messaging.isSupported()) {
@@ -524,6 +637,9 @@ createRouter.beforeEach((to, from, next) => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('refresh_token')
                             localStorage.removeItem('user')
+                            localStorage.removeItem('username')
+                            localStorage.removeItem('password')
+                            localStorage.removeItem('start_at')
                             store.dispatch('dispatchDisableLoading')
                           })
                       })
@@ -539,7 +655,8 @@ createRouter.beforeEach((to, from, next) => {
             .catch(() => {
               alert('Server Bermasalah')
             })
-        })
+          })
+        }
       } else {
         next()
       }

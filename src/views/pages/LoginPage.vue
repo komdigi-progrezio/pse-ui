@@ -85,9 +85,10 @@
                 type="submit"
                 class="btn primary-color btn-lg"
                 @click="loginSubmit"
-                :disabled="!recaptchaResponse && invalid"
+                :disabled="isSubmitLogin"
               >
                 Submit
+                <CSpinner size="sm" color="info" v-if="isSubmitLogin" />
               </button>
             </div>
           </ValidationObserver>
@@ -129,8 +130,10 @@
               type="submit"
               class="btn primary-color btn-sm"
               @click="handleOtp"
+              :disabled="isSubmit"
             >
               Submit
+              <CSpinner size="sm" color="info" v-if="isSubmit" />
             </button>
           </template>
         </CModal>
@@ -141,7 +144,7 @@
 
 <script>
 import VueRecaptcha from "vue-recaptcha";
-
+import moment from 'moment'
 export default {
   name: "LoginPage",
   components: {
@@ -175,6 +178,7 @@ export default {
         },
       },
       isSubmit: false,
+      isSubmitLogin: false,
       recaptchaResponse: null,
     }
   },
@@ -195,14 +199,17 @@ export default {
       // this.modal.otp.data = value.nama
     },
     loginSubmit() {
+      this.isSubmitLogin = true
       this.$refs.form.validate().then((success) => {
         const url = '/login-activity/get-access-token'
         if (!success) {
+          this.isSubmitLogin = false
           return
         }
 
         if (!this.recaptchaResponse) {
           this.$toastr.e('Mohon selesaikan reCAPTCHA!', 'Pemberitahuan');
+          this.isSubmitLogin = false
           return;
         }
 
@@ -234,10 +241,14 @@ export default {
           });
           if(response.data.status == 500){
             this.$toastr.e(response.data.message, 'Pemberitahuan');
+            this.isSubmitLogin = false
           }else{
             this.$toastr.s(response.data.message, 'Pemberitahuan');
             localStorage.setItem('token', response.data.data.access_token)
             localStorage.setItem('refresh_token', response.data.data.refresh_token)
+            localStorage.setItem('username', formData.username)
+            localStorage.setItem('password', formData.password)
+            localStorage.setItem('start_at', moment().format('DD-MM-YYYY HH:mm:ss'))
             this.otpModal();
           }
         })
@@ -251,10 +262,12 @@ export default {
             console.log('errLoginSubmit => ', error)
             this.$toastr.e('Periksa kembali username dan password Anda', 'Pemberitahuan');
           }
+          this.isSubmitLogin = false
         });
       })
     },
     handleOtp() {
+      this.isSubmit = true
       const url = '/login-activity/otp-verify'
         
       const formData = {
@@ -286,6 +299,7 @@ export default {
         } else {
           console.log('errHandleOtp => ', error)
         }
+        this.isSubmit = false
       });
     },
   },
