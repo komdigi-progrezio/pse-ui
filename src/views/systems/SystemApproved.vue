@@ -164,7 +164,7 @@
                       }}
                     </th>
                     <td
-                      ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
+                      >tes </td
                     >
                     <td v-if="!isSubPejabat">{{ item.organizer_profile }}</td>
                     <td
@@ -180,7 +180,7 @@
                       <CButton
                         color="primary"
                         size="sm"
-                        class="mr-2"
+                        class="mr-2 mb-2"
                         v-c-tooltip="{
                           content: 'Detail Sistem Elektronik',
                           placement: 'bottom',
@@ -196,7 +196,7 @@
                         v-if="!isAdmin"
                         color="danger"
                         size="sm"
-                        class="mr-2"
+                        class="mr-2 mb-2"
                         v-c-tooltip="{
                           content: 'Hapus Sistem Elektronik',
                           placement: 'bottom',
@@ -212,6 +212,7 @@
                         "
                         color="success"
                         size="sm"
+                        class="mr-2 mb-2"
                         v-c-tooltip="{
                           content: 'Kunci Sistem Elektronik',
                           placement: 'bottom',
@@ -221,6 +222,48 @@
                         <CIcon name="cil-check" />
                         <span class="mobile-only ml-1"
                           >Kunci Sistem Elektronik
+                        </span>
+                      </CButton>
+                      <CButton
+                        v-if="
+                          isAdmin &&
+                          item.status === 'Terdaftar' &&
+                          item.is_locked === true &&
+                          item.progress === 100
+                        "
+                        color="warning"
+                        size="sm"
+                        class="mr-2 mb-2"
+                        v-c-tooltip="{
+                          content: 'Tambah alasan',
+                          placement: 'bottom',
+                        }"
+                        @click="confirmReason(item)"
+                      >
+                        <CIcon name="cil-pencil" />
+                        <span class="mobile-only ml-1">
+                          Tambah alasan
+                        </span>
+                      </CButton>
+                      <CButton
+                        v-if="
+                          reasonData.find(
+                            (reason) =>
+                              reason.sis_profil_id === item.id
+                          ) !== undefined
+                        "
+                        color="info"
+                        size="sm"
+                        class="mr-2 mb-2"
+                        v-c-tooltip="{
+                          content: 'Detail Alasan',
+                          placement: 'bottom',
+                        }"
+                        @click="DetailDataReason(item)"
+                      >
+                        <CIcon name="cil-justify-center" />
+                        <span class="mobile-only ml-1">
+                          Detail Alasan
                         </span>
                       </CButton>
                     </td>
@@ -332,6 +375,82 @@
         </CButton>
       </template>
     </CModal>
+    <CModal
+      :title="modal.reason.title"
+      :color="modal.reason.color"
+      :show.sync="modal.reason.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <label for="reason">
+                {{ modal.reason.message }}
+                <strong>{{ modal.reason.nama_internal }}</strong>
+              </label>
+              <input
+                v-model="forms.reason"
+                type="text"
+                name="reason"
+                placeholder="Masukan Alasan"
+                class="form-control"
+                :class="{
+                  'is-invalid': errorValidations.reason.length > 0,
+                }"
+                @blur="errorValidations.reason = []"
+              />
+              <message :messages="errorValidations.reason" />
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="primary" size="sm" class="m-2" @click="sendReason()">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
+      :title="modal.detailReason.title"
+      :color="modal.detailReason.color"
+      :show.sync="modal.detailReason.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <CRow>
+            <CCol sm="12">
+              <table class="table table-hover table-striped">
+                <thead>
+                  <tr>
+                    <!-- <th>No</th> -->
+                    <th>Tanggal Update</th>
+                    <th>Detail Alasan</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-if="data.length > 0">
+                    <tr v-for="(item, index) in reasonData" :key="index">
+                      <template v-if="item.sis_profil_id === modal.detailReason.uniqueId">
+                        <!-- <th scope="row">
+                          {{ 
+                            index + 1 + reasonData
+                              .filter((dataItem, dataIndex) => 
+                                dataIndex < index && dataItem.sis_profil_id !== modal.detailReason.uniqueId
+                              ).length 
+                          }}
+                        </th> -->
+                        <td>{{ formatDate(item.created_at) }}</td>
+                        <td>{{ item.reason }}</td>
+                      </template>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </CCol>
+          </CRow>
+        </div>
+      </template>
+    </CModal>
   </div>
 </template>
 
@@ -344,10 +463,18 @@ export default {
       spinner: false,
       listFilter: false,
       data: [],
+      reasonData: [],
       disapprovedData: [],
       search: {
         nama_eksternal: null,
         nama_instansi: null,
+      },
+      forms: {
+        id: null,
+        reason: null,
+      },
+      errorValidations: {
+        reason: [],
       },
       modal: {
         confirm: {
@@ -365,6 +492,26 @@ export default {
           message: null,
           labelButton: null,
           uniqueId: null,
+        },
+        reason: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+          nama_internal: null,
+          data: null,
+        },
+        detailReason: {
+          showModal: false,
+          title: null,
+          color: null,
+          message: null,
+          labelButton: null,
+          uniqueId: null,
+          nama_internal: null,
+          data: null,
         },
         showModal: false,
         title: null,
@@ -421,6 +568,8 @@ export default {
   },
   created() {
     this.getData()
+    this.getReason()
+    
     const now = new Date().getTime()
     if (sessionStorage.getItem('isRegisteredSe') && sessionStorage.getItem('isRegisteredSeExpiry')) {
       this.getDisapprovedData()
@@ -542,6 +691,50 @@ export default {
       this.search.nama_instansi = null
       this.search.progres = ''
     },
+    clearModalReason() {
+      this.modal.reason.title = null
+      this.modal.reason.color = null
+      this.modal.reason.nama_internal = null
+      this.modal.reason.uniqueId = null
+      this.modal.reason.message = null
+      this.modal.reason.labelButton = null
+      this.modal.reason.data = null
+    },
+    closeModalReason() {
+      this.modal.reason.showModal = false
+      this.clearModalReason()
+    },
+    confirmReason(item) {
+      this.modal.reason.showModal = true
+      this.modal.reason.title = 'Alasan Sistem Elektronik Tidak Sesuai'
+      this.modal.reason.nama_internal = item.nama_internal
+      this.modal.reason.data = item
+      this.modal.reason.uniqueId = item.id
+      this.modal.reason.message = 'Berikan alasan pada sistem elektronik bernama'
+      this.modal.reason.labelButton = 'Submit'
+    },
+    clearDetailModalReason() {
+      this.modal.detailReason.title = null
+      this.modal.detailReason.color = null
+      this.modal.detailReason.nama_internal = null
+      this.modal.detailReason.uniqueId = null
+      this.modal.detailReason.message = null
+      this.modal.detailReason.labelButton = null
+      this.modal.detailReason.data = null
+    },
+    closeDetailModalReason() {
+      this.modal.detailReason.showModal = false
+      this.clearDetailModalReason()
+    },
+    DetailDataReason(item) {
+      this.modal.detailReason.showModal = true
+      this.modal.detailReason.title = 'Detail Alasan Sistem Elektronik'
+      this.modal.detailReason.nama_internal = item.nama_internal
+      this.modal.detailReason.data = item
+      this.modal.detailReason.uniqueId = item.id
+      this.modal.detailReason.message = 'Berikut detail alasan sistem elektronik'
+      this.modal.detailReason.labelButton = 'Submit'
+    },
     getData() {
       this.spinner = true
       this.$http
@@ -644,6 +837,44 @@ export default {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
         })
+    },
+    getReason() {
+      this.$http
+      .get('/reason-log/user-list', {
+      })
+      .then((response) => {
+        this.reasonData = response.data.data
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+    },
+
+    sendReason() {
+      const url = '/reason-log/send-reason'
+
+      const formData = {
+        sis_profil_id: this.modal.reason.data.id,
+        reason: this.forms.reason,
+      }
+
+      this.$http({
+        method: 'post',
+        url: url,
+        headers: {
+            "Content-Type": "application/json",
+          },
+        data: JSON.stringify(formData),
+      })
+      .then((response) => {
+        this.$toastr.s(response.data.message, 'Pemberitahuan')
+        this.closeModalReason()
+        window.location.reload()
+      })
+      .catch((error) => {
+        console.log('errorSendResonSE === ',error)
+        this.$toastr.s('Error', 'Pemberitahuan')
+      });
     },
   },
 }
