@@ -49,14 +49,6 @@
               </CRow>
               <CRow class="mt-3">
                 <CCol sm="12" md="6" lg="6">
-                  <label> Satuan Kerja : </label>
-                </CCol>
-                <CCol sm="12" md="6" lg="6">
-                  {{ data.satuan_kerja }}
-                </CCol>
-              </CRow>
-              <CRow class="mt-3">
-                <CCol sm="12" md="6" lg="6">
                   <label> Alamat : </label>
                 </CCol>
                 <CCol sm="12" md="6" lg="6">
