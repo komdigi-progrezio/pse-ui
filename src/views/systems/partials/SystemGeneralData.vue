@@ -780,20 +780,27 @@
                   rules="required|alpha_spaces"
                   v-slot="{ errors }"
                 >
-                  <textarea
-                    v-model="forms.kindOfService.keterangan"
-                    name="keterangan"
-                    cols="10"
-                    rows="10"
-                    class="form-control"
-                    maxlength="500"
-                    :class="{
-                      'is-invalid':
-                        errors.length > 0 ||
-                        errorValidations.kindOfService.keterangan.length >
-                          0,
-                    }"
-                  ></textarea>
+                <template>
+                  <div>
+                    <textarea
+                      v-model="forms.kindOfService.keterangan"
+                      name="keterangan"
+                      cols="10"
+                      rows="10"
+                      class="form-control"
+                      maxlength="500"
+                      :class="{
+                        'is-invalid':
+                          errors.length > 0 ||
+                          errorValidations.kindOfService.keterangan.length > 0,
+                      }"
+                      @input="updateCharacterCount"
+                    ></textarea>
+                    <p :class="{ 'text-danger': characterCount > 500 }">
+                      {{ characterCount }}/500 karakter
+                    </p>
+                  </div>
+                </template>
                   <div v-if="errors.length > 0" class="invalid-feedback">
                     {{ errors[0] }}
                   </div>
@@ -1721,6 +1728,7 @@ export default {
           keterangan: [],
         },
       },
+      characterCount: 0,
     }
   },
   computed: {
@@ -1751,6 +1759,9 @@ export default {
     this.fetchSystem()
   },
   methods: {
+    updateCharacterCount() {
+      this.characterCount = this.forms.kindOfService.keterangan.length;
+    },
     //  Fungsi Utama
     clearModalMainFunction() {
       this.modal.mainFunction.title = null

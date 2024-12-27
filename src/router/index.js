@@ -410,6 +410,7 @@ createRouter.beforeEach((to, from, next) => {
             localStorage.removeItem('username')
             localStorage.removeItem('password')
             localStorage.removeItem('start_at')
+            next({ path: '/login' })
           }else{
             $axiosApi
             .post('/login-activity/reaccess-token', {
@@ -548,6 +549,7 @@ createRouter.beforeEach((to, from, next) => {
               localStorage.removeItem('username')
               localStorage.removeItem('password')
               localStorage.removeItem('start_at')
+              next({ path: '/login' })
             }else{
               $axiosApi
               .post('/login-activity/reaccess-token', {

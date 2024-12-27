@@ -193,19 +193,6 @@
                         </span>
                       </CButton>
                       <CButton
-                        v-if="!isAdmin"
-                        color="danger"
-                        size="sm"
-                        class="mr-2 mb-2"
-                        v-c-tooltip="{
-                          content: 'Hapus Sistem Elektronik',
-                          placement: 'bottom',
-                        }"
-                        @click="destroy(item)"
-                      >
-                        <CIcon name="cil-trash" />
-                      </CButton>
-                      <CButton
                         v-if="
                           item.status === 'Tidak Terdaftar' && (item.is_locked === false || item.is_locked === null) &&
                           item.progress === 100

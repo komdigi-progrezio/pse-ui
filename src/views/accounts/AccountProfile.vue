@@ -136,10 +136,10 @@
                 </td>
               </tr>
               <tr>
-                <td>Pemutakhiran Data</td>
+                <td>Tanggal Terakhir Update</td>
                 <td>
                   <p class="font-14 font-weight-normal mobile-only mb-1 d-block"
-                    >Pemutakhiran Data</p
+                    >Tanggal Terakhir Update</p
                   >
                   {{ profile.modified_at }}
                 </td>
@@ -635,8 +635,8 @@ export default {
             if (kota.id ==  this.profile.id_kota) {
               this.profile.nama_kota = kota.nama
             }
-              console.log(`Kota ditemukan: ${kota.id}`); 
-              console.log(`Kota id ditemukan: ${ this.profile.nama_kota}`); 
+              // console.log(`Kota ditemukan: ${kota.id}`); 
+              // console.log(`Kota id ditemukan: ${ this.profile.nama_kota}`); 
           });
 
         })
@@ -688,7 +688,7 @@ export default {
           this.profile.id_provinsi = response.data.data.propinsi
           this.profile.id_kota = response.data.data.kota
           this.profile.created_at = this.formatDate(response.data.data.created_at)
-          this.profile.modified_at = response.data.data.modified_at
+          this.profile.modified_at = this.formatDate(response.data.data.modified_at)
           this.profile.status = response.data.data.status
           this.profile.url = response.data.data.url_dokumen
 
