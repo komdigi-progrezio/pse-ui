@@ -31,6 +31,7 @@ const Statistic = () => import('@/views/statistic/Statistic')
 const CertificatePage = () => import('@/views/pages/CertificatePage')
 const FaqPage = () => import('@/views/pages/FaqPage')
 const PrivacyPolicyPage = () => import('@/views/pages/PrivacyPolicyPage')
+const TermsAndConditionPage = () => import('@/views/pages/TermsAndConditionPage')
 
 Vue.use(Router)
 
@@ -94,6 +95,12 @@ function configRoutes() {
       path: '/privacy-policy',
       name: 'Kebijakan Privasi',
       component: PrivacyPolicyPage,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/terms-and-condition',
+      name: 'Syarat Dan Ketentuan',
+      component: TermsAndConditionPage,
       meta: { requiresAuth: false },
     },
     {

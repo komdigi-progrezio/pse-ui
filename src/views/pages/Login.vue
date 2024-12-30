@@ -76,6 +76,13 @@
                 >Privacy Policy
               </a>
           </li>
+          <li>
+              <a
+                style="color: #fff"
+                href="/terms-and-condition"
+                >Terms And Condition
+              </a>
+          </li>
         </ol>
         <div id="footer"
           >Copyright © 2024 Kementerian Komunikasi dan Informatika RI</div
