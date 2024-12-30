@@ -61,13 +61,22 @@
         </div>
       </div>
       <div class="disclaimer-wrapper text-center">
-        <div class="text-center">
-          <a
-            style="color: #fff"
-            href="/faq"
-            >FAQ
-          </a>
-        </div>
+        <ol>
+          <li>
+              <a
+                style="color: #fff"
+                href="/faq"
+                >FAQ
+              </a>
+          </li>
+          <li>
+              <a
+                style="color: #fff"
+                href="/privacy-policy"
+                >Privacy Policy
+              </a>
+          </li>
+        </ol>
         <div id="footer"
           >Copyright © 2024 Kementerian Komunikasi dan Informatika RI</div
         >
@@ -290,6 +299,28 @@ export default {
   bottom: 30px;
   left: 20px;
 }
+
+ol {
+  list-style-type: none;
+  display: inline-flex;
+  padding-inline-start: 0px;
+}
+
+ol li {
+  padding: 0px 7px;
+  position: relative;
+}
+
+ol li::after {
+  content: "•"; 
+  color: #fff;
+  margin-left: 7px; 
+}
+
+ol li:last-child::after {
+  content: ""; 
+}
+
 
 @media (max-width: 480px) {
   .message-text {

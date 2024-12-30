@@ -30,6 +30,7 @@ const EditReport = () => import('@/views/report/EditReport')
 const Statistic = () => import('@/views/statistic/Statistic')
 const CertificatePage = () => import('@/views/pages/CertificatePage')
 const FaqPage = () => import('@/views/pages/FaqPage')
+const PrivacyPolicyPage = () => import('@/views/pages/PrivacyPolicyPage')
 
 Vue.use(Router)
 
@@ -87,6 +88,12 @@ function configRoutes() {
       path: '/faq',
       name: 'Pertanyan yang Sering Ditanyakan',
       component: FaqPage,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/privacy-policy',
+      name: 'Kebijakan Privasi',
+      component: PrivacyPolicyPage,
       meta: { requiresAuth: false },
     },
     {
