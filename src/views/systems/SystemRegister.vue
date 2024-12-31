@@ -16,7 +16,6 @@
                   <input
                     v-model="forms.nama_internal"
                     type="text"
-                    name="name"
                     placeholder="Masukan Nama Internal"
                     class="form-control"
                     :class="{
@@ -29,7 +28,7 @@
                     {{ errors[0] }}
                   </div>
                 </ValidationProvider>
-                <message :messages="errorValidations.nama_eksternal" />
+                <message :messages="errorValidations.nama_internal" />
               </div>
             </CCol>
             <CCol sm="12">
@@ -43,7 +42,6 @@
                   <input
                     v-model="forms.nama_eksternal"
                     type="text"
-                    name="name"
                     placeholder="Masukan Eksternal"
                     class="form-control"
                     :class="{
@@ -248,7 +246,6 @@
                       id="inline-radio1"
                       type="radio"
                       value="0"
-                      name="inline-radios"
                     />
                     <label class="form-check-label" for="inline-radio1"
                       >Tidak</label
@@ -261,7 +258,6 @@
                       id="inline-radio1"
                       type="radio"
                       value="1"
-                      name="inline-radios"
                     />
                     <label class="form-check-label" for="inline-radio1"
                       >Ya</label
@@ -305,6 +301,7 @@ export default {
         kategori_akses: 'Online',
         url: null,
         publish: null,
+        dokumen: '',
       },
       errorValidations: {
         nama_internal: [],
@@ -313,6 +310,7 @@ export default {
         sifat_khusus: [],
         kategori_akses: [],
         url: [],
+        dokumen: [],
       },
       dataSelect: {
         serviceGoals: [
@@ -341,6 +339,7 @@ export default {
           },
         ],
       },
+      filename: 'Choose File',
     }
   },
   created() {
@@ -388,6 +387,7 @@ export default {
       this.forms.url = null
       this.forms.publish = null
       this.forms.dokumen = ''
+      this.filename = 'Choose File'
     },
     onFilePickedDocument() {
       if (event.target.files[0].type === 'application/pdf') {
@@ -420,7 +420,7 @@ export default {
       this.errorValidations.sifat_khusus = []
       this.errorValidations.kategori_akses = []
       this.errorValidations.url = []
-      this.errorValidations.name = []
+      this.errorValidations.dokumen = []
 
       this.$http({
         method: 'post',
@@ -429,10 +429,9 @@ export default {
       })
         .then((response) => {
           this.isSubmit = false
-          sessionStorage.setItem('nama_internal', this.forms.nama_internal)
-          sessionStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
-          sessionStorage.setItem('isRegisteredSe', true)
-          sessionStorage.setItem('isRegisteredSeExpiry', expiryTime)
+          localStorage.setItem('nama_internal', this.forms.nama_internal)
+          localStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
+          localStorage.setItem('isRegisteredSe', true)
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()
           this.$nextTick(() => {
@@ -468,6 +467,10 @@ export default {
               typeof error.response.data.errors.url === 'undefined'
                 ? []
                 : error.response.data.errors.url
+            this.errorValidations.dokumen =
+              typeof error.response.data.errors.dokumen === 'undefined'
+                ? []
+                : error.response.data.errors.dokumen
           } else if (error.response.status === 500) {
             this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
           } else {

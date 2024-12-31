@@ -190,6 +190,9 @@
                     >Tanggal Update</th
                   >
                   <th>Status</th>
+                  <template v-if="isAdmin">
+                    <th>Alasan</th>
+                  </template>
                   <th colspan="2">Aksi</th>
                 </tr>
               </thead>
@@ -232,6 +235,12 @@
                       ><span class="mobile-only mr-1">Status: </span>
                       {{ value.nama_status }}</td
                     >
+                    <template v-if="isAdmin">
+                      <td>
+                        <span class="mobile-only mr-1">Alasan: </span>
+                        {{ value.alasan }}
+                      </td>
+                    </template>
                     <td>
                       <template v-if="value.status">
                         <CButton
@@ -329,18 +338,21 @@
                         <CIcon name="cil-pencil" />
                         <span class="mobile-only ml-1">Edit User</span>
                       </CButton>
-                      <!-- <CButton
-                        color="secondary"
-                        size="sm"
-                        class="mt-1"
-                        v-c-tooltip="{
-                          content: 'Ganti Password',
-                          placement: 'bottom',
-                        }"
-                        @click="showModalChangePassword(value)"
-                      >
-                        <CIcon name="cil-lock-locked" />
-                      </CButton> -->
+                      <template v-if="isAdmin && value.nama_status !== 'Aktif' && value.alasan !== ''">
+                        <CButton
+                          color="danger"
+                          size="sm"
+                          class="mt-1"
+                          v-c-tooltip="{
+                            content: 'Hapus User',
+                            placement: 'bottom',
+                          }"
+                          @click="modalDelete(value)"
+                        >
+                          <CIcon name="cil-trash" />
+                          <span class="mobile-only ml-1">Hapus User</span>
+                        </CButton>
+                      </template>
                     </td>
                   </tr>
                 </template>
@@ -476,6 +488,29 @@
       </template>
     </CModal>
     <CModal
+      :title="modal.delete.title"
+      :color="modal.delete.color"
+      :show.sync="modal.delete.showModal"
+    >
+      <template v-slot:body-wrapper>
+        <div class="modal-body">
+          <p>
+            {{ modal.delete.message }}
+            <strong>{{ modal.delete.data }}</strong
+            >?
+          </p>
+        </div>
+      </template>
+      <template v-slot:footer>
+        <CButton color="dark" size="sm" class="m-2" @click="closeModal">
+          Cancel
+        </CButton>
+        <CButton color="primary" size="sm" class="m-2" @click="deleteUser">
+          Submit
+        </CButton>
+      </template>
+    </CModal>
+    <CModal
       :title="modal.reason.title"
       :color="modal.reason.color"
       :show.sync="modal.reason.showModal"
@@ -560,6 +595,16 @@ export default {
           title: 'Konfirmasi Diterima/ Ditolak User',
           color: 'dark',
           message: 'Isikan alasan diterima/ ditolak user',
+          labelButton: 'Submit',
+          uniqueId: null,
+          data: null,
+          status: null,
+        },
+        delete: {
+          showModal: false,
+          title: 'Konfirmasi Hapus Data User',
+          color: 'dark',
+          message: 'Apakah Anda yakin ingin menghapus data user',
           labelButton: 'Submit',
           uniqueId: null,
           data: null,
@@ -684,6 +729,13 @@ export default {
 
       return 'cil-filter'
     },
+    isAdmin() {
+      if (this.$store.state.auth.data.roles.includes('Admin')) {
+        return true
+      }
+
+      return false
+    },
   },
   created() {
     this.getData()
@@ -693,6 +745,7 @@ export default {
       this.modal.disable.showModal = false
       this.modal.enable.showModal = false
       this.modal.reason.showModal = false
+      this.modal.delete.showModal = false
     },
     confirmDisable(value) {
       this.modal.disable.showModal = true
@@ -709,6 +762,12 @@ export default {
       this.modal.reason.uniqueId = value.id
       this.modal.reason.data = value.nama
       this.modal.reason.status = value.nama_status
+    },
+    modalDelete(value) {
+      this.modal.delete.showModal = true
+      this.modal.delete.uniqueId = value.id
+      this.modal.delete.data = value.nama
+      this.modal.delete.status = value.nama_status
     },
     editUser(id) {
       this.$router.push(`/admin/account/${id}/edit`)
@@ -798,6 +857,26 @@ export default {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
         })
+    },
+    deleteUser() {
+      this.$http({
+        method: 'delete',
+        url: `/users/${this.modal.delete.uniqueId}`,
+      })
+      .then((response) => {
+        this.modal.delete.showModal = false
+        this.spinner = false
+        this.filterData()
+        this.$toastr.s(response.data.message, 'Pemberitahuan')
+      })
+      .catch((error) => {
+        this.modal.delete.showModal = false
+        if (error.response.status === 500) {
+          this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
+        } else {
+          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+        }
+      })
     },
     changeMinDate() {
       this.optionsModifiedAt.minDate = this.search.created_at

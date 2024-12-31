@@ -5,7 +5,7 @@
     style="background-image: url(/img/bg-pse-right.png)"
   >
     <div
-      class="align-items-center d-none d-lg-flex"
+      class="align-items-center d-block"
       id="left-side"
       style="background-image: url(/img/bg-pse-left.png)"
     >
@@ -33,7 +33,7 @@
               pada Menteri c.q Direktur Jenderal
               <a
                 style="color: #ffd93c"
-                href="/FORMAT SURAT PERMOHONAN PENDAFTARAN LAMPIRAN II.docx"
+                href="/FORMAT_SURAT_PERMOHONAN_PENDAFTARAN_LAMPIRAN_II.docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
@@ -42,7 +42,7 @@
               >Penunjukan pejabat pendaftar melalui <b>Surat Tugas</b>
               <a
                 style="color: #ffd93c"
-                href="/SURAT TUGAS LAMPIRAN PERMENKOMINFO 10 TH 2015 [LAMPIRAN I].docx"
+                href="/SURAT_TUGAS_LAMPIRAN_PERMENKOMINFO_10_TH_2015_LAMPIRAN_I.docx"
                 target="”_blank”"
                 ><u>(format unduh disini)</u>
               </a>
@@ -58,6 +58,15 @@
               mendapat persetujuan dari Menteri</li
             >
           </ul>
+        </div>
+      </div>
+      <div class="disclaimer-wrapper text-center">
+        <div class="text-center">
+          <a
+            style="color: #fff"
+            href="/faq"
+            >FAQ
+          </a>
         </div>
         <div id="footer"
           >Copyright © 2024 Kementerian Komunikasi dan Informatika RI</div
