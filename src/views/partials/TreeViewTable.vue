@@ -58,7 +58,7 @@
         </tr>
       </template>
 
-      <template v-if="data.children.length > 0">
+      <template v-if="data.children">
         <template v-for="(item, index) in data.children">
           <tree-view-table
             :show-number="false"

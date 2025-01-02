@@ -429,9 +429,9 @@ export default {
       })
         .then((response) => {
           this.isSubmit = false
-          sessionStorage.setItem('nama_internal', this.forms.nama_internal)
-          sessionStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
-          sessionStorage.setItem('isRegisteredSe', true)
+          localStorage.setItem('nama_internal', this.forms.nama_internal)
+          localStorage.setItem('nama_eksternal', this.forms.nama_eksternal)
+          localStorage.setItem('isRegisteredSe', true)
           sessionStorage.setItem('isRegisteredSeExpiry', expiryTime)
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.clearForm()

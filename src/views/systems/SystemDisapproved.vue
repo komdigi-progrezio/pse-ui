@@ -128,9 +128,10 @@
                         1
                       }}
                     </th>
-                    <td
+                    <td v-if="item.account"
                       ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
                     >
+                    <td v-else> - </td>
                     <td>
                       <span class="mobile-only mr-1"
                         >Nama Sistem Elektronik:

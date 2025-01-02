@@ -163,9 +163,10 @@
                         1
                       }}
                     </th>
-                    <td
-                      >tes </td
+                    <td  v-if="item.account"
+                      ><a :href="`/admin/account/${item.account.id}/official`">{{ item.account.nama }}</a></td
                     >
+                    <td v-else> - </td>
                     <td v-if="!isSubPejabat">{{ item.organizer_profile }}</td>
                     <td
                       >{{ item.nama_internal }} / {{ item.nama_eksternal }}</td
@@ -347,7 +348,7 @@
               <p>Yth {{ modal.confirm.user_name }}</p>
               <p>Berikut ini merupakan informasi dari Sistem Elektronik yang Anda daftarkan. <br/><br/>
                 <b>Nama Sistem Elektronik:</b>  {{ modal.confirm.nama_internal }} <br/>
-                <b>Tanggal Daftar:</b>  {{ formatDate(modal.confirm.created_at) }} <br/>
+                <b>Tanggal Daftar:</b>  {{ createdAtformatDate(modal.confirm.created_at) }} <br/>
                 <b>Status:</b>  Menunggu Diverifikasi <br /><br />
                 Best Regards, <br />
                 Webmaster PSE
@@ -560,15 +561,8 @@ export default {
     const now = new Date().getTime()
     if (sessionStorage.getItem('isRegisteredSe') && sessionStorage.getItem('isRegisteredSeExpiry')) {
       this.getDisapprovedData()
-      if (now > sessionStorage.getItem('isRegisteredSeExpiry')) {
-        sessionStorage.removeItem('nama_internal')
-        sessionStorage.removeItem('nama_eksternal')
-        sessionStorage.removeItem('isRegisteredSe')
-        sessionStorage.removeItem('isRegisteredSeExpiry')
-        this.modal.confirm.showModal = false
-      }
       this.modal.confirm.showModal = true
-      this.modal.confirm.nama_internal = sessionStorage.getItem('nama_internal')
+      this.modal.confirm.nama_internal = localStorage.getItem('nama_internal')
     }
   },
   methods: {
@@ -580,12 +574,19 @@ export default {
       }
 
     },
+    createdAtformatDate: function (date) {
+      if(date){
+        return moment(date).format('DD-MM-YYYY HH:mm:ss')
+      }else{
+        return moment().format('DD-MM-YYYY HH:mm:ss')
+      }
+
+    },
     closeConfirmModal() {
-      if (sessionStorage.getItem('isRegisteredSe')) {
-        sessionStorage.removeItem('nama_internal')
-        sessionStorage.removeItem('nama_eksternal')
-        sessionStorage.removeItem('isRegisteredSe')
-        sessionStorage.removeItem('isRegisteredSeExpiry')
+      if (localStorage.getItem('isRegisteredSe')) {
+        localStorage.removeItem('nama_internal')
+        localStorage.removeItem('nama_eksternal')
+        localStorage.removeItem('isRegisteredSe')
       }
       this.modal.confirm.showModal = false
     },
@@ -812,7 +813,7 @@ export default {
         })
         .then((response) => {
           this.disapprovedData = response.data.data  
-          if (sessionStorage.getItem('isRegisteredSe')){
+          if (localStorage.getItem('isRegisteredSe')){
             this.modal.confirm.created_at = this.disapprovedData[0].date_updated
             this.modal.confirm.user_name = this.disapprovedData[0].user_name
           }
