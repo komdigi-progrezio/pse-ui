@@ -412,7 +412,9 @@ createRouter.beforeEach((to, from, next) => {
       const startAt = localStorage.getItem('start_at')
       
       if (token !== null && typeof token !== 'undefined') {
+        console.log('condition1')
         if(startAt){
+          console.log('condition2')
           const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
           const currentTime = new Date()
           const timeDifference = currentTime - startAtDate
@@ -426,12 +428,15 @@ createRouter.beforeEach((to, from, next) => {
             localStorage.removeItem('start_at')
             next({ path: '/login' })
           }else{
+            console.log('condition3')
             $axiosApi
             .post('/login-activity/reaccess-token', {
               username: username,
               password: password,
             })
-            .then(() => {
+            .then((res) => {
+              localStorage.setItem('token', res.data.data.access_token)
+              localStorage.setItem('refresh_token', res.data.data.refresh_token)
               store.dispatch('auth/fetchAuth').then((response) => {
               store.dispatch('dispatchLogin', response.data.data)
                 .then(() => {

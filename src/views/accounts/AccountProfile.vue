@@ -634,6 +634,7 @@ export default {
           response.data.data.forEach((kota) => {
             if (kota.id ==  this.profile.id_kota) {
               this.profile.nama_kota = kota.nama
+              this.forms.kota = kota.id
             }
               // console.log(`Kota ditemukan: ${kota.id}`); 
               // console.log(`Kota id ditemukan: ${ this.profile.nama_kota}`); 
@@ -642,22 +643,22 @@ export default {
         })
         .catch((error) => {
           console.log(`Error kota: ${error}`)
-          this.$toastr.e(error.response.data.message, 'Pemberitahuan')
+          // this.$toastr.e(error.response.data.message, 'Pemberitahuan')
         })
     },
     getDistrictOnChange() {
-      this.dataSelect.kota = []
-      this.forms.kota = ''
-      
-      if (this.forms.propinsi) {
+      // this.dataSelect.kota = []
+      // this.forms.kota = ''
+
+      if (this.profile.id_provinsi) {
         axios
-          .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.forms.propinsi}/kota`)
+          .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.profile.id_provinsi}/kota`)
           .then((response) => {
             this.dataSelect.kota = response.data.data
           })
           .catch((error) => {
             console.log(`Error kota: ${error}`);
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan');
+            // this.$toastr.e(error.response.data.message, 'Pemberitahuan');
           });
       }
     },
@@ -692,14 +693,16 @@ export default {
           this.profile.status = response.data.data.status
           this.profile.url = response.data.data.url_dokumen
 
-          this.forms.id = response.data.data.id
-          this.forms.nama = response.data.data.nama
-          this.forms.nip = response.data.data.nip
-          this.forms.jabatan = response.data.data.jabatan
-          this.forms.no_telepon = response.data.data.no_telepon
-          this.forms.no_hp = response.data.data.no_hp
-          this.forms.alamat = response.data.data.alamat
-          this.forms.kode_pos = response.data.data.kode_pos
+          this.forms = response.data.data
+          // console.log('logForms === ', this.forms)
+          // this.forms.id = response.data.data.id
+          // this.forms.nama = response.data.data.nama
+          // this.forms.nip = response.data.data.nip
+          // this.forms.jabatan = response.data.data.jabatan
+          // this.forms.no_telepon = response.data.data.no_telepon
+          // this.forms.no_hp = response.data.data.no_hp
+          // this.forms.alamat = response.data.data.alamat
+          // this.forms.kode_pos = response.data.data.kode_pos
           // this.forms.propinsi = response.data.data.nama_provinsi
           // this.forms.nama_kota = response.data.data.nama_kota
 
@@ -717,6 +720,35 @@ export default {
         })
     },
     submitProfile() {
+      const missingFields = []
+      const fieldLabels = {
+        nama: 'Nama',
+        nip: 'NIP',
+        jabatan: 'Jabatan',
+        no_telepon: 'Nomor Telepon',
+        no_hp: 'Nomor Handphone',
+        alamat: 'Alamat',
+        propinsi: 'Nama Provinsi',
+        kota: 'Nama Kota',
+        kode_pos: 'Kode Pos',
+        dokumen: 'Dokumen',
+      }
+
+      Object.keys(this.forms).forEach((key) => {
+        if (!this.forms[key] || this.forms[key] === null || this.forms[key] === '') {
+          if (fieldLabels[key]) {
+            missingFields.push(fieldLabels[key])
+          }
+        }
+      })
+
+      if (missingFields.length > 0) {
+        missingFields.forEach((field) => {
+          this.$toastr.e(`${field} tidak boleh kosong`, 'Peringatan')
+        })
+        return
+      }
+
       const url = `/users/${this.forms.id}/profile`
       const formData = new FormData()
       const forMapData = Object.entries(this.forms)
@@ -747,11 +779,12 @@ export default {
       })
         .then((response) => {
           this.$toastr.s(response.data.message, 'Pemberitahuan')
-          this.$nextTick(() => {
-            this.$refs.form_profile.reset()
-          })
+          // this.$nextTick(() => {
+          //   this.$refs.form_profile.reset()
+          // })
           this.closeModalPostPut()
-          this.getProfile()
+          localStorage.setItem('user', JSON.stringify(this.forms))
+          // this.getProfile()
           window.location.reload()
         })
         .catch((error) => {
@@ -808,7 +841,7 @@ export default {
     },
     closeModalPostPut() {
       this.modal.showModal = false
-      this.clearModalPostPut()
+      // this.clearModalPostPut()
     },
     showFile(value) {
       window.open(value)
