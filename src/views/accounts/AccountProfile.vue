@@ -650,9 +650,9 @@ export default {
       // this.dataSelect.kota = []
       // this.forms.kota = ''
 
-      if (this.profile.id_provinsi) {
+      if (this.forms.propinsi) {
         axios
-          .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.profile.id_provinsi}/kota`)
+          .get(`${process.env.VUE_APP_BASE_API_URL}public/provinsi/${this.forms.propinsi}/kota`)
           .then((response) => {
             this.dataSelect.kota = response.data.data
           })
@@ -664,13 +664,27 @@ export default {
     },
 
     onFilePicked(event) {
-      const eventTarget = event.target
-      if (eventTarget.files[0].type === 'application/pdf') {
-        this.forms.dokumen = eventTarget.files[0]
-        this.label.dokumen.name = eventTarget.files[0].name
+      const file = event.target.files[0];
+
+      if (file) {
+        if (file.type === 'application/pdf') {
+          if (file.size <= 3 * 1024 * 1024) { // Validasi ukuran maksimal 3 MB
+            this.forms.dokumen = file;
+            this.label.dokumen.name = file.name;
+          } else {
+            this.$toastr.e('Ukuran file tidak boleh lebih dari 3 MB', 'Pemberitahuan')
+            this.forms.dokumen = null;
+            this.label.dokumen.name = 'Choose File';
+          }
+        } else {
+          this.$toastr.e('Hanya file PDF yang diperbolehkan', 'Pemberitahuan')
+          this.forms.dokumen = null;
+          this.label.dokumen.name = 'Choose File';
+        }
       } else {
-        this.forms.dokumen = null
-        this.label.dokumen.name = 'Choose File'
+        this.$toastr.e('Tidak ada file yang dipilih', 'Pemberitahuan')
+        this.forms.dokumen = null;
+        this.label.dokumen.name = 'Choose File';
       }
     },
     getProfile() {
