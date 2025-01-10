@@ -292,6 +292,9 @@ export default {
   data() {
     return {
       isSubmit: false,
+      isSameUrl: false,
+      urlList: [],
+      id_profile: [],
       forms: {
         nama_internal: null,
         nama_eksternal: null,
@@ -344,6 +347,7 @@ export default {
   },
   created() {
     this.fetchCategorySpecialFeatures()
+    this.getProfile()
   },
   methods: {
     back() {
@@ -414,6 +418,12 @@ export default {
           formData.append(value[0], value[1] === null ? [] : value[1])
         }
       })
+      this.urlChecker(this.forms.url)
+      if (this.isSameUrl) {
+        this.$toastr.e(`URL sudah ada, silahkan ubah dengan url lainnya`, 'Peringatan')
+        this.isSubmit = false
+        return
+      }
       this.errorValidations.nama_internal = []
       this.errorValidations.nama_eksternal = []
       this.errorValidations.cakupan_wilayah = []
@@ -478,6 +488,37 @@ export default {
             this.$toastr.e(error.response.data.message, 'Pemberitahuan')
           }
         })
+    },
+    getProfile() {
+      this.$http
+      .get('users/get/authenticated')
+      .then((response) => {
+        this.id_profile = response.data.data.id
+        this.getAllSystems()
+      })
+      .catch((error) => {
+        console.log('errResGetProfil === ', error)
+      })
+    },
+    getAllSystems() {
+      this.$http
+      .get('systems/general', {
+        params: {
+          account_id: this.id_profile,
+          filter: 'all',
+        },
+      })
+      .then((response) => {
+        response.data.data.forEach(e => {
+          this.urlList.push(e.url)
+        });
+      })
+      .catch((error) => {
+        console.log('errResGetAll === ', error)
+      })
+    },
+    urlChecker(url){
+      this.isSameUrl = this.urlList.some(dbURL => dbURL.includes(url))
     },
   },
 }
