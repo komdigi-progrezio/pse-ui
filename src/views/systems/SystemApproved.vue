@@ -527,6 +527,73 @@ export default {
           name: '100%',
         },
       ],
+      lockedValidation: {
+        dataUmum:{
+          nama_internal: null,
+          nama_eksternal: null,
+          keterangan: null,
+          kategori_se: null,
+          publish: null,
+          fungsi_sistem: null,
+          keterangan_fungsi_sistem: null,
+          ruang_lingkup: null,
+          jenis_layanan: null,
+          keterangan_jenis_layanan: null,
+          nama_sistem: null,
+          keterangan_sistem_pengaman: null,
+          nama_sistem_terkait: null,
+          keterangan_sistem_terkait: null,
+          no_sertifikat: null,
+          nama_sertifikat: null,
+          institusi: null,
+          tgl_terbit_sertifikat: null,
+          mulai_berlaku_sertifikat: null,
+          tgl_akhir_sertifikat: null,
+          ruang_lingkup_sertifikat: null,
+          masa_berlaku_sertifikat: null,
+          jenis_pengguna: null,
+          keterangan_jenis_pengguna: null,
+        },
+        profilPenyelenggara: {
+          organizer_profile: null,
+        },
+        perangkatKeras: {
+          jenis: null,
+          pemilik: null,
+          bandwith: null,
+          processor: null,
+          memory: null,
+          kegunaan: null,
+        },
+        perangkatLunak: {
+          nama: null,
+          jenis: null,
+          penyedia: null,
+        },
+        penganggungJawab: {
+          nama_penanggung_jawab: null,
+          nip: null,
+          jabatan: null,
+          satuan_kerja: null,
+          alamat: null,
+          provinsi: null,
+          kotaKab: null,
+          kode_pos: null,
+          no_telp: null,
+          email: null,
+        },
+        helpDesk: {
+          nama_lengkap: null,
+          telepon: null,
+          fax: null,
+          email: null,
+        },
+        dokumen: {
+          kategori: null,
+          nama_dokumen: null,
+          dokumen: null,
+        },
+      },
     }
   },
   computed: {
@@ -610,27 +677,157 @@ export default {
       this.modal.uniqueId = item.id
       this.modal.message = 'Ingin Mengkunci Sistem Elektronik'
       this.modal.labelButton = 'Kunci'
+      this.dataSeValidation()
     },
     locked() {
+      const { 
+        dataUmum,
+        profilPenyelenggara,
+        perangkatKeras,
+        perangkatLunak,
+        penganggungJawab,
+        helpDesk,
+        dokumen,
+      } = this.lockedValidation;
+      const nullMessages = [];
+
+      // Cek dataUmum
+      if (Object.values(dataUmum).some(value => value === null)) {
+        nullMessages.push("Data Umum");
+      }
+
+      // Cek profil penyelenggara
+      if (Object.values(profilPenyelenggara).some(value => value === null)) {
+        nullMessages.push("Profil Penyelenggara");
+      }
+
+      // Cek perangkatKeras
+      if (Object.values(perangkatKeras).some(value => value === null)) {
+        nullMessages.push("Perangkat Keras");
+      }
+
+      // Cek perangkatLunak
+      if (Object.values(perangkatLunak).some(value => value === null)) {
+        nullMessages.push("Perangkat Lunak");
+      }
+
+      // Cek penanggung jawab
+      if (Object.values(penganggungJawab).some(value => value === null)) {
+        nullMessages.push("Penanggung Jawab");
+      }
+
+      // Cek help desk
+      if (Object.values(helpDesk).some(value => value === null)) {
+        nullMessages.push("Help Desk");
+      }
+
+      // Cek dokumen
+      if (Object.values(dokumen).some(value => value === null)) {
+        nullMessages.push("Dokumen");
+      }
+
+      // Jika ada field yang null, tampilkan toastr error dan hentikan eksekusi
+      if (nullMessages.length > 0) {
+        this.$toastr.e(
+          `Beberapa field yang berada di ${nullMessages.join(", ")} masih kosong, harap diisi terlebih dahulu!`,
+          "Pemberitahuan"
+        );
+        return;
+      }
+
+      // Melanjutkan proses jika validasi lolos
       this.$http
-        .patch(`/systems/${this.modal.uniqueId}/locked`)
-        .then((response) => {
-          this.filterData()
-          this.closeModal()
-          if(response.data.status === 400){
-            this.$toastr.e(response.data.message, 'Pemberitahuan')
-          }else{
-            this.$toastr.s(response.data.message, 'Pemberitahuan')
-          }
-        })
-        .catch((error) => {
-          this.closeModal()
-          if (error.response.status === 500) {
-            this.$toastr.e('Ada Kesalahan dari Server', 'Pemberitahuan')
-          } else {
-            this.$toastr.e(error.response.data.message, 'Pemberitahuan')
-          }
-        })
+      .patch(`/systems/${this.modal.uniqueId}/locked`)
+      .then((response) => {
+        this.filterData();
+        this.closeModal();
+        if (response.data.status === 400) {
+          this.$toastr.e(response.data.message, "Pemberitahuan");
+        } else {
+          this.$toastr.s(response.data.message, "Pemberitahuan");
+        }
+      })
+      .catch((error) => {
+        this.closeModal();
+        if (error.response.status === 500) {
+          this.$toastr.e("Ada Kesalahan dari Server", "Pemberitahuan");
+        } else {
+          this.$toastr.e(error.response.data.message, "Pemberitahuan");
+        }
+      });
+    },
+    dataSeValidation() {
+      this.$http
+      .get(`systems/${this.modal.uniqueId}`)
+      .then((response) => {
+        // data dataumum 
+        this.lockedValidation.dataUmum.nama_internal = response?.data?.data?.nama_internal
+        this.lockedValidation.dataUmum.nama_eksternal = response?.data?.data?.nama_eksternal
+        this.lockedValidation.dataUmum.keterangan = response?.data?.data?.deskripsi
+        this.lockedValidation.dataUmum.kategori_se = response?.data?.data?.name_sifat_khusus
+        this.lockedValidation.dataUmum.publish = response?.data?.data?.publish
+        this.lockedValidation.dataUmum.fungsi_sistem = response?.data?.data?.relation?.special_function[0]?.fungsi_sistem
+        this.lockedValidation.dataUmum.keterangan_fungsi_sistem = response?.data?.data?.relation?.special_function[0]?.keterangan
+        this.lockedValidation.dataUmum.ruang_lingkup = response?.data?.data?.relation?.scope[0]?.ruang_lingkup
+        this.lockedValidation.dataUmum.jenis_layanan = response?.data?.data?.relation?.kind_of_service[0]?.jenis_layanan
+        this.lockedValidation.dataUmum.keterangan_jenis_layanan = response?.data?.data?.relation?.kind_of_service[0]?.keterangan
+        this.lockedValidation.dataUmum.nama_sistem = response?.data?.data?.relation?.security[0]?.nama_sistem
+        this.lockedValidation.dataUmum.keterangan_sistem_pengaman = response?.data?.data?.relation?.security[0]?.keterangan
+        this.lockedValidation.dataUmum.nama_sistem_terkait = response?.data?.data?.relation?.related[0]?.nama_sistem
+        this.lockedValidation.dataUmum.keterangan_sistem_terkait = response?.data?.data?.relation?.related[0]?.keterangan
+        this.lockedValidation.dataUmum.no_sertifikat = response?.data?.data?.relation?.certificate[0]?.no_sertifikat
+        this.lockedValidation.dataUmum.nama_sertifikat = response?.data?.data?.relation?.certificate[0]?.nama_sertifikat
+        this.lockedValidation.dataUmum.institusi = response?.data?.data?.relation?.certificate[0]?.nama_institusi
+        this.lockedValidation.dataUmum.tgl_terbit_sertifikat = response?.data?.data?.relation?.certificate[0]?.tgl_terbit
+        this.lockedValidation.dataUmum.mulai_berlaku_sertifikat = response?.data?.data?.relation?.certificate[0]?.tgl_mulai
+        this.lockedValidation.dataUmum.tgl_akhir_sertifikat = response?.data?.data?.relation?.certificate[0]?.tgl_expire
+        this.lockedValidation.dataUmum.ruang_lingkup_sertifikat = response?.data?.data?.relation?.certificate[0]?.ruang_lingkup
+        this.lockedValidation.dataUmum.masa_berlaku_sertifikat = response?.data?.data?.relation?.certificate[0]?.masa_berlaku
+        this.lockedValidation.dataUmum.jenis_pengguna = response?.data?.data?.relation?.service_user[0]?.nama_jenis_pengguna
+        this.lockedValidation.dataUmum.keterangan_jenis_pengguna = response?.data?.data?.relation?.service_user[0]?.keterangan
+
+        // data profilPenyelenggara
+        this.lockedValidation.profilPenyelenggara.organizer_profile = response?.data?.data?.organizer_profile == 'Kosong' ? null : response?.data?.data?.organizer_profile
+
+        // data perangkatKeras
+        this.lockedValidation.perangkatKeras.jenis = response?.data?.data?.relation?.hardware[0]?.jenis
+        this.lockedValidation.perangkatKeras.pemilik = response?.data?.data?.relation?.hardware[0]?.pemilik
+        this.lockedValidation.perangkatKeras.bandwith = response?.data?.data?.relation?.hardware[0]?.fasilitas_data_center == 0 ? 'Kosong' : response?.data?.data?.relation?.hardware[0]?.bandwidth
+        this.lockedValidation.perangkatKeras.processor = response?.data?.data?.relation?.hardware[0]?.processor
+        this.lockedValidation.perangkatKeras.memory = response?.data?.data?.relation?.hardware[0]?.memory
+        this.lockedValidation.perangkatKeras.kegunaan = response?.data?.data?.relation?.hardware[0]?.shared
+
+        // data perangkatLunak
+        this.lockedValidation.perangkatLunak.nama = response?.data?.data?.relation?.software[0]?.nama
+        this.lockedValidation.perangkatLunak.jenis = response?.data?.data?.relation?.software[0]?.nama_jenis
+        this.lockedValidation.perangkatLunak.penyedia = response?.data?.data?.relation?.software[0]?.vendor
+
+        // data penaggungjawab
+        this.lockedValidation.penganggungJawab.nama_penanggung_jawab = response?.data?.data?.relation?.responsible_person?.nama
+        this.lockedValidation.penganggungJawab.nip = response?.data?.data?.relation?.responsible_person?.nip
+        this.lockedValidation.penganggungJawab.jabatan = response?.data?.data?.relation?.responsible_person?.jabatan
+        this.lockedValidation.penganggungJawab.satuan_kerja = response?.data?.data?.relation?.responsible_person?.satuan_kerja
+        this.lockedValidation.penganggungJawab.alamat = response?.data?.data?.relation?.responsible_person?.alamat_satuan_kerja
+        this.lockedValidation.penganggungJawab.provinsi = response?.data?.data?.relation?.responsible_person?.nama_provinsi
+        this.lockedValidation.penganggungJawab.kotaKab = response?.data?.data?.relation?.responsible_person?.nama_kabupaten
+        this.lockedValidation.penganggungJawab.kode_pos = response?.data?.data?.relation?.responsible_person?.kode_pos_satuan_kerja
+        this.lockedValidation.penganggungJawab.no_telp = response?.data?.data?.relation?.responsible_person?.handphone
+        this.lockedValidation.penganggungJawab.email = response?.data?.data?.relation?.responsible_person?.email
+
+        // data helpdesk
+        this.lockedValidation.helpDesk.nama_lengkap = response?.data?.data?.relation?.help_desk[0]?.nama
+        this.lockedValidation.helpDesk.telepon = response?.data?.data?.relation?.help_desk[0]?.telepon
+        this.lockedValidation.helpDesk.fax = response?.data?.data?.relation?.help_desk[0]?.fax
+        this.lockedValidation.helpDesk.email = response?.data?.data?.relation?.help_desk[0]?.email
+
+        // data dokumen
+        this.lockedValidation.dokumen.kategori = response?.data?.data?.relation?.document[0]?.category
+        this.lockedValidation.dokumen.nama_dokumen = response?.data?.data?.relation?.document[0]?.name
+        this.lockedValidation.dokumen.dokumen = response?.data?.data?.relation?.document[0]?.dokumen
+      })
+      .catch((error) => {
+        console.log('errGetDataSeValidation => ',error)
+      })
     },
     filter() {
       this.listFilter = !this.listFilter
