@@ -105,6 +105,21 @@
                 </select>
               </div>
             </CCol>
+            <CCol sm="12">
+              <div class="form-group">
+                <label for="name">Status</label>
+                <select v-model="search.status" class="form-control">
+                  <option value="">Pilih Status</option>
+                  <option
+                    v-for="(value, index) in status"
+                    :value="value.id"
+                    :key="`status-${index}`"
+                  >
+                    {{ value.name }}
+                  </option>
+                </select>
+              </div>
+            </CCol>
           </CRow>
         </template>
       </CCardBody>
@@ -456,6 +471,7 @@ export default {
       search: {
         nama_eksternal: null,
         nama_instansi: null,
+        status: '',
       },
       forms: {
         id: null,
@@ -594,6 +610,16 @@ export default {
           dokumen: null,
         },
       },
+      status: [
+        {
+          id: 0,
+          name: 'Tidak Terdaftar',
+        },
+        {
+          id: 1,
+          name: 'Terdaftar',
+        },
+      ],
     }
   },
   computed: {
@@ -875,6 +901,8 @@ export default {
       this.search.nama_eksternal = null
       this.search.nama_instansi = null
       this.search.progres = ''
+      this.search.status = ''
+      
     },
     clearModalReason() {
       this.modal.reason.title = null
@@ -929,7 +957,8 @@ export default {
             filter: 'nama_eksternal',
             q: this.search.nama_eksternal,
             agency: this.search.nama_instansi,
-            progres: this.search.progres
+            progres: this.search.progres,
+            status: this.search.status,
           },
         })
         .then((response) => {
@@ -958,6 +987,7 @@ export default {
             q: this.search.nama_eksternal,
             agency: this.search.nama_instansi,
             progres: this.search.progres,
+            status: this.search.status,
           },
         })
         .then((response) => {
