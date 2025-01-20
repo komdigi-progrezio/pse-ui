@@ -95,13 +95,13 @@
     >
       <div id="message-wrapper">
         <img id="pselogo" src="@/assets/images/logo-text-pse.png" alt="PSE" />
-        <router-link
+        <button
           class="btn btn-lg px-4 d-block mb-3 mt-5 w-100 primary-color border-button"
-          to="/autentikasi-pengguna"
-          tag="button"
+          type="submit"
+          @click="login"
         >
           LOGIN
-        </router-link>
+        </button>
         <router-link
           to="/register"
           class="btn btn-lg d-block w-100 outline-primary-color border-button"

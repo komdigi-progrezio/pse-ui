@@ -61,12 +61,12 @@ function configRoutes() {
         },
       ],
     },
-    {
-      path: '/autentikasi-pengguna',
-      name: 'Autentikasi Pengguna',
-      component: LoginNew,
-      meta: { requiresAuth: false },
-    },
+    // {
+    //   path: '/autentikasi-pengguna',
+    //   name: 'Autentikasi Pengguna',
+    //   component: LoginNew,
+    //   meta: { requiresAuth: false },
+    // },
     {
       path: '/sealid/:id',
       name: 'sealid',
@@ -264,181 +264,97 @@ function configRoutes() {
   ]
 }
 
-// createRouter.beforeEach((to, from, next) => {
-//   const initOptions = {
-//     url: process.env.VUE_APP_KEYCLOAK_URL,
-//     realm: process.env.VUE_APP_KEYCLOAK_REALM,
-//     clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
-//     onLoad: 'login-required',
-//   }
-//   const keycloak = Keycloak(initOptions)
-//   if (to.meta.requiresAuth) {
-//     if (!store.state.auth.isLogin) {
-//       keycloak
-//         .init({
-//           onLoad: initOptions.onLoad,
-//           checkLoginIframe: true,
-//           pkceMethod: 'S256',
-//           // redirectUri: 'http://localhost:8082/check-sso',
-//         })
-//         .then((authenticated) => {
-//           if (!authenticated) {
-//             window.location.reload()
-//           }
-//           localStorage.setItem('token', keycloak.token)
-//           localStorage.setItem('refresh_token', keycloak.refreshToken)
-//           store.dispatch('auth/fetchAuth').then((response) => {
-//             store.dispatch('dispatchLogin', response.data.data).then(() => {
-//               try {
-//                 if (firebase.messaging.isSupported()) {
-//                   const messaging = firebase.messaging()
-//                   Notification.requestPermission().then(() => {
-//                     messaging
-//                       .getToken({
-//                         vapidKey:
-//                           'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-//                       })
-//                       .then((currentToken) => {
-//                         $axiosApi
-//                           .post('/users/notification-token', {
-//                             token: currentToken,
-//                             type: 'web',
-//                           })
-//                           .then(() => {
-//                             next()
-//                           })
-//                           .catch(() => {
-//                             localStorage.removeItem('token')
-//                             localStorage.removeItem('refresh_token')
-//                             localStorage.removeItem('user')
-//                             store.dispatch('dispatchDisableLoading')
-//                           })
-//                       })
-//                       .catch(() => {
-//                         next()
-//                       })
-//                   })
-//                 }
-//               } catch (error) {
-//                 alert(error)
-//               }
-//             })
-//           })
-//         })
-//         .catch(() => {
-//           alert('Server Bermasalah')
-//         })
-//     } else {
-//       next()
-//     }
-//   } else {
-//     if (to.path === '/register') {
-//       const token = localStorage.getItem('token')
-//       if (token !== null && typeof token !== 'undefined') {
-//         next({ path: '/admin/dashboard' })
-//       } else {
-//         next()
-//       }
-//     } else if (to.path === '/sealid/:id') {
-//       next()
-//     } else {
-//       keycloak
-//         .init({
-//           onLoad: 'check-sso',
-//           checkLoginIframe: true,
-//           pkceMethod: 'S256',
-//         })
-//         .then((response) => {
-//           if (response) {
-//             localStorage.setItem('token', keycloak.token)
-//             localStorage.setItem('refresh_token', keycloak.refreshToken)
-//             store.dispatch('auth/fetchAuth').then((response) => {
-//               store
-//                 .dispatch('dispatchLogin', response.data.data)
-//                 .then(() => {
-//                   try {
-//                     if (firebase.messaging.isSupported()) {
-//                       const messaging = firebase.messaging()
-//                       Notification.requestPermission().then(() => {
-//                         messaging
-//                           .getToken({
-//                             vapidKey:
-//                               'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-//                           })
-//                           .then((currentToken) => {
-//                             $axiosApi
-//                               .post('/users/notification-token', {
-//                                 token: currentToken,
-//                                 type: 'web',
-//                               })
-//                               .then(() => {
-//                                 next({ path: '/admin/dashboard' })
-//                               })
-//                               .catch(() => {
-//                                 localStorage.removeItem('token')
-//                                 localStorage.removeItem('refresh_token')
-//                                 localStorage.removeItem('user')
-//                                 store.dispatch('dispatchDisableLoading')
-//                               })
-//                           })
-//                           .catch(() => {
-//                             next({ path: '/admin/dashboard' })
-//                           })
-//                       })
-//                     }
-//                   } catch (error) {
-//                     alert(error)
-//                   }
-//                 })
-//                 .catch(() => {
-//                   alert('Server Bermasalah')
-//                 })
-//             })
-//           } else {
-//             next()
-//           }
-//         })
-//     }
-//   }
-// })
-
 createRouter.beforeEach((to, from, next) => {
-
+  const initOptions = {
+    url: process.env.VUE_APP_KEYCLOAK_URL,
+    realm: process.env.VUE_APP_KEYCLOAK_REALM,
+    clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
+    onLoad: 'login-required',
+  }
+  const keycloak = Keycloak(initOptions)
   if (to.meta.requiresAuth) {
     if (!store.state.auth.isLogin) {
-      const token = localStorage.getItem('token')
-      const username = localStorage.getItem('username')
-      const password = localStorage.getItem('password')
-      const startAt = localStorage.getItem('start_at')
-      
-      if (token !== null && typeof token !== 'undefined') {
-        console.log('condition1')
-        if(startAt){
-          console.log('condition2')
-          const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
-          const currentTime = new Date()
-          const timeDifference = currentTime - startAtDate
-          const differenceInHours = timeDifference / (1000 * 60 * 60)
-          if(differenceInHours >= 1){
-            localStorage.removeItem('token')
-            localStorage.removeItem('refresh_token')
-            localStorage.removeItem('user')
-            localStorage.removeItem('username')
-            localStorage.removeItem('password')
-            localStorage.removeItem('start_at')
-            next({ path: '/login' })
-          }else{
-            console.log('condition3')
-            $axiosApi
-            .post('/login-activity/reaccess-token', {
-              username: username,
-              password: password,
+      keycloak
+        .init({
+          onLoad: initOptions.onLoad,
+          checkLoginIframe: true,
+          pkceMethod: 'S256',
+          // redirectUri: 'http://localhost:8082/check-sso',
+        })
+        .then((authenticated) => {
+          if (!authenticated) {
+            window.location.reload()
+          }
+          localStorage.setItem('token', keycloak.token)
+          localStorage.setItem('refresh_token', keycloak.refreshToken)
+          store.dispatch('auth/fetchAuth').then((response) => {
+            store.dispatch('dispatchLogin', response.data.data).then(() => {
+              try {
+                if (firebase.messaging.isSupported()) {
+                  const messaging = firebase.messaging()
+                  Notification.requestPermission().then(() => {
+                    messaging
+                      .getToken({
+                        vapidKey:
+                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+                      })
+                      .then((currentToken) => {
+                        $axiosApi
+                          .post('/users/notification-token', {
+                            token: currentToken,
+                            type: 'web',
+                          })
+                          .then(() => {
+                            next()
+                          })
+                          .catch(() => {
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('refresh_token')
+                            localStorage.removeItem('user')
+                            store.dispatch('dispatchDisableLoading')
+                          })
+                      })
+                      .catch(() => {
+                        next()
+                      })
+                  })
+                }
+              } catch (error) {
+                alert(error)
+              }
             })
-            .then((res) => {
-              localStorage.setItem('token', res.data.data.access_token)
-              localStorage.setItem('refresh_token', res.data.data.refresh_token)
-              store.dispatch('auth/fetchAuth').then((response) => {
-              store.dispatch('dispatchLogin', response.data.data)
+          })
+        })
+        .catch(() => {
+          alert('Server Bermasalah')
+        })
+    } else {
+      next()
+    }
+  } else {
+    if (to.path === '/register') {
+      const token = localStorage.getItem('token')
+      if (token !== null && typeof token !== 'undefined') {
+        next({ path: '/admin/dashboard' })
+      } else {
+        next()
+      }
+    } else if (to.path === '/sealid/:id') {
+      next()
+    } else {
+      keycloak
+        .init({
+          onLoad: 'check-sso',
+          checkLoginIframe: true,
+          pkceMethod: 'S256',
+        })
+        .then((response) => {
+          if (response) {
+            localStorage.setItem('token', keycloak.token)
+            localStorage.setItem('refresh_token', keycloak.refreshToken)
+            store.dispatch('auth/fetchAuth').then((response) => {
+              store
+                .dispatch('dispatchLogin', response.data.data)
                 .then(() => {
                   try {
                     if (firebase.messaging.isSupported()) {
@@ -456,20 +372,17 @@ createRouter.beforeEach((to, from, next) => {
                                 type: 'web',
                               })
                               .then(() => {
-                                next()
+                                next({ path: '/admin/dashboard' })
                               })
                               .catch(() => {
                                 localStorage.removeItem('token')
                                 localStorage.removeItem('refresh_token')
                                 localStorage.removeItem('user')
-                                localStorage.removeItem('username')
-                                localStorage.removeItem('password')
-                                localStorage.removeItem('start_at')
                                 store.dispatch('dispatchDisableLoading')
                               })
                           })
                           .catch(() => {
-                            next()
+                            next({ path: '/admin/dashboard' })
                           })
                       })
                     }
@@ -480,209 +393,296 @@ createRouter.beforeEach((to, from, next) => {
                 .catch(() => {
                   alert('Server Bermasalah')
                 })
-              })
             })
+          } else {
+            next()
           }
-        }
-      } else {
-        console.log('Access denied, login before please')
-        next({ path: '/' })
-      }
-    } else {
-      console.log('isLogin is true, continue please')
-      next()
-    }
-  } else {
-    if (to.path === '/register') {
-      const token = localStorage.getItem('token')
-      if (token !== null && typeof token !== 'undefined') {
-        store.dispatch('auth/fetchAuth').then((response) => {
-          store
-            .dispatch('dispatchLogin', response.data.data)
-            .then(() => {
-              try {
-                if (firebase.messaging.isSupported()) {
-                  const messaging = firebase.messaging()
-                  Notification.requestPermission().then(() => {
-                    messaging
-                      .getToken({
-                        vapidKey:
-                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                      })
-                      .then((currentToken) => {
-                        $axiosApi
-                          .post('/users/notification-token', {
-                            token: currentToken,
-                            type: 'web',
-                          })
-                          .then(() => {
-                            next({ path: '/admin/dashboard' })
-                          })
-                          .catch(() => {
-                            localStorage.removeItem('token')
-                            localStorage.removeItem('refresh_token')
-                            localStorage.removeItem('user')
-                            localStorage.removeItem('username')
-                            localStorage.removeItem('password')
-                            localStorage.removeItem('start_at')
-                            store.dispatch('dispatchDisableLoading')
-                          })
-                      })
-                      .catch(() => {
-                        next({ path: '/admin/dashboard' })
-                      })
-                  })
-                }
-              } catch (error) {
-                alert(error)
-              }
-            })
-            .catch(() => {
-              alert('Server Bermasalah')
-            })
         })
-      } else {
-        next()
-      }
-    } else if (to.path === '/sealid/:id') {
-      next()
-    } else {
-      const token = localStorage.getItem('token')
-      const username = localStorage.getItem('username')
-      const password = localStorage.getItem('password')
-      const thisUser = localStorage.getItem('user')
-      const startAt = localStorage.getItem('start_at')
-
-      if (token !== null && typeof token !== 'undefined') {
-        if (thisUser == 'undefined'){
-          console.log('log2a undefined')
-          if(startAt){
-            const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
-            const currentTime = new Date()
-            const timeDifference = currentTime - startAtDate
-            const differenceInHours = timeDifference / (1000 * 60 * 60)
-            if(differenceInHours >= 1){
-              localStorage.removeItem('token')
-              localStorage.removeItem('refresh_token')
-              localStorage.removeItem('user')
-              localStorage.removeItem('username')
-              localStorage.removeItem('password')
-              localStorage.removeItem('start_at')
-              next({ path: '/login' })
-            }else{
-              $axiosApi
-              .post('/login-activity/reaccess-token', {
-                username: username,
-                password: password,
-              })
-              .then(() => {
-                store.dispatch('auth/fetchAuth').then((response) => {
-                store.dispatch('dispatchLogin', response.data.data)
-                  .then(() => {
-                    try {
-                      if (firebase.messaging.isSupported()) {
-                        const messaging = firebase.messaging()
-                        Notification.requestPermission().then(() => {
-                          messaging
-                            .getToken({
-                              vapidKey:
-                                'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                            })
-                            .then((currentToken) => {
-                              $axiosApi
-                                .post('/users/notification-token', {
-                                  token: currentToken,
-                                  type: 'web',
-                                })
-                                .then(() => {
-                                  next({ path: '/admin/dashboard' })
-                                })
-                                .catch(() => {
-                                  localStorage.removeItem('token')
-                                  localStorage.removeItem('refresh_token')
-                                  localStorage.removeItem('user')
-                                  localStorage.removeItem('username')
-                                  localStorage.removeItem('password')
-                                  localStorage.removeItem('start_at')
-                                  store.dispatch('dispatchDisableLoading')
-                                })
-                            })
-                            .catch(() => {
-                              next({ path: '/admin/dashboard' })
-                            })
-                        })
-                      }
-                    } catch (error) {
-                      alert(error)
-                    }
-                  })
-                  .catch(() => {
-                    alert('Server Bermasalah')
-                  })
-                })
-              })
-              .catch(() => {
-                localStorage.removeItem('token')
-                localStorage.removeItem('refresh_token')
-                localStorage.removeItem('user')
-                localStorage.removeItem('username')
-                localStorage.removeItem('password')
-                store.dispatch('dispatchDisableLoading')
-              })
-            }
-          }
-        }else{
-          console.log('log2b undefined')
-          store.dispatch('auth/fetchAuth').then((response) => {
-          store.dispatch('dispatchLogin', response.data.data)
-            .then(() => {
-              try {
-                if (firebase.messaging.isSupported()) {
-                  const messaging = firebase.messaging()
-                  Notification.requestPermission().then(() => {
-                    messaging
-                      .getToken({
-                        vapidKey:
-                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                      })
-                      .then((currentToken) => {
-                        $axiosApi
-                          .post('/users/notification-token', {
-                            token: currentToken,
-                            type: 'web',
-                          })
-                          .then(() => {
-                            next({ path: '/admin/dashboard' })
-                          })
-                          .catch(() => {
-                            localStorage.removeItem('token')
-                            localStorage.removeItem('refresh_token')
-                            localStorage.removeItem('user')
-                            localStorage.removeItem('username')
-                            localStorage.removeItem('password')
-                            localStorage.removeItem('start_at')
-                            store.dispatch('dispatchDisableLoading')
-                          })
-                      })
-                      .catch(() => {
-                        next({ path: '/admin/dashboard' })
-                      })
-                  })
-                }
-              } catch (error) {
-                alert(error)
-              }
-            })
-            .catch(() => {
-              alert('Server Bermasalah')
-            })
-          })
-        }
-      } else {
-        next()
-      }
     }
   }
 })
+
+// createRouter.beforeEach((to, from, next) => {
+
+//   if (to.meta.requiresAuth) {
+//     if (!store.state.auth.isLogin) {
+//       const token = localStorage.getItem('token')
+//       const username = localStorage.getItem('username')
+//       const password = localStorage.getItem('password')
+//       const startAt = localStorage.getItem('start_at')
+      
+//       if (token !== null && typeof token !== 'undefined') {
+//         console.log('condition1')
+//         if(startAt){
+//           console.log('condition2')
+//           const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
+//           const currentTime = new Date()
+//           const timeDifference = currentTime - startAtDate
+//           const differenceInHours = timeDifference / (1000 * 60 * 60)
+//           if(differenceInHours >= 1){
+//             localStorage.removeItem('token')
+//             localStorage.removeItem('refresh_token')
+//             localStorage.removeItem('user')
+//             localStorage.removeItem('username')
+//             localStorage.removeItem('password')
+//             localStorage.removeItem('start_at')
+//             next({ path: '/login' })
+//           }else{
+//             console.log('condition3')
+//             $axiosApi
+//             .post('/login-activity/reaccess-token', {
+//               username: username,
+//               password: password,
+//             })
+//             .then((res) => {
+//               localStorage.setItem('token', res.data.data.access_token)
+//               localStorage.setItem('refresh_token', res.data.data.refresh_token)
+//               store.dispatch('auth/fetchAuth').then((response) => {
+//               store.dispatch('dispatchLogin', response.data.data)
+//                 .then(() => {
+//                   try {
+//                     if (firebase.messaging.isSupported()) {
+//                       const messaging = firebase.messaging()
+//                       Notification.requestPermission().then(() => {
+//                         messaging
+//                           .getToken({
+//                             vapidKey:
+//                               'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                           })
+//                           .then((currentToken) => {
+//                             $axiosApi
+//                               .post('/users/notification-token', {
+//                                 token: currentToken,
+//                                 type: 'web',
+//                               })
+//                               .then(() => {
+//                                 next()
+//                               })
+//                               .catch(() => {
+//                                 localStorage.removeItem('token')
+//                                 localStorage.removeItem('refresh_token')
+//                                 localStorage.removeItem('user')
+//                                 localStorage.removeItem('username')
+//                                 localStorage.removeItem('password')
+//                                 localStorage.removeItem('start_at')
+//                                 store.dispatch('dispatchDisableLoading')
+//                               })
+//                           })
+//                           .catch(() => {
+//                             next()
+//                           })
+//                       })
+//                     }
+//                   } catch (error) {
+//                     alert(error)
+//                   }
+//                 })
+//                 .catch(() => {
+//                   alert('Server Bermasalah')
+//                 })
+//               })
+//             })
+//           }
+//         }
+//       } else {
+//         console.log('Access denied, login before please')
+//         next({ path: '/' })
+//       }
+//     } else {
+//       console.log('isLogin is true, continue please')
+//       next()
+//     }
+//   } else {
+//     if (to.path === '/register') {
+//       const token = localStorage.getItem('token')
+//       if (token !== null && typeof token !== 'undefined') {
+//         store.dispatch('auth/fetchAuth').then((response) => {
+//           store
+//             .dispatch('dispatchLogin', response.data.data)
+//             .then(() => {
+//               try {
+//                 if (firebase.messaging.isSupported()) {
+//                   const messaging = firebase.messaging()
+//                   Notification.requestPermission().then(() => {
+//                     messaging
+//                       .getToken({
+//                         vapidKey:
+//                           'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                       })
+//                       .then((currentToken) => {
+//                         $axiosApi
+//                           .post('/users/notification-token', {
+//                             token: currentToken,
+//                             type: 'web',
+//                           })
+//                           .then(() => {
+//                             next({ path: '/admin/dashboard' })
+//                           })
+//                           .catch(() => {
+//                             localStorage.removeItem('token')
+//                             localStorage.removeItem('refresh_token')
+//                             localStorage.removeItem('user')
+//                             localStorage.removeItem('username')
+//                             localStorage.removeItem('password')
+//                             localStorage.removeItem('start_at')
+//                             store.dispatch('dispatchDisableLoading')
+//                           })
+//                       })
+//                       .catch(() => {
+//                         next({ path: '/admin/dashboard' })
+//                       })
+//                   })
+//                 }
+//               } catch (error) {
+//                 alert(error)
+//               }
+//             })
+//             .catch(() => {
+//               alert('Server Bermasalah')
+//             })
+//         })
+//       } else {
+//         next()
+//       }
+//     } else if (to.path === '/sealid/:id') {
+//       next()
+//     } else {
+//       const token = localStorage.getItem('token')
+//       const username = localStorage.getItem('username')
+//       const password = localStorage.getItem('password')
+//       const thisUser = localStorage.getItem('user')
+//       const startAt = localStorage.getItem('start_at')
+
+//       if (token !== null && typeof token !== 'undefined') {
+//         if (thisUser == 'undefined'){
+//           console.log('log2a undefined')
+//           if(startAt){
+//             const startAtDate = new Date(startAt.split(' ')[0].split('-').reverse().join('-') + 'T' + startAt.split(' ')[1])
+//             const currentTime = new Date()
+//             const timeDifference = currentTime - startAtDate
+//             const differenceInHours = timeDifference / (1000 * 60 * 60)
+//             if(differenceInHours >= 1){
+//               localStorage.removeItem('token')
+//               localStorage.removeItem('refresh_token')
+//               localStorage.removeItem('user')
+//               localStorage.removeItem('username')
+//               localStorage.removeItem('password')
+//               localStorage.removeItem('start_at')
+//               next({ path: '/login' })
+//             }else{
+//               $axiosApi
+//               .post('/login-activity/reaccess-token', {
+//                 username: username,
+//                 password: password,
+//               })
+//               .then(() => {
+//                 store.dispatch('auth/fetchAuth').then((response) => {
+//                 store.dispatch('dispatchLogin', response.data.data)
+//                   .then(() => {
+//                     try {
+//                       if (firebase.messaging.isSupported()) {
+//                         const messaging = firebase.messaging()
+//                         Notification.requestPermission().then(() => {
+//                           messaging
+//                             .getToken({
+//                               vapidKey:
+//                                 'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                             })
+//                             .then((currentToken) => {
+//                               $axiosApi
+//                                 .post('/users/notification-token', {
+//                                   token: currentToken,
+//                                   type: 'web',
+//                                 })
+//                                 .then(() => {
+//                                   next({ path: '/admin/dashboard' })
+//                                 })
+//                                 .catch(() => {
+//                                   localStorage.removeItem('token')
+//                                   localStorage.removeItem('refresh_token')
+//                                   localStorage.removeItem('user')
+//                                   localStorage.removeItem('username')
+//                                   localStorage.removeItem('password')
+//                                   localStorage.removeItem('start_at')
+//                                   store.dispatch('dispatchDisableLoading')
+//                                 })
+//                             })
+//                             .catch(() => {
+//                               next({ path: '/admin/dashboard' })
+//                             })
+//                         })
+//                       }
+//                     } catch (error) {
+//                       alert(error)
+//                     }
+//                   })
+//                   .catch(() => {
+//                     alert('Server Bermasalah')
+//                   })
+//                 })
+//               })
+//               .catch(() => {
+//                 localStorage.removeItem('token')
+//                 localStorage.removeItem('refresh_token')
+//                 localStorage.removeItem('user')
+//                 localStorage.removeItem('username')
+//                 localStorage.removeItem('password')
+//                 store.dispatch('dispatchDisableLoading')
+//               })
+//             }
+//           }
+//         }else{
+//           console.log('log2b undefined')
+//           store.dispatch('auth/fetchAuth').then((response) => {
+//           store.dispatch('dispatchLogin', response.data.data)
+//             .then(() => {
+//               try {
+//                 if (firebase.messaging.isSupported()) {
+//                   const messaging = firebase.messaging()
+//                   Notification.requestPermission().then(() => {
+//                     messaging
+//                       .getToken({
+//                         vapidKey:
+//                           'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
+//                       })
+//                       .then((currentToken) => {
+//                         $axiosApi
+//                           .post('/users/notification-token', {
+//                             token: currentToken,
+//                             type: 'web',
+//                           })
+//                           .then(() => {
+//                             next({ path: '/admin/dashboard' })
+//                           })
+//                           .catch(() => {
+//                             localStorage.removeItem('token')
+//                             localStorage.removeItem('refresh_token')
+//                             localStorage.removeItem('user')
+//                             localStorage.removeItem('username')
+//                             localStorage.removeItem('password')
+//                             localStorage.removeItem('start_at')
+//                             store.dispatch('dispatchDisableLoading')
+//                           })
+//                       })
+//                       .catch(() => {
+//                         next({ path: '/admin/dashboard' })
+//                       })
+//                   })
+//                 }
+//               } catch (error) {
+//                 alert(error)
+//               }
+//             })
+//             .catch(() => {
+//               alert('Server Bermasalah')
+//             })
+//           })
+//         }
+//       } else {
+//         next()
+//       }
+//     }
+//   }
+// })
 
 export default createRouter
