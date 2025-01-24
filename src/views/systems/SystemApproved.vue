@@ -704,6 +704,7 @@ export default {
       this.modal.message = 'Ingin Mengkunci Sistem Elektronik'
       this.modal.labelButton = 'Kunci'
       this.dataSeValidation()
+      console.log('cekdata = ',this.lockedValidation)
     },
     locked() {
       const { 
@@ -813,7 +814,7 @@ export default {
         this.lockedValidation.dataUmum.keterangan_jenis_pengguna = response?.data?.data?.relation?.service_user[0]?.keterangan
 
         // data profilPenyelenggara
-        this.lockedValidation.profilPenyelenggara.organizer_profile = response?.data?.data?.organizer_profile == 'Kosong' ? null : response?.data?.data?.organizer_profile
+        this.lockedValidation.profilPenyelenggara.organizer_profile = response?.data?.data?.relation?.organizer?.name
 
         // data perangkatKeras
         this.lockedValidation.perangkatKeras.jenis = response?.data?.data?.relation?.hardware[0]?.jenis
