@@ -193,7 +193,7 @@
                         </th>
 
                         <td>
-                          {{ item.organizer_profile }}
+                          {{ item.nama_penanggungjawab_satuan_kerja }}
                         </td>
 
                         <td>
