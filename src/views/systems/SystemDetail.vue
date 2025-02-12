@@ -364,6 +364,7 @@ export default {
           this.closeModal()
           this.$toastr.s(response.data.message, 'Pemberitahuan')
           this.isSubmit = false
+          window.location.reload()
         })
         .catch((error) => {
           this.isSubmit = false
