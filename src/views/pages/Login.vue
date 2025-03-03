@@ -12,7 +12,7 @@
       <div id="infotext">
         <img
           id="joinlogo"
-          src="@/assets/images/logo-kominfo-spbe.png"
+          src="@/assets/images/logo-kominfo-new-spbe.png"
           alt="PSE"
         />
         <div class="info-header">
