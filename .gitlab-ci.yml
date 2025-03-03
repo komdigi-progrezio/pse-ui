@@ -15,11 +15,11 @@ variables:
 
 publish:
   stage: publish
-  image: docker:${DOCKER_VERSION}-cli
+  image: docker:cli
   tags:
     - docker
   services:
-    - name: docker:${DOCKER_VERSION}-dind
+    - name: docker:dind
       entrypoint:
         - dockerd-entrypoint.sh
       command:
