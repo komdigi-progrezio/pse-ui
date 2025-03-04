@@ -31,7 +31,7 @@ RUN npm install cross-env --save-dev
 RUN npm run build
 
 # Set the base image to nginx
-FROM registry.dev.layanan.go.id/base/nginx:latest
+FROM nginx:latest
 
 # Remove the default nginx static content
 RUN rm -rf /usr/share/nginx/html/*
