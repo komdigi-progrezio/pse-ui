@@ -3,7 +3,7 @@
     <h5>Profil Penyelenggara Sistem Elektronik </h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addOrganizer"
     >

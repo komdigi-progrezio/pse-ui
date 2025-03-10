@@ -1,7 +1,7 @@
 <template>
   <div class="mt-lg-2">
     <router-link
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       tag="button"
       :to="`/admin/systems/${this.$route.params.id}/edit`"
       class="btn btn-link d-flex"
@@ -58,7 +58,7 @@
     <h5>Fungsi Utama</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addMainFunction"
     >
@@ -122,7 +122,7 @@
     <h5>Ruang Lingkup</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addScope"
     >
@@ -181,7 +181,7 @@
     <h5>Jenis Layanan</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addKindOfService"
     >
@@ -245,7 +245,7 @@
     <h5>Sistem Pengamanan</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addSecurity"
     >
@@ -306,7 +306,7 @@
     <h5>Sistem Terkait</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addRelated"
     >
@@ -370,7 +370,7 @@
     <h5>Sertifikasi</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addCertificate"
     >
@@ -458,7 +458,7 @@
     <h5>Pengguna Layanan</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="addServiceUsers"
     >

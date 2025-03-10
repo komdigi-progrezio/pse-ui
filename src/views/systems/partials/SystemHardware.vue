@@ -3,7 +3,7 @@
     <h5>Perangkat Keras Utama</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="openModalHardware('Simpan', 'Tambah Perangkat Keras Utama')"
     >
@@ -81,7 +81,7 @@
     <h5>Perangkat Jaringan</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="openModalNetwork('Simpan', 'Tambah Perangkat Jaringan')"
     >
@@ -148,7 +148,7 @@
     <h5>Perangkat Khusus</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="openModalPeripheral('Simpan', 'Tambah Perangkat Khusus')"
     >
@@ -213,7 +213,7 @@
     </div>
 
     <ValidationObserver
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       v-slot="{ invalid }"
       :ref="hardwareForm"
     >

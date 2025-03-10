@@ -3,7 +3,7 @@
     <h5>Perangkat Lunak Utama</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="openSoftwareModal('Simpan', 'Tambah Perangkat Lunak Utama')"
     >
@@ -74,7 +74,7 @@
     <h5>Perangkat Lunak Pendukung</h5>
     <hr />
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click="
         openSoftwareToolModal('Simpan', 'Tambah Perangkat Lunak Pendukung')

@@ -5,7 +5,7 @@
     <hr />
 
     <button
-      v-if="system.is_locked !== true"
+      v-if="system.approved_publish == true && system.is_locked !== true"
       class="btn btn-link d-flex"
       @click.prevent="openModalDocument('Simpan', 'Tambah Data')"
     >
