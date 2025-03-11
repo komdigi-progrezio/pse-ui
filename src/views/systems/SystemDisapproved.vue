@@ -170,9 +170,23 @@
                           >
                         </CButton>
                         <CButton
+                          color="primary"
+                          size="sm"
+                          class="mr-2"
+                          v-c-tooltip="{
+                            content: 'Detail Sistem Elektronik',
+                            placement: 'bottom',
+                          }"
+                          :to="`/admin/systems/${item.id}`"
+                        >
+                          <CIcon name="cil-description" />
+                          <span class="mobile-only ml-1"
+                            >Detail Sistem Elektronik
+                          </span>
+                        </CButton>
+                        <CButton
                           color="danger"
                           size="sm"
-                          class="ml-2"
                           v-c-tooltip="{
                             content: 'Hapus Sistem Elektronik',
                             placement: 'bottom',
@@ -184,21 +198,6 @@
                       </td>
                     </template>
                     <template v-else>
-                      <!-- <CButton
-                        color="primary"
-                        size="sm"
-                        class="mr-2"
-                        v-c-tooltip="{
-                          content: 'Detail Sistem Elektronik',
-                          placement: 'bottom',
-                        }"
-                        :to="`/admin/systems/${item.id}`"
-                      >
-                        <CIcon name="cil-description" />
-                        <span class="mobile-only ml-1"
-                          >Detail Sistem Elektronik
-                        </span>
-                      </CButton> -->
                       <CButton
                         v-if="!isAdmin"
                         color="danger"

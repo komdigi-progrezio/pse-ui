@@ -231,8 +231,8 @@
                         v-if="
                           isAdmin &&
                           item.status === 'Tidak Terdaftar' &&
-                          item.is_locked !== true &&
-                          item.progress !== 100
+                          item.is_locked === true &&
+                          item.progress === 100
                         "
                         color="warning"
                         size="sm"
