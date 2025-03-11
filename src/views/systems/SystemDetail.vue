@@ -248,6 +248,7 @@ export default {
           name_sifat_khusus: null,
           approved: null,
           approved_date: null,
+          approved_publish: null,
           no_reg: null,
           img_badge: null,
           flag_sistem_pengaman: null,
@@ -434,6 +435,7 @@ export default {
           this.data.system.name_sifat_khusus =
             response.data.data.name_sifat_khusus
           this.data.system.approved = response.data.data.approved
+          this.data.system.approved_publish = response.data.data.approved_publish
           this.data.system.approved_date = response.data.data.approved_date
           this.data.system.no_reg = response.data.data.no_reg
           this.data.system.img_badge = response.data.data.img_badge
