@@ -59,13 +59,22 @@
             </CCol>
             <CCol sm="12">
               <div class="form-group">
-                <label for="name">Keterangan</label>
-                <textarea
-                  v-model="forms.deskripsi"
-                  cols="30"
-                  rows="2"
-                  class="form-control"
-                ></textarea>
+                <label for="deskripsi">Keterangan</label>
+                <ValidationProvider name="Keterangan" rules="required" v-slot="{ errors }">
+                  <textarea
+                    v-model="forms.deskripsi"
+                    cols="30"
+                    rows="2"
+                    class="form-control"
+                    :class="{
+                      'is-invalid':
+                        errors.length > 0 || errorValidations.deskripsi.length > 0,
+                    }"
+                  ></textarea>
+                  <div v-if="errors.length > 0" class="invalid-feedback">
+                    {{ errors[0] }}
+                  </div>
+                </ValidationProvider>
               </div>
             </CCol>
             <CCol sm="12">
@@ -309,6 +318,7 @@ export default {
       errorValidations: {
         nama_internal: [],
         nama_eksternal: [],
+        deskripsi: [],
         cakupan_wilayah: [],
         sifat_khusus: [],
         kategori_akses: [],
@@ -431,6 +441,7 @@ export default {
       this.errorValidations.kategori_akses = []
       this.errorValidations.url = []
       this.errorValidations.dokumen = []
+      this.errorValidations.deskripsi = []
 
       this.$http({
         method: 'post',

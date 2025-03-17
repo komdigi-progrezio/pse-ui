@@ -62,7 +62,7 @@
             <div class="form-group">
               <label for="name">Keterangan<span class="text-danger">*</span></label>
               <ValidationProvider
-                name="Nama Eksternal"
+                name="Deskripsi"
                 rules="required"
                 v-slot="{ errors }"
               >
@@ -257,7 +257,7 @@ export default {
       errorValidations: {
         nama_internal: [],
         nama_eksternal: [],
-        keterangan: [],
+        deskripsi: [],
         cakupan_wilayah: [],
         sifat_khusus: [],
         kategori_akses: [],
