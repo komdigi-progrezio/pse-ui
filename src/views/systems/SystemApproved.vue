@@ -757,12 +757,12 @@ export default {
       }
 
       // Cek help desk
-      if (Object.values(helpDesk).some(value => value === null)) {
+      if (Object.values(helpDesk).some(value => value === null || value == undefined)) {
         nullMessages.push("Help Desk");
       }
 
       // Cek dokumen
-      if (Object.values(dokumen).some(value => value === null)) {
+      if (Object.values(dokumen).some(value => value === null || value == undefined)) {
         nullMessages.push("Dokumen");
       }
 
