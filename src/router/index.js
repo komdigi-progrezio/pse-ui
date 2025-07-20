@@ -6,6 +6,7 @@ import $axiosApi from '@/utils/api'
 import firebase from 'firebase/app'
 import 'firebase/messaging'
 
+
 // Containers
 const TheContainer = () => import('@/containers/TheContainer')
 
@@ -16,7 +17,9 @@ import systems from '@/router/partials/systems.js'
 
 const Dashboard = () => import('@/views/Dashboard')
 const LoginNew = () => import('@/views/pages/LoginPage')
-const Login = () => import('@/views/pages/Login')
+const Login = () => import('@/views/pages/LoginLocal')
+const CreatePassword = () => import('@/views/pages/CreatePassword.vue')
+const HomePage = () => import('@/views/pages/Login') 
 const Forbidden = () => import('@/views/pages/Forbidden')
 const OfficialNew = () => import('@/views/pages/OfficialNew')
 const OfficiaReplace = () => import('@/views/pages/OfficiaReplace')
@@ -33,6 +36,7 @@ const FaqPage = () => import('@/views/pages/FaqPage')
 const PrivacyPolicyPage = () => import('@/views/pages/PrivacyPolicyPage')
 const TermsAndConditionPage = () => import('@/views/pages/TermsAndConditionPage')
 
+
 Vue.use(Router)
 
 const createRouter = new Router({
@@ -43,6 +47,12 @@ const createRouter = new Router({
 })
 function configRoutes() {
   return [
+    {
+      path: '/',
+      name: 'HomePage',
+      component: HomePage,
+      meta: { requiresAuth: false },
+    },
     {
       path: '',
       redirect: '/login',
@@ -83,6 +93,12 @@ function configRoutes() {
       path: '/register',
       name: 'Daftar Pejabat',
       component: OfficialNew,
+      meta: { requiresAuth: false },
+    },
+    {
+      path: '/create-password',
+      name: 'CreatePassword',
+      component: CreatePassword,
       meta: { requiresAuth: false },
     },
     {
@@ -265,142 +281,21 @@ function configRoutes() {
 }
 
 createRouter.beforeEach((to, from, next) => {
-  const initOptions = {
-    url: process.env.VUE_APP_KEYCLOAK_URL,
-    realm: process.env.VUE_APP_KEYCLOAK_REALM,
-    clientId: process.env.VUE_APP_KEYCLOAK_CLIENT_ID,
-    onLoad: 'login-required',
-  }
-  const keycloak = Keycloak(initOptions)
+  const token = localStorage.getItem('token')
+
   if (to.meta.requiresAuth) {
-    if (!store.state.auth.isLogin) {
-      keycloak
-        .init({
-          onLoad: initOptions.onLoad,
-          checkLoginIframe: true,
-          pkceMethod: 'S256',
-          // redirectUri: 'http://localhost:8082/check-sso',
-        })
-        .then((authenticated) => {
-          if (!authenticated) {
-            window.location.reload()
-          }
-          localStorage.setItem('token', keycloak.token)
-          localStorage.setItem('refresh_token', keycloak.refreshToken)
-          store.dispatch('auth/fetchAuth').then((response) => {
-            store.dispatch('dispatchLogin', response.data.data).then(() => {
-              try {
-                if (firebase.messaging.isSupported()) {
-                  const messaging = firebase.messaging()
-                  Notification.requestPermission().then(() => {
-                    messaging
-                      .getToken({
-                        vapidKey:
-                          'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                      })
-                      .then((currentToken) => {
-                        $axiosApi
-                          .post('/users/notification-token', {
-                            token: currentToken,
-                            type: 'web',
-                          })
-                          .then(() => {
-                            next()
-                          })
-                          .catch(() => {
-                            localStorage.removeItem('token')
-                            localStorage.removeItem('refresh_token')
-                            localStorage.removeItem('user')
-                            store.dispatch('dispatchDisableLoading')
-                          })
-                      })
-                      .catch(() => {
-                        next()
-                      })
-                  })
-                }
-              } catch (error) {
-                alert(error)
-              }
-            })
-          })
-        })
-        .catch(() => {
-          alert('Server Bermasalah')
-        })
+    // Only run this block for authenticated routes
+    if (!token) {
+      next('/login')
     } else {
       next()
     }
   } else {
-    if (to.path === '/register') {
-      const token = localStorage.getItem('token')
-      if (token !== null && typeof token !== 'undefined') {
-        next({ path: '/admin/dashboard' })
-      } else {
-        next()
-      }
-    } else if (to.path === '/sealid/:id') {
-      next()
-    } else {
-      keycloak
-        .init({
-          onLoad: 'check-sso',
-          checkLoginIframe: true,
-          pkceMethod: 'S256',
-        })
-        .then((response) => {
-          if (response) {
-            localStorage.setItem('token', keycloak.token)
-            localStorage.setItem('refresh_token', keycloak.refreshToken)
-            store.dispatch('auth/fetchAuth').then((response) => {
-              store
-                .dispatch('dispatchLogin', response.data.data)
-                .then(() => {
-                  try {
-                    if (firebase.messaging.isSupported()) {
-                      const messaging = firebase.messaging()
-                      Notification.requestPermission().then(() => {
-                        messaging
-                          .getToken({
-                            vapidKey:
-                              'BK7ZJNZrpvWFm-rCo-7K6pHNvnNAlHEpF37loL3fvpSkO9782mh18OMM089ssfIH7VQw6dN3Gje8QT8McptZ5zQ',
-                          })
-                          .then((currentToken) => {
-                            $axiosApi
-                              .post('/users/notification-token', {
-                                token: currentToken,
-                                type: 'web',
-                              })
-                              .then(() => {
-                                next({ path: '/admin/dashboard' })
-                              })
-                              .catch(() => {
-                                localStorage.removeItem('token')
-                                localStorage.removeItem('refresh_token')
-                                localStorage.removeItem('user')
-                                store.dispatch('dispatchDisableLoading')
-                              })
-                          })
-                          .catch(() => {
-                            next({ path: '/admin/dashboard' })
-                          })
-                      })
-                    }
-                  } catch (error) {
-                    alert(error)
-                  }
-                })
-                .catch(() => {
-                  alert('Server Bermasalah')
-                })
-            })
-          } else {
-            next()
-          }
-        })
-    }
+    // Public pages — allow access freely without Keycloak
+    next()
   }
 })
+
 
 // createRouter.beforeEach((to, from, next) => {
 

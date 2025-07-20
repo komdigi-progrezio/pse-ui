@@ -30,6 +30,8 @@ import { CChartBar, CChartLine } from '@coreui/vue-chartjs'
 import './fb'
 import './utils/validations'
 import VueRecaptcha from 'vue-recaptcha'
+import 'regenerator-runtime/runtime'
+
 
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
